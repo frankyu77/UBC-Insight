@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/node18/tsconfig.json",
+  "compilerOptions": {
+    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"],
+  "include": ["test/**/*"]
+
+}
