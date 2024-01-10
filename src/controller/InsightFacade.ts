@@ -1,5 +1,5 @@
 import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult} from "./IInsightFacade";
-export class InsightFacade implements IInsightFacade {
+export default class InsightFacade implements IInsightFacade {
     addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 
         //stub
