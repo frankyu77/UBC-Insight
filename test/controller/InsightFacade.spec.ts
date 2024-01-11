@@ -15,8 +15,11 @@ describe("InsightFacade", function() {
         let facade: InsightFacade;
 
         before(function() {
-            sections = getContentFromArchives("yourzipfile.zip");
-            console.log("hello");
+            sections = getContentFromArchives("pair.zip");
+            var chai = require("chai");
+            var chaiAsPromised = require("chai-as-promised");
+
+            chai.use(chaiAsPromised);
         });
 
         beforeEach(function() {
