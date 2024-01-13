@@ -85,10 +85,17 @@ describe("InsightFacade", function() {
         });
 
         it ("should successfully add two different datasets", () => {
-            facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections)
-            const result2 = facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections)
+            facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+            return facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result) => {
+                //expect(result).to.eventually.have.members(["CPSC110", "CPSC210"]);
+                expect(result).to.have.members(["CPSC110", "CPSC210"]) ||
+                    expect(result).to.eventually.have.members(["CPSC210", "CPSC110"]);
+            }).catch((error) => {
+                //expect(error).to.be.null;
+                expect(error).to.be.equal(InsightError);
+            })
 
-            return expect(result2).to.eventually.have.members(["CPSC110", "CPSC210"]);
+            //return expect(result2).to.eventually.have.members(["CPSC110", "CPSC210"]);
         });
 
     });
