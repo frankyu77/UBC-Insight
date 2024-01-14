@@ -36,28 +36,52 @@ describe("InsightFacade", function() {
         });
 
         //id containing underscore -------------------------------------------------------------------------------------
-        it ("should reject if id added contains an underscore (at the front)", () => {
-           const result = facade.addDataset("_UBC", sections, InsightDatasetKind.Sections)
+        it ("should reject if id added contains an underscore (at the front)", async () => {
+           // const result = facade.addDataset("_UBC", sections, InsightDatasetKind.Sections)
+           //
+           // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-           return expect(result).to.eventually.be.rejectedWith(InsightError);
+            return facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+                expect.fail("should not have added");
+            }).catch((error) => {
+                expect(error).to.equal(InsightError);
+            })
         });
 
-        it ("should reject if id added contains an underscore (at the back)", () => {
-            const result = facade.addDataset("UBC_", sections, InsightDatasetKind.Sections)
+        it ("should reject if id added contains an underscore (at the back)", async () => {
+            // const result = facade.addDataset("UBC_", sections, InsightDatasetKind.Sections)
+            //
+            // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-            return expect(result).to.eventually.be.rejectedWith(InsightError);
+            return facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections).then((result) => {
+                expect.fail("should not have added");
+            }).catch((error) => {
+                expect(error).to.equal(InsightError);
+            })
         });
 
-        it ("should reject if id added contains an underscore (in the middle)", () => {
-            const result = facade.addDataset("U_BC", sections, InsightDatasetKind.Sections)
+        it ("should reject if id added contains an underscore (in the middle)", async () => {
+            // const result = facade.addDataset("U_BC", sections, InsightDatasetKind.Sections)
+            //
+            // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-            return expect(result).to.eventually.be.rejectedWith(InsightError);
+            return facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections).then((result) => {
+                expect.fail("should not have added");
+            }).catch((error) => {
+                expect(error).to.equal(InsightError);
+            })
         });
 
-        it ("should reject if id added contains an underscore (multiple)", () => {
-            const result = facade.addDataset("U_B_C_", sections, InsightDatasetKind.Sections)
+        it ("should reject if id added contains an underscore (multiple)", async () => {
+            // const result = facade.addDataset("U_B_C_", sections, InsightDatasetKind.Sections)
+            //
+            // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-            return expect(result).to.eventually.be.rejectedWith(InsightError);
+            return facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections).then((result) => {
+                expect.fail("should not have added");
+            }).catch((error) => {
+                expect(error).to.equal(InsightError);
+            })
         });
 
         //duplicate id -------------------------------------------------------------------------------------------------
@@ -68,35 +92,51 @@ describe("InsightFacade", function() {
         //     return expect(result2).to.eventually.be.rejectedWith(InsightError);
         // });
 
-        it ("should reject when adding two duplicate datasets with same id (not back to back)", () => {
-            facade.addDataset("hello", sections, InsightDatasetKind.Sections)
-            facade.addDataset("testing", sections, InsightDatasetKind.Sections)
-            facade.addDataset("bonjour", sections, InsightDatasetKind.Sections)
-            const result2 = facade.addDataset("hello", sections, InsightDatasetKind.Sections)
+        it ("should reject when adding two duplicate datasets with same id (not back to back)", async () => {
+            facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections)
+            facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections)
+            facade.addDataset("CPSC310", sections, InsightDatasetKind.Sections)
+            // const result2 = facade.addDataset("hello", sections, InsightDatasetKind.Sections)
+            //
+            // return expect(result2).to.eventually.be.rejectedWith(InsightError);
 
-            return expect(result2).to.eventually.be.rejectedWith(InsightError);
+            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+                expect.fail("should not have added");
+            }).catch((error) => {
+                expect(error).to.equal(InsightError);
+            })
         });
 
         //***********************************************SUCCESSES******************************************************
-        it ("should successfully add one dataset", function() {
-            const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections)
+        it ("should successfully add one dataset", async function() {
+            // const result = facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections)
+            //
+            // return expect(result).to.eventually.have.members(["CPSC110"]);
 
-            return expect(result).to.eventually.have.members(["ubc"]);
+            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+                expect(result).to.eventually.have.members(["CPSC110"]);
+            }).catch((error) => {
+                expect.fail("should have added");
+            });
         });
 
-        // it ("should successfully add two different datasets", () => {
-        //     facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-        //     return facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result) => {
-        //         //expect(result).to.eventually.have.members(["CPSC110", "CPSC210"]);
-        //         expect(result).to.have.members(["CPSC110", "CPSC210"]) ||
-        //             expect(result).to.eventually.have.members(["CPSC210", "CPSC110"]);
-        //     }).catch((error) => {
-        //         //expect(error).to.be.null;
-        //         expect(error).to.be.equal(InsightError);
-        //     })
-        //
-        //     //return expect(result2).to.eventually.have.members(["CPSC110", "CPSC210"]);
-        // });
+        it ("should successfully add two different datasets", async () => {
+            facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+            return facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result) => {
+                //expect(result).to.eventually.have.members(["CPSC110", "CPSC210"]);
+                expect(result).to.have.members(["CPSC110", "CPSC210"]);
+            }).catch((error) => {
+                expect.fail("should have added");
+            })
+
+            //return expect(result2).to.eventually.have.members(["CPSC110", "CPSC210"]);
+
+
+
+
+
+
+        });
 
     });
 });
