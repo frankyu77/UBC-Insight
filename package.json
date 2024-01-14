@@ -20,10 +20,15 @@
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true,
+    "check-coverage": true
+
   },
   "scripts": {
     "build": "tsc",
     "clear": "tsc --build --clean"
   }
+
 }

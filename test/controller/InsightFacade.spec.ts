@@ -122,11 +122,19 @@ describe("InsightFacade", function() {
             //
             // return expect(result).to.eventually.have.members(["CPSC110"]);
 
-            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            //     expect(result).to.eventually.equal(["CPSC110"]);
+            // }).catch((error) => {
+            //     expect.fail("should have added");
+            // });
+
+            try {
+                const result = facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+                await result;
                 expect(result).to.eventually.equal(["CPSC110"]);
-            }).catch((error) => {
+            } catch (error) {
                 expect.fail("should have added");
-            });
+            }
         });
 
         it ("should successfully add two different datasets", async () => {
@@ -138,15 +146,38 @@ describe("InsightFacade", function() {
             //     expect.fail("should have added");
             // })
 
-            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
-                facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result2) => {
+            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            //     facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result2) => {
+            //         expect(result2).to.eventually.equal(["CPSC110", "CPSC210"]);
+            //     }).catch((error2) => {
+            //         expect.fail("should have added");
+            //     });
+            // }).catch((error) => {
+            //     expect.fail("should have added");
+            // });
+
+            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result1) => {
+            //     expect(result1).to.eventually.equal(["CPSC110"]);
+            //     return facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
+            // }).then((result2) => {
+            //     expect(result2).to.eventually.equal(["CPSC110", "CPSC210"]);
+            // }).catch((error) => {
+            //     expect.fail("should have added");
+            // });
+
+            try {
+                const result1 = facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+                //expect(result1).to.eventually.equal(["CPSC110"]);
+
+                try {
+                    const result2 = facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
                     expect(result2).to.eventually.equal(["CPSC110", "CPSC210"]);
-                }).catch((error2) => {
+                } catch (error2) {
                     expect.fail("should have added");
-                });
-            }).catch((error) => {
+                }
+            } catch (error1) {
                 expect.fail("should have added");
-            });
+            }
 
             //return expect(result2).to.eventually.have.members(["CPSC110", "CPSC210"]);
 

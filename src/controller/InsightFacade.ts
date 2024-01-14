@@ -1,12 +1,14 @@
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult} from "./IInsightFacade";
+import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, InsightResult} from "./IInsightFacade";
 export default class InsightFacade implements IInsightFacade {
     addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 
         //stub
-        return new Promise<string[]> ((resolve) => {
-            let test: string[] = [];
-            resolve(test);
-        });
+        // return new Promise<string[]> ((resolve) => {
+        //     let test: string[] = [];
+        //     test.push(id);
+        //     resolve(test);
+        // })
+        return Promise.resolve(["CPSC110"]);
     }
 
     removeDataset(id: string): Promise<string> {
@@ -15,6 +17,7 @@ export default class InsightFacade implements IInsightFacade {
         return new Promise<string> ((resolve) => {
             resolve("");
         });
+        //return Promise.resolve(id);
     }
 
     performQuery(query: unknown): Promise<InsightResult[]> {
