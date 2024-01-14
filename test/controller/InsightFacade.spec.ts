@@ -16,16 +16,16 @@ describe("InsightFacade", function() {
         let sections: string;
         let facade: InsightFacade;
 
-        before(function() {
-            sections = getContentFromArchives("pair.zip");
+        before(async function() {
+            sections = await getContentFromArchives("pair.zip");
             var chai = require("chai");
             var chaiAsPromised = require("chai-as-promised");
 
             chai.use(chaiAsPromised);
         });
 
-        beforeEach(function() {
-            clearDisk();
+        beforeEach(async function() {
+            await clearDisk();
             facade = new InsightFacade();
         });
 
@@ -46,7 +46,7 @@ describe("InsightFacade", function() {
             return facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
                 expect.fail("should not have added");
             }).catch((error) => {
-                expect(error).to.equal(InsightError);
+                expect(error).to.equal(Error);
             })
         });
 
@@ -116,7 +116,7 @@ describe("InsightFacade", function() {
             // return expect(result).to.eventually.have.members(["CPSC110"]);
 
             return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
-                expect(result).to.eventually.have.members(["CPSC110"]);
+                expect(result).to.equal(["CPSC110"]);
             }).catch((error) => {
                 expect.fail("should have added");
             });
@@ -133,7 +133,7 @@ describe("InsightFacade", function() {
 
             return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
                 facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result2) => {
-                    expect(result2).to.eventually.have.members(["CPSC110", "CPSC210"]);
+                    expect(result2).to.equal(["CPSC110", "CPSC210"]);
                 }).catch((error2) => {
                     expect.fail("should have added");
                 });
@@ -216,7 +216,7 @@ describe("InsightFacade", function() {
         //***********************************************SUCCESSES******************************************************
         it ("should successfully remove one dataset", async function() {
             return facade.removeDataset("CPSC110").then((result) => {
-                expect(result).to.eventually.have.members(["CPSC210", "CPSC221", "CPSC213"]);
+                expect(result).to.equal("CPSC110");
             }).catch((error) => {
                 expect.fail("should have removed");
             });
@@ -225,7 +225,7 @@ describe("InsightFacade", function() {
         it ("should successfully remove two different datasets", async () => {
             return facade.removeDataset("CPSC110").then((result) => {
                 facade.removeDataset("CPSC210").then((result2) => {
-                    expect(result2).to.eventually.have.members(["CPSC221", "CPSC213"]);
+                    expect(result2).to.equal("CPSC210");
                 }).catch((error2) => {
                     expect.fail("should have removed");
                 });
