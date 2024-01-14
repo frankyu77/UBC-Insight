@@ -10,6 +10,13 @@ import {describe} from "mocha";
 //     })
 // });
 
+export interface ITestQuery {
+    title: string; //title of the test case
+    input: unknown; //the query under test
+    errorExpected: boolean; //if the query is expected to throw an error
+    expected: any; //the expected result
+}
+
 describe("InsightFacade", function() {
     //####################################################################################################    addDataset
     describe("addDataset", function() {
@@ -17,7 +24,7 @@ describe("InsightFacade", function() {
         let facade: InsightFacade;
 
         before(async function() {
-            sections = await getContentFromArchives("pair.zip");
+            sections = await getContentFromArchives("shorterCourses.zip");
             var chai = require("chai");
             var chaiAsPromised = require("chai-as-promised");
 
@@ -31,7 +38,7 @@ describe("InsightFacade", function() {
 
         //**********************************************REJECTIONS******************************************************
         //empty id -----------------------------------------------------------------------------------------------------
-        it ("should reject with an empty dataset id", function() {
+        it ("should reject with an empty dataset id when adding", function() {
             const result = facade.addDataset("", sections, InsightDatasetKind.Sections)
 
             return expect(result).to.eventually.be.rejectedWith(InsightError);
@@ -154,34 +161,34 @@ describe("InsightFacade", function() {
         let sections: string;
         let facade: InsightFacade;
 
-        before(function() {
-            sections = getContentFromArchives("pair.zip");
+        before(async function() {
+            sections = await getContentFromArchives("pair.zip");
             var chai = require("chai");
             var chaiAsPromised = require("chai-as-promised");
 
             chai.use(chaiAsPromised);
         });
 
-        beforeEach(function() {
-            clearDisk();
+        beforeEach(async function() {
+            await clearDisk();
             facade = new InsightFacade();
 
-            facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-            facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections);
-            facade.addDataset("CPSC221", sections, InsightDatasetKind.Sections);
-            facade.addDataset("CPSC213", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("CPSC221", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("CPSC213", sections, InsightDatasetKind.Sections);
         });
 
         //**********************************************REJECTIONS******************************************************
         //empty id -----------------------------------------------------------------------------------------------------
-        it ("should reject with an empty dataset id", function() {
+        it ("should reject with an empty dataset id when remove", function() {
             const result = facade.removeDataset("")
 
             return expect(result).to.eventually.be.rejectedWith(InsightError);
         });
 
         //id containing underscore -------------------------------------------------------------------------------------
-        it ("should reject if id added contains an underscore (at the front)", async () => {
+        it ("should reject if id removed contains an underscore (at the front)", async () => {
             return facade.removeDataset("_CPSC110").then((result) => {
                 expect.fail("should not have been removed");
             }).catch((error) => {
@@ -189,7 +196,7 @@ describe("InsightFacade", function() {
             })
         });
 
-        it ("should reject if id added contains an underscore (at the back)", async () => {
+        it ("should reject if id removed contains an underscore (at the back)", async () => {
             return facade.removeDataset("CPSC110_").then((result) => {
                 expect.fail("should not have been removed");
             }).catch((error) => {
@@ -197,7 +204,7 @@ describe("InsightFacade", function() {
             })
         });
 
-        it ("should reject if id added contains an underscore (in the middle)", async () => {
+        it ("should reject if id removed contains an underscore (in the middle)", async () => {
             return facade.removeDataset("CPSC_110").then((result) => {
                 expect.fail("should not have been removed");
             }).catch((error) => {
@@ -205,7 +212,7 @@ describe("InsightFacade", function() {
             })
         });
 
-        it ("should reject if id added contains an underscore (multiple)", async () => {
+        it ("should reject if id removed contains an underscore (multiple)", async () => {
             return facade.removeDataset("C_P_S_C110").then((result) => {
                 expect.fail("should not have been removed");
             }).catch((error) => {

@@ -21,9 +21,11 @@ const persistDir = "./data";
 //     return buffer.toString("base64");
 // }
 
-const getContentFromArchives = (name: string): string => {
-    return fs.readFileSync("test/resources/archives/" + name).toString("base64");
-};
+async function getContentFromArchives (name: string): Promise<string> {
+    const buffer = await fs.readFile("test/resources/archives/" + name);
+
+    return buffer.toString("base64");
+}
 
 
 /**
