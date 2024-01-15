@@ -69,11 +69,18 @@ describe("InsightFacade", function() {
             //
             // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-            return facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections).then((result) => {
+            // return facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections).then((result) => {
+            //     expect.fail("should not have added");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections);
                 expect.fail("should not have added");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         it ("should reject if id added contains an underscore (in the middle)", async () => {
@@ -81,11 +88,18 @@ describe("InsightFacade", function() {
             //
             // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-            return facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections).then((result) => {
+            // return facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections).then((result) => {
+            //     expect.fail("should not have added");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections);
                 expect.fail("should not have added");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         it ("should reject if id added contains an underscore (multiple)", async () => {
@@ -93,11 +107,18 @@ describe("InsightFacade", function() {
             //
             // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-            return facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections).then((result) => {
+            // return facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections).then((result) => {
+            //     expect.fail("should not have added");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections);
                 expect.fail("should not have added");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         //duplicate id -------------------------------------------------------------------------------------------------
@@ -116,11 +137,18 @@ describe("InsightFacade", function() {
             //
             // return expect(result2).to.eventually.be.rejectedWith(InsightError);
 
-            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            //     expect.fail("should not have added");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
                 expect.fail("should not have added");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         //***********************************************SUCCESSES******************************************************
@@ -174,10 +202,12 @@ describe("InsightFacade", function() {
 
             try {
                 const result1 = facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+                await result1;
                 //expect(result1).to.eventually.equal(["CPSC110"]);
 
                 try {
                     const result2 = facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
+                    await result2;
                     expect(result2).to.eventually.equal(["CPSC110", "CPSC210"]);
                 } catch (error2) {
                     expect.fail("should have added");
@@ -227,44 +257,79 @@ describe("InsightFacade", function() {
 
         //id containing underscore -------------------------------------------------------------------------------------
         it ("should reject if id removed contains an underscore (at the front)", async () => {
-            return facade.removeDataset("_CPSC110").then((result) => {
-                expect.fail("should not have been removed");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            // return facade.removeDataset("_CPSC110").then((result) => {
+            //     expect.fail("should not have been removed");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.removeDataset("_CPSC110");
+                expect.fail("should not have removed");
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         it ("should reject if id removed contains an underscore (at the back)", async () => {
-            return facade.removeDataset("CPSC110_").then((result) => {
-                expect.fail("should not have been removed");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            // return facade.removeDataset("CPSC110_").then((result) => {
+            //     expect.fail("should not have been removed");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.removeDataset("CPSC110_");
+                expect.fail("should not have removed");
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         it ("should reject if id removed contains an underscore (in the middle)", async () => {
-            return facade.removeDataset("CPSC_110").then((result) => {
-                expect.fail("should not have been removed");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            // return facade.removeDataset("CPSC_110").then((result) => {
+            //     expect.fail("should not have been removed");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.removeDataset("CPSC_110");
+                expect.fail("should not have removed");
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         it ("should reject if id removed contains an underscore (multiple)", async () => {
-            return facade.removeDataset("C_P_S_C110").then((result) => {
-                expect.fail("should not have been removed");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            // return facade.removeDataset("C_P_S_C110").then((result) => {
+            //     expect.fail("should not have been removed");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.removeDataset("C_P_S_C110");
+                expect.fail("should not have removed");
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         });
 
         //non-existent id-----------------------------------------------------------------------------------------------
         it ("should fail if try and remove an id that is non-existent", async () => {
-            return facade.removeDataset("CPEN211").then((result) => {
-                expect.fail("should not have been removed");
-            }).catch((error) => {
-                expect(error).to.eventually.be.rejectedWith(InsightError);
-            })
+            // return facade.removeDataset("CPEN211").then((result) => {
+            //     expect.fail("should not have been removed");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.be.rejectedWith(InsightError);
+            // })
+
+            try {
+                await facade.removeDataset("CPEN211");
+                expect.fail("should not have removed");
+            } catch (error) {
+                expect(error).to.be.an.instanceof(InsightError);
+            }
         })
 
         //***********************************************SUCCESSES******************************************************
