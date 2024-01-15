@@ -462,7 +462,7 @@ describe("InsightFacade", function() {
 
     //######################################################################################################performQuery
 
-    describe("valid queries", function() {
+    describe("performQuery", () => {
         let sections: string;
         let facade: InsightFacade;
 
@@ -480,29 +480,42 @@ describe("InsightFacade", function() {
         });
 
 
-        let validQueries: ITestQuery[];
-        try {
-            validQueries = readFileQueries("valid");
-        } catch (e: unknown) {
-            expect.fail(`Failed to read one or more test queries. ${e}`);
-        }
+        describe("valid queries", function() {
+            let validQueries: ITestQuery[];
+            try {
+                validQueries = readFileQueries("valid");
+            } catch (e: unknown) {
+                expect.fail(`Failed to read one or more test queries. ${e}`);
+            }
 
-        validQueries.forEach(function(test: any) {
-            it(`${test.title}`, async function () {
-                return facade.performQuery(test.input).then((result) => {
-                    //assert.fail("Write your assertions here!");
-                    expect(result).to.eventually.equal(test.expected);
-                }).catch((err: string) => {
-                    assert.fail(`performQuery threw unexpected error: ${err}`);
+            validQueries.forEach(function(test: any) {
+                it(`${test.title}`, async function () {
+                    return facade.performQuery(test.input).then((result) => {
+                        //assert.fail("Write your assertions here!");
+                        //expect(result).to.equal(test.expected);
+
+
+
+                        if (!test.errorExpected) {
+                            //assert.fail("asdlfkjasdfkla");
+                            expect(result).to.be.deep.equal(test.expected);
+
+                        } else {
+                            assert.fail();
+                        }
+
+                    }).catch((err: string) => {
+                        assert.fail(`performQuery threw unexpected error: ${err}`);
+                    });
+
+                    // try {
+                    //     const result = facade.performQuery(test.input);
+                    //     await result;
+                    //     expect(result).to.eventually.equal(test.expected);
+                    // } catch (err: unknown) {
+                    //     assert.fail(`performQuery threw unexpected error: ${err}`);
+                    // }
                 });
-
-                // try {
-                //     const result = facade.performQuery(test.input);
-                //     await result;
-                //     expect(result).to.eventually.equal(test.expected);
-                // } catch (err: unknown) {
-                //     assert.fail(`performQuery threw unexpected error: ${err}`);
-                // }
             });
         });
     });
