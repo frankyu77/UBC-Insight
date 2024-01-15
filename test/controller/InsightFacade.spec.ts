@@ -418,6 +418,37 @@ describe("InsightFacade", function() {
                 numRows: 64612
             }]);
         });
+
+        it ("should list multiple datasets", async () => {
+            await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("sfu", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("uofc", sections, InsightDatasetKind.Sections);
+
+            const datasets = await facade.listDatasets();
+
+            expect(datasets).to.deep.equal([
+                {id: "ubc", kind: InsightDatasetKind.Sections, numRows: 64612},
+                {id: "sfu", kind: InsightDatasetKind.Sections, numRows: 64612},
+                {id: "uofc", kind: InsightDatasetKind.Sections, numRows: 64612}
+            ]);
+        });
+
+        it ("should list multiple datasets after a sequence of add and remove", async () => {
+            await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("sfu", sections, InsightDatasetKind.Sections);
+            await facade.removeDataset("sfu");
+            await facade.addDataset("uofc", sections, InsightDatasetKind.Sections);
+            await facade.removeDataset("ubc");
+
+            const datasets = await facade.listDatasets();
+
+            expect(datasets).to.deep.equal([{
+                id: "uofc",
+                kind: InsightDatasetKind.Sections,
+                numRows: 64612
+            }]);
+        })
+
     });
 
 
