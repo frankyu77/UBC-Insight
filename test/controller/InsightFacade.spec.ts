@@ -1,7 +1,7 @@
 import InsightFacade from "../../src/controller/InsightFacade";
-import {clearDisk, getContentFromArchives} from "../resources/archives/TestUtil";
+import {clearDisk, getContentFromArchives, readFileQueries} from "../resources/archives/TestUtil";
 import {InsightDatasetKind, InsightError, NotFoundError} from "../../src/controller/IInsightFacade";
-import chai, {expect} from "chai";
+import chai, {assert, expect} from "chai";
 import {describe} from "mocha";
 import chaiAsPromised from "chai-as-promised";
 
@@ -403,6 +403,12 @@ describe("InsightFacade", function() {
             facade = new InsightFacade();
         });
 
+        it ("should list an empty datset", async () => {
+            const datasets = await facade.listDatasets();
+
+            expect(datasets).to.deep.equal([]);
+        })
+
         //test taken from CPSC310 site
         it ("should list one dataset", async () => {
             //Setup
@@ -449,6 +455,56 @@ describe("InsightFacade", function() {
             }]);
         })
 
+    });
+
+
+
+
+    //######################################################################################################performQuery
+
+    describe("valid queries", function() {
+        let sections: string;
+        let facade: InsightFacade;
+
+        before(async function() {
+            sections = await getContentFromArchives("shorterCourses.zip");
+            facade = new InsightFacade();
+
+            var chai = require("chai");
+            var chaiAsPromised = require("chai-as-promised");
+            chai.use(chaiAsPromised);
+        });
+
+        beforeEach(async function() {
+            await clearDisk();
+        });
+
+
+        let validQueries: ITestQuery[];
+        try {
+            validQueries = readFileQueries("valid");
+        } catch (e: unknown) {
+            expect.fail(`Failed to read one or more test queries. ${e}`);
+        }
+
+        validQueries.forEach(function(test: any) {
+            it(`${test.title}`, async function () {
+                return facade.performQuery(test.input).then((result) => {
+                    //assert.fail("Write your assertions here!");
+                    expect(result).to.eventually.equal(test.expected);
+                }).catch((err: string) => {
+                    assert.fail(`performQuery threw unexpected error: ${err}`);
+                });
+
+                // try {
+                //     const result = facade.performQuery(test.input);
+                //     await result;
+                //     expect(result).to.eventually.equal(test.expected);
+                // } catch (err: unknown) {
+                //     assert.fail(`performQuery threw unexpected error: ${err}`);
+                // }
+            });
+        });
     });
 
 

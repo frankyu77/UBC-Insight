@@ -1,4 +1,5 @@
 import * as fs from "fs-extra";
+import {ITestQuery} from "../../controller/InsightFacade.spec";
 
 
 /**
@@ -35,5 +36,27 @@ async function clearDisk(): Promise<void> {
     await fs.remove(persistDir);
 }
 
+/**
 
-export {getContentFromArchives, clearDisk};
+ * Searches for test query JSON files in the path.
+
+ * @param path The path to the sample query JSON files.
+
+ */
+
+function readFileQueries(path: string): ITestQuery[] {
+    // Note: This method *must* be synchronous for Mocha
+    const fileNames = fs.readdirSync(`test/resources/queries/${path}`);
+
+    const allQueries: ITestQuery[] = [];
+    for (const fileName of fileNames) {
+        const fileQuery = fs.readJSONSync(`test/resources/queries/${path}/${fileName}`);
+
+        allQueries.push(fileQuery);
+    }
+
+    return allQueries;
+}
+
+
+export {getContentFromArchives, clearDisk, readFileQueries};
