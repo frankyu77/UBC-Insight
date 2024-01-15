@@ -14,10 +14,10 @@ export default class InsightFacade implements IInsightFacade {
     removeDataset(id: string): Promise<string> {
 
         //stub
-        return new Promise<string> ((resolve) => {
-            resolve("");
-        });
-        //return Promise.resolve(id);
+        // return new Promise<string> ((resolve) => {
+        //     resolve("");
+        // });
+        return Promise.resolve(id);
     }
 
     performQuery(query: unknown): Promise<InsightResult[]> {

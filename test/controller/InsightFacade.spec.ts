@@ -262,23 +262,48 @@ describe("InsightFacade", function() {
 
         //***********************************************SUCCESSES******************************************************
         it ("should successfully remove one dataset", async function() {
-            return facade.removeDataset("CAPS449").then((result) => {
-                expect(result).to.equal("CAPS449");
-            }).catch((error) => {
+            // return facade.removeDataset("CAPS449").then((result) => {
+            //     expect(result).to.eventually.equal("CAPS449");
+            // }).catch((error) => {
+            //     expect.fail("should have removed");
+            // });
+
+            try {
+                const result = facade.removeDataset("CAPS449");
+                await result;
+                expect(result).to.eventually.equal("CAPS449");
+            } catch (error) {
                 expect.fail("should have removed");
-            });
+            }
         });
 
         it ("should successfully remove two different datasets", async () => {
-            return facade.removeDataset("CAPS449").then((result) => {
-                facade.removeDataset("CAPS430").then((result2) => {
-                    expect(result2).to.equal("CAPS430");
-                }).catch((error2) => {
+            // return facade.removeDataset("CAPS449").then((result) => {
+            //     facade.removeDataset("CAPS430").then((result2) => {
+            //         expect(result2).to.eventually.equal("CAPS430");
+            //     }).catch((error2) => {
+            //         expect.fail("should have removed");
+            //     });
+            // }).catch((error) => {
+            //     expect.fail("should have removed");
+            // });
+
+            try {
+                const result1 = facade.removeDataset("CAPS449");
+                await result1;
+                expect(result1).to.eventually.equal("CAPS449");
+
+                try {
+                    const result2 = facade.removeDataset("CAPS430");
+                    await result2;
+                    expect(result2).to.eventually.equal("CAPS430");
+                } catch (error2) {
                     expect.fail("should have removed");
-                });
-            }).catch((error) => {
+                }
+            } catch (error1) {
                 expect.fail("should have removed");
-            });
+            }
+
         });
 
 
