@@ -391,7 +391,7 @@ describe("InsightFacade", function() {
         let facade: InsightFacade;
 
         before(async function() {
-            sections = await getContentFromArchives("shorterCourses.zip");
+            sections = await getContentFromArchives("pair.zip");
             var chai = require("chai");
             var chaiAsPromised = require("chai-as-promised");
 
