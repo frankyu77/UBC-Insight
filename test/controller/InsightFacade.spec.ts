@@ -50,11 +50,18 @@ describe("InsightFacade", function() {
            //
            // return expect(result).to.eventually.be.rejectedWith(InsightError);
 
-            return facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            // return facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            //     expect.fail("should not have added");
+            // }).catch((error) => {
+            //     expect(error).to.eventually.equal(Error);
+            // })
+
+            try {
+                await facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections);
                 expect.fail("should not have added");
-            }).catch((error) => {
-                expect(error).to.eventually.equal(Error);
-            })
+            } catch (error) {
+                expect(error).to.equal(InsightError);
+            }
         });
 
         it ("should reject if id added contains an underscore (at the back)", async () => {
@@ -268,6 +275,8 @@ describe("InsightFacade", function() {
             //     expect.fail("should have removed");
             // });
 
+            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+
             try {
                 const result = facade.removeDataset("CAPS449");
                 await result;
@@ -287,6 +296,9 @@ describe("InsightFacade", function() {
             // }).catch((error) => {
             //     expect.fail("should have removed");
             // });
+
+            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("CAPS430", sections, InsightDatasetKind.Sections);
 
             try {
                 const result1 = facade.removeDataset("CAPS449");
