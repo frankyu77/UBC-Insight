@@ -8,8 +8,8 @@ export default class InsightFacade implements IInsightFacade {
         //     test.push(id);
         //     resolve(test);
         // })
-        // return Promise.resolve(["CPSC110"]);
-        throw new InsightError("errrrrr");
+        return Promise.resolve(["CPSC110"]);
+        // throw new InsightError("errrrrr");
     }
 
     removeDataset(id: string): Promise<string> {
@@ -18,7 +18,8 @@ export default class InsightFacade implements IInsightFacade {
         // return new Promise<string> ((resolve) => {
         //     resolve("");
         // });
-        return Promise.resolve(id);
+        //return Promise.resolve(id);
+        throw new InsightError("errrrrr");
     }
 
     performQuery(query: unknown): Promise<InsightResult[]> {
