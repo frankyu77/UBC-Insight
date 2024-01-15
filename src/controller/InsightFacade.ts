@@ -8,7 +8,8 @@ export default class InsightFacade implements IInsightFacade {
         //     test.push(id);
         //     resolve(test);
         // })
-        return Promise.resolve(["CPSC110"]);
+        // return Promise.resolve(["CPSC110"]);
+        throw new InsightError();
     }
 
     removeDataset(id: string): Promise<string> {

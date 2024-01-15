@@ -60,7 +60,7 @@ describe("InsightFacade", function() {
                 await facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections);
                 expect.fail("should not have added");
             } catch (error) {
-                expect(error).to.equal(InsightError);
+                expect(error).to.be.an.instanceof(InsightError);
             }
         });
 
