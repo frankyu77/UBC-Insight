@@ -1,6 +1,6 @@
 import InsightFacade from "../../src/controller/InsightFacade";
 import {clearDisk, getContentFromArchives} from "../resources/archives/TestUtil";
-import {InsightDatasetKind, InsightError} from "../../src/controller/IInsightFacade";
+import {InsightDatasetKind, InsightError, NotFoundError} from "../../src/controller/IInsightFacade";
 import {expect} from "chai";
 import {describe} from "mocha";
 
@@ -330,7 +330,7 @@ describe("InsightFacade", function() {
                 await facade.removeDataset("hello");
                 expect.fail("should not have removed");
             } catch (error) {
-                expect(error).to.be.an.instanceof(InsightError);
+                expect(error).to.be.an.instanceof(NotFoundError);
             }
         })
 
