@@ -324,8 +324,10 @@ describe("InsightFacade", function() {
             //     expect(error).to.eventually.be.rejectedWith(InsightError);
             // })
 
+            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+
             try {
-                await facade.removeDataset("CPEN211");
+                await facade.removeDataset("hello");
                 expect.fail("should not have removed");
             } catch (error) {
                 expect(error).to.be.an.instanceof(InsightError);
