@@ -1,8 +1,9 @@
 import InsightFacade from "../../src/controller/InsightFacade";
 import {clearDisk, getContentFromArchives} from "../resources/archives/TestUtil";
 import {InsightDatasetKind, InsightError, NotFoundError} from "../../src/controller/IInsightFacade";
-import {expect} from "chai";
+import chai, {expect} from "chai";
 import {describe} from "mocha";
+import chaiAsPromised from "chai-as-promised";
 
 // describe("Testing base case for addDataset", () => {
 //     before(() => {
@@ -38,7 +39,7 @@ describe("InsightFacade", function() {
 
         //**********************************************REJECTIONS******************************************************
         //empty id -----------------------------------------------------------------------------------------------------
-        it ("should reject with an empty dataset id when adding", function() {
+        it ("should reject with an empty dataset id when adding", function() { //test taken from CPSC310 site
             const result = facade.addDataset("", sections, InsightDatasetKind.Sections)
 
             return expect(result).to.eventually.be.rejectedWith(InsightError);
@@ -230,7 +231,7 @@ describe("InsightFacade", function() {
         let facade: InsightFacade;
 
         before(async function() {
-            sections = await getContentFromArchives("pair.zip");
+            sections = await getContentFromArchives("shorterCourses.zip");
             var chai = require("chai");
             var chaiAsPromised = require("chai-as-promised");
 
@@ -240,11 +241,6 @@ describe("InsightFacade", function() {
         beforeEach(async function() {
             await clearDisk();
             facade = new InsightFacade();
-
-            // await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-            // await facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections);
-            // await facade.addDataset("CPSC221", sections, InsightDatasetKind.Sections);
-            // await facade.addDataset("CPSC213", sections, InsightDatasetKind.Sections);
         });
 
         //**********************************************REJECTIONS******************************************************
@@ -386,6 +382,42 @@ describe("InsightFacade", function() {
         });
 
 
+    });
+
+    //#################################################################################################### listDataset
+    describe("listDataset", () => {
+
+        let sections: string;
+        let facade: InsightFacade;
+
+        before(async function() {
+            sections = await getContentFromArchives("shorterCourses.zip");
+            var chai = require("chai");
+            var chaiAsPromised = require("chai-as-promised");
+
+            chai.use(chaiAsPromised);
+        });
+
+        beforeEach(async function() {
+            await clearDisk();
+            facade = new InsightFacade();
+        });
+
+        //test taken from CPSC310 site
+        it ("should list one dataset", async () => {
+            //Setup
+            await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+
+            //Execution
+            const datasets = await facade.listDatasets();
+
+            //Validation
+            expect(datasets).to.deep.equal([{
+                id: "ubc",
+                kind: InsightDatasetKind.Sections,
+                numRows: 64612
+            }]);
+        });
     });
 
 

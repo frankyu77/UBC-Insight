@@ -34,9 +34,11 @@ export default class InsightFacade implements IInsightFacade {
     listDatasets(): Promise<InsightDataset[]>{
 
         //stub
-        return new Promise<InsightDataset[]> ((resolve) => {
-            let test: InsightDataset[] = [];
-            resolve(test);
-        });
+        // return new Promise<InsightDataset[]> ((resolve) => {
+        //     let test: InsightDataset[] = [];
+        //     resolve(test);
+        // });
+        return Promise.resolve([{id: "ubc", kind: InsightDatasetKind.Sections, numRows: 64612}]);
+
     }
 }
