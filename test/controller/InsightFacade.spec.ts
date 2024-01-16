@@ -499,7 +499,7 @@ describe("InsightFacade", function() {
             var chai = require("chai");
             var chaiAsPromised = require("chai-as-promised");
             chai.use(chaiAsPromised);
-            //await clearDisk();
+            await clearDisk();
             await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
         });
 
@@ -521,7 +521,8 @@ describe("InsightFacade", function() {
 
                         if (!test.errorExpected) {
                             //assert.fail("asdlfkjasdfkla");
-                            expect(result).to.be.deep.equal(test.expected);
+                            expect(result).to.be.deep.equal(test.result);
+                            //expect(result).to.be.deep.members(test.result);
 
                         } else {
                             throw new Error("error expected");
@@ -541,6 +542,38 @@ describe("InsightFacade", function() {
                 });
             });
         });
+
+        describe("invalid queries", () => {
+            let invalidQueries: ITestQuery[];
+            try {
+                invalidQueries = readFileQueries("invalid");
+            } catch (e: unknown) {
+                expect.fail(`Failed to read one or more test queries. ${e}`);
+            }
+
+            invalidQueries.forEach(function(test: any) {
+                it(`${test.title}`, async function () {
+                    // return facade.performQuery(test.input).then((result) => {
+                    //     assert.fail('should have thrown an error');
+                    // }).catch((err: string) => {
+                    //     //assert.fail(`performQuery threw unexpected error: ${err}`);
+                    //     expect(err).to.equal(InsightError);
+                    // });
+
+                    try {
+                        const result = facade.performQuery(test.input);
+                        await result;
+                        assert.fail('should have thrown an error');
+                    } catch (err: unknown) {
+                        //expect(err).to.be.an.instanceof(test.expected);
+                        expect(err).to.be.an.instanceof(InsightError);
+                    }
+                });
+            });
+
+
+        })
+
     });
 
 

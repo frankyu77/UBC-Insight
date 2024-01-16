@@ -15,7 +15,7 @@
     }
   },
   "errorExpected": false,
-  "expected": [
+  "result": [
     { "sections_dept": "math", "sections_avg": 97.09 },
     { "sections_dept": "math", "sections_avg": 97.09 },
     { "sections_dept": "epse", "sections_avg": 97.09 },
