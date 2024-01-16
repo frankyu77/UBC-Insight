@@ -59,9 +59,9 @@ describe("InsightFacade", function() {
 
             try {
                 await facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections);
-                expect.fail("should not have added");
+                return expect.fail("should not have added");
             } catch (error) {
-                expect(error).to.be.an.instanceof(InsightError);
+                return expect(error).to.be.an.instanceof(InsightError);
             }
         });
 
@@ -78,9 +78,9 @@ describe("InsightFacade", function() {
 
             try {
                 await facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections);
-                expect.fail("should not have added");
+                return expect.fail("should not have added");
             } catch (error) {
-                expect(error).to.be.an.instanceof(InsightError);
+                return expect(error).to.be.an.instanceof(InsightError);
             }
         });
 
@@ -97,9 +97,9 @@ describe("InsightFacade", function() {
 
             try {
                 await facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections);
-                expect.fail("should not have added");
+                return expect.fail("should not have added");
             } catch (error) {
-                expect(error).to.be.an.instanceof(InsightError);
+                return expect(error).to.be.an.instanceof(InsightError);
             }
         });
 
@@ -116,9 +116,9 @@ describe("InsightFacade", function() {
 
             try {
                 await facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections);
-                expect.fail("should not have added");
+                return expect.fail("should not have added");
             } catch (error) {
-                expect(error).to.be.an.instanceof(InsightError);
+                return expect(error).to.be.an.instanceof(InsightError);
             }
         });
 
@@ -130,10 +130,11 @@ describe("InsightFacade", function() {
         //     return expect(result2).to.eventually.be.rejectedWith(InsightError);
         // });
 
-        it ("should reject when adding two duplicate datasets with same id (not back to back)", async () => {
-            await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections)
-            await facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections)
-            await facade.addDataset("CPSC310", sections, InsightDatasetKind.Sections)
+        it ("should reject when adding two duplicate datasets with same id", async () => {
+            // await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections)
+            // await facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections)
+            // await facade.addDataset("CPSC310", sections, InsightDatasetKind.Sections)
+
             // const result2 = facade.addDataset("hello", sections, InsightDatasetKind.Sections)
             //
             // return expect(result2).to.eventually.be.rejectedWith(InsightError);
@@ -144,13 +145,38 @@ describe("InsightFacade", function() {
             //     expect(error).to.eventually.be.rejectedWith(InsightError);
             // })
 
-            try {
-                await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-                expect.fail("should not have added");
-            } catch (error) {
-                expect(error).to.be.an.instanceof(InsightError);
-            }
+            // try {
+            //     await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+            //     return expect.fail("should not have added");
+            // } catch (error) {
+            //     return expect(error).to.be.an.instanceof(InsightError);
+            // }
+
+            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+                return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result1) => {
+                    return expect.fail("should not have added");
+                })
+            }).catch((error) => {
+                return expect(error).to.be.an.instanceof(InsightError);
+            })
         });
+
+        it ("should reject if adding same dataset to a new instance of facade", async () => {
+            try {
+                const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+                await result;
+                expect(result).to.equal(["ubc"]);
+                try {
+                    const facade2 = new InsightFacade();
+                    const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
+                    expect.fail("should not have added");
+                } catch (error1) {
+                    expect(error1).to.be.an.instanceof(InsightError);
+                }
+            } catch (error) {
+                expect.fail("should have added");
+            }
+        })
 
         //***********************************************SUCCESSES******************************************************
         it ("should successfully add one dataset", async function() {
@@ -473,12 +499,9 @@ describe("InsightFacade", function() {
             var chai = require("chai");
             var chaiAsPromised = require("chai-as-promised");
             chai.use(chaiAsPromised);
+            //await clearDisk();
+            await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
         });
-
-        beforeEach(async function() {
-            await clearDisk();
-        });
-
 
         describe("valid queries", function() {
             let validQueries: ITestQuery[];
@@ -501,7 +524,7 @@ describe("InsightFacade", function() {
                             expect(result).to.be.deep.equal(test.expected);
 
                         } else {
-                            assert.fail();
+                            throw new Error("error expected");
                         }
 
                     }).catch((err: string) => {

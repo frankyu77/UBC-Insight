@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "clear": "tsc --build --clean"
+    "clear": "tsc --build --clean",
+    "coverage": "nyc npm run test"
   }
-
 }
