@@ -162,20 +162,32 @@ describe("InsightFacade", function() {
         });
 
         it ("should reject if adding same dataset to a new instance of facade", async () => {
+            // try {
+            //     const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+            //     await result;
+            //     expect(result).to.eventually.equal(["ubc"]);
+            //     try {
+            //         const facade2 = new InsightFacade();
+            //         const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
+            //         await result2;
+            //         return expect.fail("should not have added");
+            //     } catch (error1) {
+            //         return expect(error1).to.be.an.instanceof(InsightError);
+            //     }
+            // } catch (error) {
+            //     return expect.fail("should have added");
+            // }
+            await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
             try {
-                const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-                await result;
-                expect(result).to.equal(["ubc"]);
-                try {
-                    const facade2 = new InsightFacade();
-                    const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
-                    expect.fail("should not have added");
-                } catch (error1) {
-                    expect(error1).to.be.an.instanceof(InsightError);
-                }
+                const facade2 = new InsightFacade();
+                const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
+                await result2;
+                return expect.fail("should not have added");
             } catch (error) {
-                expect.fail("should have added");
+                return expect(error).to.be.an.instanceof(InsightError);
             }
+
+
         })
 
         //***********************************************SUCCESSES******************************************************
