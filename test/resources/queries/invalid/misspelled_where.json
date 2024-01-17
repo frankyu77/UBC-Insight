@@ -1,9 +1,9 @@
 {
-  "title": "result above 5000 results, fail",
+  "title": "misspelled WHERE",
   "input": {
-    "WHERE": {
+    "WEHRE": {
       "GT": {
-        "sections_avg": 88.74
+        "sections_avg": 97
       }
     },
     "OPTIONS": {
@@ -15,5 +15,5 @@
     }
   },
   "errorExpected": true,
-  "result": "ResultTooLargeError"
+  "result": "InsightError"
 }

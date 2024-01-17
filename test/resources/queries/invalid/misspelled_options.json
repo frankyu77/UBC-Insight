@@ -1,12 +1,12 @@
 {
-  "title": "result above 5000 results, fail",
+  "title": "misspelled OPTIONS",
   "input": {
     "WHERE": {
       "GT": {
-        "sections_avg": 88.74
+        "sections_avg": 97
       }
     },
-    "OPTIONS": {
+    "OPTOINS": {
       "COLUMNS": [
         "sections_dept",
         "sections_avg"
@@ -15,5 +15,5 @@
     }
   },
   "errorExpected": true,
-  "result": "ResultTooLargeError"
+  "result": "InsightError"
 }
