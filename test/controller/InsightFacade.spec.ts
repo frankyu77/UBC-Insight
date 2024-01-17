@@ -20,7 +20,7 @@ export interface ITestQuery {
     title: string; //title of the test case
     input: unknown; //the query under test
     errorExpected: boolean; //if the query is expected to throw an error
-    expected: any; //the expected result
+    result: any; //the expected result
 }
 
 describe("InsightFacade", function() {
@@ -575,8 +575,9 @@ describe("InsightFacade", function() {
                         await result;
                         assert.fail('should have thrown an error');
                     } catch (err: unknown) {
-                        expect(err).to.be.an.instanceof(Error);
+                        //expect(err).to.be.an.instanceof(InsightError);
                         //expect(err).to.be.an.instanceof(ResultTooLargeError);
+                        expect(err).to.be.an.instanceof(Error);
                     }
                 });
             });

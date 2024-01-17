@@ -34,6 +34,7 @@ export default class InsightFacade implements IInsightFacade {
         // )
 
         throw new InsightError();
+        //return Promise.resolve([]);
     }
 
     listDatasets(): Promise<InsightDataset[]>{
