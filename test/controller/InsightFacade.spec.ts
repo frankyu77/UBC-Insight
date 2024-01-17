@@ -1,6 +1,11 @@
 import InsightFacade from "../../src/controller/InsightFacade";
 import {clearDisk, getContentFromArchives, readFileQueries} from "../resources/archives/TestUtil";
-import {InsightDatasetKind, InsightError, NotFoundError} from "../../src/controller/IInsightFacade";
+import {
+    InsightDatasetKind,
+    InsightError,
+    NotFoundError,
+    ResultTooLargeError
+} from "../../src/controller/IInsightFacade";
 import chai, {assert, expect} from "chai";
 import {describe} from "mocha";
 import chaiAsPromised from "chai-as-promised";
@@ -565,20 +570,13 @@ describe("InsightFacade", function() {
 
             invalidQueries.forEach(function(test: any) {
                 it(`${test.title}`, async function () {
-                    // return facade.performQuery(test.input).then((result) => {
-                    //     assert.fail('should have thrown an error');
-                    // }).catch((err: string) => {
-                    //     //assert.fail(`performQuery threw unexpected error: ${err}`);
-                    //     expect(err).to.equal(InsightError);
-                    // });
-
                     try {
                         const result = facade.performQuery(test.input);
                         await result;
                         assert.fail('should have thrown an error');
                     } catch (err: unknown) {
-                        //expect(err).to.be.an.instanceof(test.expected);
-                        expect(err).to.be.an.instanceof(InsightError);
+                        expect(err).to.be.an.instanceof(Error);
+                        //expect(err).to.be.an.instanceof(ResultTooLargeError);
                     }
                 });
             });

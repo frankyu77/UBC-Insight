@@ -4,5 +4,5 @@
     "OPTIONS": {}
   },
   "errorExpected": true,
-  "expected": "InsightError"
+  "result": "InsightError"
 }
