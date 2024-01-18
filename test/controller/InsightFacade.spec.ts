@@ -69,7 +69,7 @@ describe("InsightFacade", function() {
         });
 
         //rooms and not sections ---------------------------------------------------------------------------------------
-        it ("should reject with an invalid content when adding", function() {
+        it ("should reject with in valid kind", function() {
             const result = facade.addDataset("ubc", sections, InsightDatasetKind.Rooms)
 
             return expect(result).to.eventually.be.rejectedWith(InsightError);
@@ -103,7 +103,7 @@ describe("InsightFacade", function() {
         });
 
         //invalid section (missing fields) -----------------------------------------------------------------------------
-        it ("should reject when adding content with no valid section", async function() {
+        it ("should reject when adding content with missing fields in sections", async function() {
             let newSections = await getContentFromArchives("missingFields.zip");
 
             const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
