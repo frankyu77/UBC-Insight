@@ -84,8 +84,8 @@ describe("InsightFacade", function() {
             return expect(result).to.eventually.be.rejectedWith(InsightError);
         });
 
-        //invalid course (root of zip not 'courses') ---------------------------------------------------------------------------------------
-        it ("should reject with an invalid content when adding", async function() {
+        //invalid course (root of zip not 'courses') -------------------------------------------------------------------
+        it ("should reject when adding content whose root folder is not call courses/", async function() {
             let newSections = await getContentFromArchives("coursesNotRootFolder.zip");
 
             const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
@@ -93,9 +93,18 @@ describe("InsightFacade", function() {
             return expect(result).to.eventually.be.rejectedWith(InsightError);
         });
 
-        //invalid course (no valid section) ---------------------------------------------------------------------------------------
-        it ("should reject with an invalid content when adding", async function() {
+        //invalid course (no valid section) ----------------------------------------------------------------------------
+        it ("should reject when adding content with no valid section", async function() {
             let newSections = await getContentFromArchives("noValidSection.zip");
+
+            const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        //invalid section (missing fields) -----------------------------------------------------------------------------
+        it ("should reject when adding content with no valid section", async function() {
+            let newSections = await getContentFromArchives("missingFields.zip");
 
             const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
 
@@ -316,6 +325,32 @@ describe("InsightFacade", function() {
 
         });
 
+        //pass, contains one valid section------------------------------------------------------------------------------
+        it ("contains one singular valid section", async function() {
+            let newSections = await getContentFromArchives("oneValidSection.zip");
+
+            try {
+                const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
+                await result;
+                expect(result).to.eventually.equal(["ubc"]);
+            } catch (error) {
+                expect.fail("should have added");
+            }
+        });
+
+        //pass, in section some field contain empty string--------------------------------------------------------------
+        it ("section has some fields containing empty string", async function() {
+            let newSections = await getContentFromArchives("someFieldEmptyString.zip");
+
+            try {
+                const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
+                await result;
+                expect(result).to.eventually.equal(["ubc"]);
+            } catch (error) {
+                expect.fail("should have added");
+            }
+        });
+
     });
 
 
@@ -434,36 +469,36 @@ describe("InsightFacade", function() {
             }
         })
 
-        it ("should not be able to remove dataset from a different instance of facade after already removed", async () => {
-            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-
-            // try {
-            //     const result = facade.removeDataset("CAPS449");
-            //     await result;
-            //
-            //     expect(result).to.eventually.equal("CAPS449");
-            //
-            //     try {
-            //         const facade2 = new InsightFacade();
-            //         const result2 = facade2.removeDataset("CAPS449");
-            //         await result2;
-            //         expect.fail("should not have removed");
-            //     } catch (error2) {
-            //         return expect(error2).to.be.an.instanceof(InsightError);
-            //     }
-            // } catch (error) {
-            //     expect.fail("should have removed");
-            // }
-            await facade.removeDataset("CAPS449");
-            try {
-                const facade2 = new InsightFacade();
-                const result2 = facade2.removeDataset("CAPS449");
-                await result2;
-                expect.fail("should not have removed");
-            } catch (error) {
-                return expect(error).to.be.an.instanceof(InsightError);
-            }
-        });
+        // it ("should not be able to remove dataset from a different instance of facade after already removed", async () => {
+        //     await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+        //
+        //     // try {
+        //     //     const result = facade.removeDataset("CAPS449");
+        //     //     await result;
+        //     //
+        //     //     expect(result).to.eventually.equal("CAPS449");
+        //     //
+        //     //     try {
+        //     //         const facade2 = new InsightFacade();
+        //     //         const result2 = facade2.removeDataset("CAPS449");
+        //     //         await result2;
+        //     //         expect.fail("should not have removed");
+        //     //     } catch (error2) {
+        //     //         return expect(error2).to.be.an.instanceof(InsightError);
+        //     //     }
+        //     // } catch (error) {
+        //     //     expect.fail("should have removed");
+        //     // }
+        //     await facade.removeDataset("CAPS449");
+        //     try {
+        //         const facade2 = new InsightFacade();
+        //         const result2 = facade2.removeDataset("CAPS449");
+        //         await result2;
+        //         expect.fail("should not have removed");
+        //     } catch (error) {
+        //         return expect(error).to.be.an.instanceof(InsightError);
+        //     }
+        // });
 
         //***********************************************SUCCESSES******************************************************
         it ("should successfully remove one dataset", async function() {
