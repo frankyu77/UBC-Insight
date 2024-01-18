@@ -1,0 +1,15 @@
+{
+  "title": "empty COLUMNS, fail",
+  "input": {
+    "WHERE": {
+      "GT": {
+        "sections_avg": 98
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": []
+    }
+  },
+  "errorExpected": true,
+  "result": "InsightError"
+}

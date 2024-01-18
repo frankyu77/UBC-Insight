@@ -1,0 +1,16 @@
+{
+  "title": "empty WHERE, fail, shows all the datasets",
+  "input": {
+    "WHERE": {},
+    "OPTIONS": {
+      "COLUMNS": [
+        "sections_dept",
+        "sections_avg",
+        "sections_year",
+        "sections_id"
+      ]
+    }
+  },
+  "errorExpected": true,
+  "result": "ResultTooLargeError"
+}
