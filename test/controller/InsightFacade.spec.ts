@@ -373,6 +373,36 @@ describe("InsightFacade", function() {
             }
         })
 
+        it ("should fail if try and remove an id from an empty list of datasets", async () => {
+            try {
+                await facade.removeDataset("CPSC110");
+                expect.fail("should not have removed");
+            } catch (error) {
+                expect(error).to.be.an.instanceof(NotFoundError);
+            }
+        })
+
+        it ("should not be able to remove dataset from a different instance of facade after already removed", async () => {
+            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+
+            try {
+                let result = facade.removeDataset("CAPS449");
+                await result;
+                expect(result).to.eventually.equal("CAPS449");
+
+                let facade2 = new InsightFacade();
+                try {
+                    const result2 = facade2.removeDataset("CAPS449");
+                    await result2;
+                    expect.fail("should not have removed");
+                } catch (error2) {
+                    expect(error2).to.be.an.instanceof(InsightError);
+                }
+            } catch (error) {
+                expect.fail("should have removed");
+            }
+        });
+
         //***********************************************SUCCESSES******************************************************
         it ("should successfully remove one dataset", async function() {
             // return facade.removeDataset("CAPS449").then((result) => {
@@ -424,8 +454,23 @@ describe("InsightFacade", function() {
 
         });
 
+        it ("should be able to remove dataset from a different instance of facade", async () => {
+            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+
+            let facade2 = new InsightFacade();
+
+            try {
+                const result2 = facade2.removeDataset("CAPS449");
+                await result2;
+                expect(result2).to.eventually.equal("CAPS430");
+            } catch (error) {
+                expect.fail("should have removed");
+            }
+        });
 
     });
+
+
 
     //#################################################################################################### listDataset
     describe("listDataset", () => {
