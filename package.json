@@ -20,5 +20,8 @@
     "nyc": "^15.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "test": "mocha --require ts-node/register --timeout 10000 test/**/*.spec.ts"
   }
 }
