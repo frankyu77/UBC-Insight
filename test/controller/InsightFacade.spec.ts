@@ -9,6 +9,7 @@ import {
 import chai, {assert, expect} from "chai";
 import {describe} from "mocha";
 import chaiAsPromised from "chai-as-promised";
+import * as fs from "fs-extra";
 
 // describe("Testing base case for addDataset", () => {
 //     before(() => {
@@ -46,6 +47,57 @@ describe("InsightFacade", function() {
         //empty id -----------------------------------------------------------------------------------------------------
         it ("should reject with an empty dataset id when adding", function() { //test taken from CPSC310 site
             const result = facade.addDataset("", sections, InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        //invalid content ----------------------------------------------------------------------------------------------
+        it ("should reject with an invalid content when adding", function() {
+            const result = facade.addDataset("hello", "blah blah", InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        //not base64 ----------------------------------------------------------------------------------------------
+        it ("should reject when adding dataset not base64", async function() {
+            const buffer = await fs.readFile("test/resources/archives/file.txt");
+            const test = buffer.toString("base64url");
+
+            const result = facade.addDataset("hello", test, InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        //rooms and not sections ---------------------------------------------------------------------------------------
+        it ("should reject with an invalid content when adding", function() {
+            const result = facade.addDataset("ubc", sections, InsightDatasetKind.Rooms)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        //valid dataset with invalid course (NOT JSON formatted)--------------------------------------------------------
+        it ("should reject when adding content with valid dataset but invalid course (not JSON formatted)", async function() {
+            let newSections = await getContentFromArchives("fileNotJSONFormatted.zip");
+
+            const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        //invalid course (root of zip not 'courses') ---------------------------------------------------------------------------------------
+        it ("should reject with an invalid content when adding", async function() {
+            let newSections = await getContentFromArchives("coursesNotRootFolder.zip");
+
+            const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        //invalid course (no valid section) ---------------------------------------------------------------------------------------
+        it ("should reject with an invalid content when adding", async function() {
+            let newSections = await getContentFromArchives("noValidSection.zip");
+
+            const result = facade.addDataset("ubc", newSections, InsightDatasetKind.Sections)
 
             return expect(result).to.eventually.be.rejectedWith(InsightError);
         });
@@ -385,21 +437,31 @@ describe("InsightFacade", function() {
         it ("should not be able to remove dataset from a different instance of facade after already removed", async () => {
             await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 
+            // try {
+            //     const result = facade.removeDataset("CAPS449");
+            //     await result;
+            //
+            //     expect(result).to.eventually.equal("CAPS449");
+            //
+            //     try {
+            //         const facade2 = new InsightFacade();
+            //         const result2 = facade2.removeDataset("CAPS449");
+            //         await result2;
+            //         expect.fail("should not have removed");
+            //     } catch (error2) {
+            //         return expect(error2).to.be.an.instanceof(InsightError);
+            //     }
+            // } catch (error) {
+            //     expect.fail("should have removed");
+            // }
+            await facade.removeDataset("CAPS449");
             try {
-                let result = facade.removeDataset("CAPS449");
-                await result;
-                expect(result).to.eventually.equal("CAPS449");
-
-                let facade2 = new InsightFacade();
-                try {
-                    const result2 = facade2.removeDataset("CAPS449");
-                    await result2;
-                    expect.fail("should not have removed");
-                } catch (error2) {
-                    expect(error2).to.be.an.instanceof(InsightError);
-                }
+                const facade2 = new InsightFacade();
+                const result2 = facade2.removeDataset("CAPS449");
+                await result2;
+                expect.fail("should not have removed");
             } catch (error) {
-                expect.fail("should have removed");
+                return expect(error).to.be.an.instanceof(InsightError);
             }
         });
 
