@@ -35,10 +35,24 @@ describe("InsightFacade Tests", function()  {
         });
 
 
-        it ("should reject with  an empty dataset id", function() {
+        it ("reject - dataset id empty", function() {
             const result = facade.addDataset("", sections, InsightDatasetKind.Sections)
 
-            return expect(result).to.eventually.be.rejectedWith(new InsightError());
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+
+
+        it("reject - dataset id with whitespace", function() {
+            const result = facade.addDataset("  01", sections, InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        it("reject - dataset id with underscore", function() {
+            const result = facade.addDataset("0_1", sections, InsightDatasetKind.Sections)
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
         });
     });
 });
