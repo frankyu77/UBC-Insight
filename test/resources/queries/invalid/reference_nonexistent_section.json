@@ -1,6 +1,6 @@
 {
-  "title": "should fail when referencing a not added dataset",
-  "intput": {
+  "title": "should fail when referencing a not existent section",
+  "input": {
     "WHERE": {
 
       "IS": {"sections_dept": "testing"}

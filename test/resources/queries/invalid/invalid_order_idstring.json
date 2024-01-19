@@ -1,5 +1,5 @@
 {
-  "title": "Query misspelled id",
+  "title": "OPTIONS idstring is wrong, fail",
   "input": {
     "WHERE": {
       "EQ": {
@@ -12,14 +12,14 @@
         "sections_avg",
         "sections_year",
         "sections_id",
-        "sections_isntrucotr",
+        "sections_instructor",
         "sections_uuid",
         "sections_title",
         "sections_pass",
         "sections_fail",
         "sections_audit"
       ],
-      "ORDER": "sections_year"
+      "ORDER": "sectoins_year"
     }
   },
   "errorExpected": true,
