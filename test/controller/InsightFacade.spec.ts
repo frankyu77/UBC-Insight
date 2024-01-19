@@ -3,6 +3,7 @@ import {clearDisk, getContentFromArchives, readFileQueries} from "../resources/a
 import InsightFacade from "../../src/controller/InsightFacade";
 import chai, {expect} from "chai";
 import chaiAsPromised from "chai-as-promised";
+import assert from "node:assert";
 
 
 chai.use(chaiAsPromised);
@@ -15,21 +16,19 @@ export interface ITestQuery {
 }
 
 
-// MY FIRST TEST
-describe("InsightFacade Tests", function()  {
+// ADD REMOVE LIST TESTS !!!
+describe("InsightFacade add/remove/listDatasets Tests", function()  {
 
 
         let valid_dataset: string;
         let invalid_dataset: string;
         let known_rows_dataset: string;
-        let full_dataset: string;
         let facade: InsightFacade;
 
         before(async function() {
             valid_dataset = await getContentFromArchives("valid_dataset.zip");
             invalid_dataset = await getContentFromArchives("invalid_dataset.zip");
             known_rows_dataset = await getContentFromArchives("known_rows_dataset.zip");
-            //full_dataset = await getContentFromArchives("pair.zip")
         });
 
         beforeEach(async function () {
@@ -175,40 +174,73 @@ describe("InsightFacade Tests", function()  {
         //
         // });
 
+});
 
-        //QUERY TESTS !!!
-        // describe ("performQuery Tests", function() {
-        //
-        //     before(async function() {
-        //         valid_dataset = await getContentFromArchives("valid_dataset.zip");
-        //         invalid_dataset = await getContentFromArchives("invalid_dataset.zip");
-        //         known_rows_dataset = await getContentFromArchives("known_rows_dataset.zip");
-        //     });
-        //
-        //     describe("valid queries", function() {
-        //
-        //         let validQueries: ITestQuery[];
-        //
-        //         try {
-        //             validQueries = readFileQueries("valid");
-        //         } catch (e: unknown) {
-        //             expect.fail(`Failed to read one or more test queries. ${e}`);
-        //         }
-        //
-        //         validQueries.forEach(function(test: any) {
-        //             it(`${test.title}`, function () {
-        //                 return facade.performQuery(test.input).then((result) => {
-        //
-        //                     assert.fail("Write your assertions here!");
-        //
-        //                 }).catch((err: any) => {
-        //
-        //                     assert.fail(`performQuery threw unexpected error: ${err}`);
-        //
-        //                 });
-        //             });
-        //         });
-        //     });
-        // });
+
+// Load full data set
+// Add full data set to facade
+// QUERY TESTS !!!
+describe ("InsightFacade performQuery Tests", function() {
+            let facade: InsightFacade;
+            let sections: string;
+
+            before(async function() {
+                sections = await getContentFromArchives("pair.zip")
+                await clearDisk();
+                facade = new InsightFacade();
+                await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
+            });
+
+            describe("valid queries", function() {
+
+                let validQueries: ITestQuery[];
+
+                try {
+                    validQueries = readFileQueries("valid");
+                } catch (e: unknown) {
+                    expect.fail(`Failed to read one or more test queries. ${e}`);
+                }
+
+                validQueries.forEach(function(test: any) {
+                    it(`${test.title}`, function () {
+                        return facade.performQuery(test.input).then((result) => {
+
+                            expect(result).to.deep.equal(test.expected);
+
+                        }).catch((err: any) => {
+                            // should NOT throw insightError
+                            assert.fail(`performQuery threw unexpected error: ${err}`);
+
+                        });
+                    });
+                });
+            });
+
+            describe("invalid queries", function() {
+
+                let invalidQueries: ITestQuery[];
+
+                try {
+                    invalidQueries = readFileQueries("invalid");
+                } catch (e: unknown) {
+                    expect.fail(`Failed to read one or more test queries. ${e}`);
+                }
+
+                invalidQueries.forEach(function(test: any) {
+                    it(`${test.title}`, function () {
+                        return facade.performQuery(test.input).then((result) => {
+
+                            assert.fail("performQuery completed with no expected error thrown");
+
+                        }).catch((err: any) => {
+                            // SHOULD throw insightError OR MaxResultsError
+
+                            //expect(err).to.equal(InsightError);
+
+                        });
+                    });
+                });
+            });
 
 });
+
