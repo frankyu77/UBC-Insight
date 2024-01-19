@@ -606,16 +606,33 @@ describe("InsightFacade", function() {
         });
 
         it ("should be able to remove dataset from a different instance of facade", async () => {
-            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-
-            let facade2 = new InsightFacade();
+            // await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+            //
+            // let facade2 = new InsightFacade();
+            //
+            // try {
+            //     const result2 = facade2.removeDataset("CAPS449");
+            //     await result2;
+            //     expect(result2).to.eventually.equal("CAPS430");
+            // } catch (error) {
+            //     expect.fail("should have removed");
+            // }
 
             try {
-                const result2 = facade2.removeDataset("CAPS449");
-                await result2;
-                expect(result2).to.eventually.equal("CAPS430");
-            } catch (error) {
-                expect.fail("should have removed");
+                const result = facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+                await result;
+                expect(result).to.eventually.equal(["CAPS449"]);
+
+                let facade2 = new InsightFacade();
+                try {
+                    const result2 = facade2.removeDataset("CAPS449");
+                    await result2;
+                    expect(result2).to.eventually.equal("CAPS430");
+                } catch (error) {
+                    expect.fail("should have removed");
+                }
+            } catch (error1) {
+                expect.fail("should have added");
             }
         });
 

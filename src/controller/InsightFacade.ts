@@ -25,9 +25,9 @@ export default class InsightFacade implements IInsightFacade {
         // return new Promise<string> ((resolve) => {
         //     resolve("");
         // });
-        //return Promise.resolve(id);
+        return Promise.resolve(id);
         //throw new InsightError("remove error");
-        throw new NotFoundError();
+        //throw new NotFoundError();
     }
 
     performQuery(query: unknown): Promise<InsightResult[]> {
