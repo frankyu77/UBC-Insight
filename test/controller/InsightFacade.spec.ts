@@ -23,12 +23,16 @@ describe("InsightFacade add/remove/listDatasets Tests", function()  {
         let valid_dataset: string;
         let invalid_dataset: string;
         let known_rows_dataset: string;
+        let empty_zip: string;
         let facade: InsightFacade;
 
         before(async function() {
             valid_dataset = await getContentFromArchives("valid_dataset.zip");
             invalid_dataset = await getContentFromArchives("invalid_dataset.zip");
             known_rows_dataset = await getContentFromArchives("known_rows_dataset.zip");
+            empty_zip = await getContentFromArchives("empty_zip.zip");
+
+
         });
 
         beforeEach(async function () {
@@ -79,6 +83,12 @@ describe("InsightFacade add/remove/listDatasets Tests", function()  {
 
         it("add - reject - content empty)", function() {
             const result = facade.addDataset("1", "", InsightDatasetKind.Sections);
+
+            return expect(result).to.eventually.be.rejectedWith(InsightError);
+        });
+
+        it("add - reject - zip empty)", function() {
+            const result = facade.addDataset("1", empty_zip, InsightDatasetKind.Sections);
 
             return expect(result).to.eventually.be.rejectedWith(InsightError);
         });
@@ -171,6 +181,8 @@ describe("InsightFacade add/remove/listDatasets Tests", function()  {
         // it("list - accept (empty facade)", async () => {
         //
         //     const result = facade.listDatasets();
+        //
+        //     return expect(result).to.have.length(0);
         //
         // });
 
