@@ -20,10 +20,6 @@ export interface ITestQuery {
     expected: any; //the expected result
 }
 
-// const errors = {
-//     InsightError,
-//     ResultTooLargeError,
-// };
 
 
 // ADD REMOVE LIST TESTS !!!
