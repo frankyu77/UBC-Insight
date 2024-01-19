@@ -1,0 +1,35 @@
+{
+	"title": "orderKeyNotInCol",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_audit": 1
+					}
+				},
+				{
+					"GT": {
+						"sections_avg": 92
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_uuid",
+				"sections_dept",
+				"sections_id",
+				"sections_avg",
+				"sections_title",
+				"sections_instructor",
+				"sections_year",
+				"sections_pass",
+				"sections_fail"
+			],
+			"ORDER": "sections_audit"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

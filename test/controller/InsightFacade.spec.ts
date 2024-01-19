@@ -1,4 +1,9 @@
-import {InsightDatasetKind, InsightError, NotFoundError} from "../../src/controller/IInsightFacade";
+import {
+    InsightDatasetKind,
+    InsightError,
+    NotFoundError,
+    ResultTooLargeError
+} from "../../src/controller/IInsightFacade";
 import {clearDisk, getContentFromArchives, readFileQueries} from "../resources/archives/TestUtil";
 import InsightFacade from "../../src/controller/InsightFacade";
 import chai, {expect} from "chai";
@@ -14,6 +19,11 @@ export interface ITestQuery {
     errorExpected: boolean; //if the query is expected to throw an error
     expected: any; //the expected result
 }
+
+// const errors = {
+//     InsightError,
+//     ResultTooLargeError,
+// };
 
 
 // ADD REMOVE LIST TESTS !!!
@@ -246,8 +256,9 @@ describe ("InsightFacade performQuery Tests", function() {
 
                         }).catch((err: any) => {
                             // SHOULD throw insightError OR MaxResultsError
+                            assert.equal(err, InsightError || ResultTooLargeError);
+                            //expect(err).to.eventually.be.rejectedWith(errors[test.expected as keyof typeof errors]);
 
-                            //expect(err).to.equal(InsightError);
 
                         });
                     });
