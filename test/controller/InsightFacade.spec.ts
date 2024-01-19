@@ -450,13 +450,28 @@ describe("InsightFacade", function() {
             //     expect(error).to.eventually.be.rejectedWith(InsightError);
             // })
 
-            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+            // await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+            //
+            // try {
+            //     await facade.removeDataset("hello");
+            //     expect.fail("should not have removed");
+            // } catch (error) {
+            //     expect(error).to.be.an.instanceof(NotFoundError);
+            // }
 
             try {
-                await facade.removeDataset("hello");
-                expect.fail("should not have removed");
-            } catch (error) {
-                expect(error).to.be.an.instanceof(NotFoundError);
+                const result1 = facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+                await result1;
+                expect(result1).to.eventually.equal(["CAPS449"]);
+                try {
+                    const result = facade.removeDataset("hello");
+                    await result;
+                    expect.fail("should not have removed");
+                } catch (error) {
+                    expect(error).to.be.an.instanceof(NotFoundError);
+                }
+            } catch (error1) {
+                expect.fail("should have removed");
             }
         })
 
@@ -508,15 +523,23 @@ describe("InsightFacade", function() {
             //     expect.fail("should have removed");
             // });
 
-            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-
+            //await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
             try {
-                const result = facade.removeDataset("CAPS449");
-                await result;
-                expect(result).to.eventually.equal("CAPS449");
-            } catch (error) {
+                const result1 = facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+                await result1;
+                expect(result1).to.eventually.equal(["CAPS449"]);
+                try {
+                    const result = facade.removeDataset("CAPS449");
+                    await result;
+                    expect(result).to.eventually.equal("CAPS449");
+                } catch (error) {
+                    expect.fail("should have removed");
+                }
+            } catch (error1) {
                 expect.fail("should have removed");
             }
+
+
         });
 
         it ("should successfully remove two different datasets", async () => {
@@ -530,24 +553,55 @@ describe("InsightFacade", function() {
             //     expect.fail("should have removed");
             // });
 
-            await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-            await facade.addDataset("CAPS430", sections, InsightDatasetKind.Sections);
+            // await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+            // await facade.addDataset("CAPS430", sections, InsightDatasetKind.Sections);
+
 
             try {
-                const result1 = facade.removeDataset("CAPS449");
-                await result1;
-                expect(result1).to.eventually.equal("CAPS449");
-
+                const res = facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
+                await res;
+                expect(res).to.eventually.equal(["CAPS449"]);
                 try {
-                    const result2 = facade.removeDataset("CAPS430");
-                    await result2;
-                    expect(result2).to.eventually.equal("CAPS430");
+                    const res2 = facade.addDataset("CAPS430", sections, InsightDatasetKind.Sections);
+                    await res2;
+                    expect(res2).to.eventually.equal(["CAPS449", "CAPS430"]);
+                    try {
+                        const result1 = facade.removeDataset("CAPS449");
+                        await result1;
+                        expect(result1).to.eventually.equal("CAPS449");
+
+                        try {
+                            const result2 = facade.removeDataset("CAPS430");
+                            await result2;
+                            expect(result2).to.eventually.equal("CAPS430");
+                        } catch (error4) {
+                            expect.fail("should have removed");
+                        }
+                    } catch (error3) {
+                        expect.fail("should have removed");
+                    }
                 } catch (error2) {
-                    expect.fail("should have removed");
+                    expect.fail("should have added");
                 }
-            } catch (error1) {
-                expect.fail("should have removed");
+            } catch (error) {
+                expect.fail("should have added");
             }
+
+            // try {
+            //     const result1 = facade.removeDataset("CAPS449");
+            //     await result1;
+            //     expect(result1).to.eventually.equal("CAPS449");
+            //
+            //     try {
+            //         const result2 = facade.removeDataset("CAPS430");
+            //         await result2;
+            //         expect(result2).to.eventually.equal("CAPS430");
+            //     } catch (error2) {
+            //         expect.fail("should have removed");
+            //     }
+            // } catch (error1) {
+            //     expect.fail("should have removed");
+            // }
 
         });
 

@@ -1,4 +1,11 @@
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, InsightResult} from "./IInsightFacade";
+import {
+    IInsightFacade,
+    InsightDataset,
+    InsightDatasetKind,
+    InsightError,
+    InsightResult,
+    NotFoundError
+} from "./IInsightFacade";
 export default class InsightFacade implements IInsightFacade {
     addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 
@@ -19,7 +26,8 @@ export default class InsightFacade implements IInsightFacade {
         //     resolve("");
         // });
         //return Promise.resolve(id);
-        throw new InsightError("remove error");
+        //throw new InsightError("remove error");
+        throw new NotFoundError();
     }
 
     performQuery(query: unknown): Promise<InsightResult[]> {
