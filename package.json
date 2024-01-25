@@ -1,0 +1,30 @@
+{
+  "name": "cs310project",
+  "version": "1.0.0",
+  "description": "my cpsc 310 project",
+  "main": "index.js",
+  "repository": "https://github.students.cs.ubc.ca/CPSC310-2023W-T2/c0_team328.git",
+  "author": "Frank Yu <kyu16@students.cs.ubc.ca>",
+  "license": "MIT",
+  "dependencies": {
+    "@tsconfig/node18": "^18.2.2",
+    "@types/chai": "^4.3.11",
+    "@types/chai-as-promised": "^7.1.8",
+    "@types/fs-extra": "^11.0.4",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.8",
+    "chai": "4.3.10",
+    "chai-as-promised": "^7.1.1",
+    "fs-extra": "^11.2.0",
+    "jszip": "^3.10.1",
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clear": "tsc --build --clean",
+    "coverage": "nyc npm run test"
+  }
+}

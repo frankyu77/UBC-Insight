@@ -1,0 +1,19 @@
+{
+  "title": "should fail when referencing a not existent section",
+  "input": {
+    "WHERE": {
+
+      "IS": {"sections_dept": "testing"}
+
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "sections_dept",
+        "sections_avg"
+      ],
+      "ORDER": "sections_avg"
+    }
+  },
+  "errorExpected": true,
+  "result": "InsightError"
+}
