@@ -1,0 +1,28 @@
+{
+	"title": "emptyDatasetString",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"EQ": {
+						"_avg": 61
+					}
+				},
+				{
+					"IS": {
+						"_dept": "engl"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"_dept",
+				"_id",
+				"_avg"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

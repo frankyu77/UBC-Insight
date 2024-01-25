@@ -1,0 +1,55 @@
+{
+	"title": "and",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_audit": 1
+					}
+				},
+				{
+					"EQ": {
+						"sections_avg": 95
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_instructor",
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "rhsc",
+			"sections_instructor": "",
+			"sections_avg": 95
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "",
+			"sections_avg": 95
+		},
+		{
+			"sections_dept": "epse",
+			"sections_instructor": "zumbo, bruno",
+			"sections_avg": 95
+		},
+		{
+			"sections_dept": "econ",
+			"sections_instructor": "",
+			"sections_avg": 95
+		},
+		{
+			"sections_dept": "econ",
+			"sections_instructor": "gallipoli, giovanni",
+			"sections_avg": 95
+		}
+	]
+}

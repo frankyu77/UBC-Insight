@@ -1,0 +1,19 @@
+{
+	"title": "0KeyOr",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_id",
+				"sections_avg"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
