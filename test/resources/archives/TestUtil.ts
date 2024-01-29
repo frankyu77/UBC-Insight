@@ -23,9 +23,9 @@ const persistDir = "./data";
 // }
 
 async function getContentFromArchives (name: string): Promise<string> {
-    const buffer = await fs.readFile("test/resources/archives/" + name);
+	const buffer = await fs.readFile("test/resources/archives/" + name);
 
-    return buffer.toString("base64");
+	return buffer.toString("base64");
 }
 
 
@@ -33,29 +33,29 @@ async function getContentFromArchives (name: string): Promise<string> {
  * Removes all files within the persistDir.
  */
 async function clearDisk(): Promise<void> {
-    await fs.remove(persistDir);
+	await fs.remove(persistDir);
 }
 
 /**
-
+ *
  * Searches for test query JSON files in the path.
-
+ *
  * @param path The path to the sample query JSON files.
-
+ *
  */
 
 function readFileQueries(path: string): ITestQuery[] {
     // Note: This method *must* be synchronous for Mocha
-    const fileNames = fs.readdirSync(`test/resources/queries/${path}`);
+	const fileNames = fs.readdirSync(`test/resources/queries/${path}`);
 
-    const allQueries: ITestQuery[] = [];
-    for (const fileName of fileNames) {
-        const fileQuery = fs.readJSONSync(`test/resources/queries/${path}/${fileName}`);
+	const allQueries: ITestQuery[] = [];
+	for (const fileName of fileNames) {
+		const fileQuery = fs.readJSONSync(`test/resources/queries/${path}/${fileName}`);
 
-        allQueries.push(fileQuery);
-    }
+		allQueries.push(fileQuery);
+	}
 
-    return allQueries;
+	return allQueries;
 }
 
 
