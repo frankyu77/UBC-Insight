@@ -3,13 +3,13 @@ import * as fs from "fs-extra";
 import * as zip from "jszip";
 
 import {
-    IInsightFacade,
-    InsightDatasetKind,
-    NotFoundError,
-    ResultTooLargeError,
-    InsightError,
-    InsightDataset,
-    InsightResult,
+	IInsightFacade,
+	InsightDatasetKind,
+	NotFoundError,
+	ResultTooLargeError,
+	InsightError,
+	InsightDataset,
+	InsightResult,
 } from "./controller/IInsightFacade";
 import InsightFacade from "./controller/InsightFacade";
 
@@ -24,12 +24,14 @@ const futureAddedIds: Promise<string[]> = insightFacade.addDataset("bar", "baz",
 
 
 futureInsightDatasets.then((insightDatasets) => {
-    const {id, numRows, kind} = insightDatasets[0];
+	const {id, numRows, kind} = insightDatasets[0];
+}).catch((err) => {
+
 });
 
 
 const errors: Error[] = [
-    new ResultTooLargeError("foo"),
-    new NotFoundError("bar"),
-    new InsightError("baz"),
+	new ResultTooLargeError("foo"),
+	new NotFoundError("bar"),
+	new InsightError("baz"),
 ];

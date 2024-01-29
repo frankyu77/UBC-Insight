@@ -20,24 +20,24 @@ export interface InsightResult {
 }
 
 export class InsightError extends Error {
-     constructor(message?: string) {
-         super(message);
-         Error.captureStackTrace(this, InsightError);
-     }
+	constructor(message?: string) {
+		super(message);
+		Error.captureStackTrace(this, InsightError);
+	}
 }
 
 export class NotFoundError extends Error {
-     constructor(message?: string) {
-         super(message);
-         Error.captureStackTrace(this, NotFoundError);
-     }
+	constructor(message?: string) {
+		super(message);
+		Error.captureStackTrace(this, NotFoundError);
+	}
 }
 
 export class ResultTooLargeError extends Error {
-     constructor(message?: string) {
-         super(message);
-         Error.captureStackTrace(this, ResultTooLargeError);
-     }
+	constructor(message?: string) {
+		super(message);
+		Error.captureStackTrace(this, ResultTooLargeError);
+	}
 }
 
 export interface IInsightFacade {
