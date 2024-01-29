@@ -1,0 +1,31 @@
+{
+	"title": "empty key name in where",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT":{
+						"sections_avg":96
+					}
+				},
+				{
+					"IS":{
+						"sections_dept":"adhe"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"",
+				"sections_avg",
+				"sections_id",
+				"sections_year",
+				"sections_instructor"
+			],
+			"ORDER": "sections_year"
+		}
+	},
+	"errorExpected": false,
+	"result": "InsightError"
+}
