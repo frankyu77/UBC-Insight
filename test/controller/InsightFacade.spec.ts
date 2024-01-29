@@ -306,15 +306,14 @@ describe("InsightFacade", function() {
             // });
 
 			try {
-				const result1 = facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-				await result1;
-                // expect(result1).to.eventually.equal(["CPSC110"]);
+				const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+                expect(result1).to.deep.equal(["CPSC110"]);
 
 				try {
 					const result2 = await facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
 					expect(result2).to.deep.equal(["CPSC110", "CPSC210"]);
 				} catch (error2) {
-					expect.fail("should have added");
+					expect.fail("should have added 2");
 				}
 			} catch (error1) {
 				expect.fail("should have added");
@@ -614,7 +613,7 @@ describe("InsightFacade", function() {
 				let facade2 = new InsightFacade();
 				try {
 					const result2 = await facade2.removeDataset("CAPS449");
-					expect(result2).to.deep.equal("CAPS430");
+					expect(result2).to.deep.equal("CAPS449");
 				} catch (error) {
 					expect.fail("should have removed");
 				}

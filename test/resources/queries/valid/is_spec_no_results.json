@@ -17,6 +17,6 @@
 			"ORDER": "sections_year"
 		}
 	},
-	"errorExpected": true,
+	"errorExpected": false,
 	"result": []
 }

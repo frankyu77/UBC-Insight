@@ -1,9 +1,9 @@
 {
-	"title": "empty is spec and empty result",
+	"title": "star in the middle fail",
 	"input" : {
 		"WHERE": {
-			"IS":{
-				"sections_dept":""
+			"IS": {
+				"sections_dept": "cp*sc"
 			}
 		},
 		"OPTIONS": {
@@ -17,6 +17,6 @@
 			"ORDER": "sections_year"
 		}
 	},
-	"errorExpected": false,
-	"result": []
+	"errorExpected": true,
+	"result": "InsightError"
 }
