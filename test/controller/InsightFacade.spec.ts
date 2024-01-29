@@ -307,7 +307,7 @@ describe("InsightFacade", function() {
 
 			try {
 				const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-                expect(result1).to.deep.equal(["CPSC110"]);
+				expect(result1).to.deep.equal(["CPSC110"]);
 
 				try {
 					const result2 = await facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
