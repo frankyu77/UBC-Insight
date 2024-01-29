@@ -26,7 +26,7 @@ const futureAddedIds: Promise<string[]> = insightFacade.addDataset("bar", "baz",
 futureInsightDatasets.then((insightDatasets) => {
 	const {id, numRows, kind} = insightDatasets[0];
 }).catch((err) => {
-
+	console.log(err);
 });
 
 
