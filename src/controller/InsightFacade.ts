@@ -6,8 +6,32 @@ import {
 	InsightResult,
 	NotFoundError
 } from "./IInsightFacade";
+import Section from "./Sections";
+
 export default class InsightFacade implements IInsightFacade {
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		//	template for how to create a section
+		//	let section = new Section(
+		// 	"CPSC",
+		// 	"101",
+		// 	"computer science",
+		// 	"gregor",
+		// 	"science",
+		// 	2022,
+		// 	88,
+		// 	100,
+		// 	30,
+		// 	10
+		// );
+
+		return new Promise<string[]> (() => {
+
+
+
+		});
+
+
+
 
         // stub
         // return new Promise<string[]> ((resolve) => {
@@ -15,7 +39,7 @@ export default class InsightFacade implements IInsightFacade {
         //     test.push(id);
         //     resolve(test);
         // })
-		return Promise.resolve([id]);
+		//return Promise.resolve([id]);
         // throw new InsightError("errrrrr");
 	}
 
