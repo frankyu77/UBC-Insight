@@ -27,10 +27,7 @@ export default class InsightFacade implements IInsightFacade {
 		return new Promise<string[]> (() => {
 
 
-
 		});
-
-
 
 
         // stub
@@ -39,7 +36,7 @@ export default class InsightFacade implements IInsightFacade {
         //     test.push(id);
         //     resolve(test);
         // })
-		//return Promise.resolve([id]);
+		// return Promise.resolve([id]);
         // throw new InsightError("errrrrr");
 	}
 
