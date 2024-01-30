@@ -10,13 +10,6 @@ import chai, {assert, expect} from "chai";
 import {describe} from "mocha";
 import chaiAsPromised from "chai-as-promised";
 import * as fs from "fs-extra";
-
-// describe("Testing base case for addDataset", () => {
-//     before(() => {
-//         const insightFacade = new InsightFacade();
-//     })
-// });
-
 export interface ITestQuery {
     title: string; // title of the test case
     input: unknown; // the query under test
@@ -32,9 +25,6 @@ describe("InsightFacade", function() {
 
 		before(async function() {
 			sections = await getContentFromArchives("shorterCourses.zip");
-			// let chai = require("chai");
-			// let chaiAsPromised = require("chai-as-promised");
-
 			chai.use(chaiAsPromised);
 		});
 
@@ -114,17 +104,7 @@ describe("InsightFacade", function() {
 
         // id containing underscore -------------------------------------------------------------------------------------
 		it ("should reject if id added contains an underscore (at the front)", async () => {
-           // const result = facade.addDataset("_UBC", sections, InsightDatasetKind.Sections)
-           //
-           // return expect(result).to.eventually.be.rejectedWith(InsightError);
-
-            // return facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
-            //     expect.fail("should not have added");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.equal(Error);
-            // })
-
-			try {
+           try {
 				await facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -133,17 +113,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id added contains an underscore (at the back)", async () => {
-            // const result = facade.addDataset("UBC_", sections, InsightDatasetKind.Sections)
-            //
-            // return expect(result).to.eventually.be.rejectedWith(InsightError);
-
-            // return facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections).then((result) => {
-            //     expect.fail("should not have added");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-			try {
+            try {
 				await facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -152,17 +122,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id added contains an underscore (in the middle)", async () => {
-            // const result = facade.addDataset("U_BC", sections, InsightDatasetKind.Sections)
-            //
-            // return expect(result).to.eventually.be.rejectedWith(InsightError);
-
-            // return facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections).then((result) => {
-            //     expect.fail("should not have added");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-			try {
+            try {
 				await facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -171,17 +131,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id added contains an underscore (multiple)", async () => {
-            // const result = facade.addDataset("U_B_C_", sections, InsightDatasetKind.Sections)
-            //
-            // return expect(result).to.eventually.be.rejectedWith(InsightError);
-
-            // return facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections).then((result) => {
-            //     expect.fail("should not have added");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-			try {
+            try {
 				await facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -189,37 +139,8 @@ describe("InsightFacade", function() {
 			}
 		});
 
-        // duplicate id -------------------------------------------------------------------------------------------------
-        // it ("should reject when adding two duplicate datasets with same id", () => {
-        //     facade.addDataset("hello", sections, InsightDatasetKind.Sections)
-        //     const result2 = facade.addDataset("hello", sections, InsightDatasetKind.Sections)
-        //
-        //     return expect(result2).to.eventually.be.rejectedWith(InsightError);
-        // });
-
 		it ("should reject when adding two duplicate datasets with same id", async () => {
-            // await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections)
-            // await facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections)
-            // await facade.addDataset("CPSC310", sections, InsightDatasetKind.Sections)
-
-            // const result2 = facade.addDataset("hello", sections, InsightDatasetKind.Sections)
-            //
-            // return expect(result2).to.eventually.be.rejectedWith(InsightError);
-
-            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
-            //     expect.fail("should not have added");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-            // try {
-            //     await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-            //     return expect.fail("should not have added");
-            // } catch (error) {
-            //     return expect(error).to.be.an.instanceof(InsightError);
-            // }
-
-			return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
 				return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result1) => {
 					return expect.fail("should not have added");
 				});
@@ -229,22 +150,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if adding same dataset to a new instance of facade", async () => {
-            // try {
-            //     const result = facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-            //     await result;
-            //     expect(result).to.eventually.equal(["ubc"]);
-            //     try {
-            //         const facade2 = new InsightFacade();
-            //         const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
-            //         await result2;
-            //         return expect.fail("should not have added");
-            //     } catch (error1) {
-            //         return expect(error1).to.be.an.instanceof(InsightError);
-            //     }
-            // } catch (error) {
-            //     return expect.fail("should have added");
-            // }
-			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+            await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 			try {
 				const facade2 = new InsightFacade();
 				const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
@@ -259,17 +165,7 @@ describe("InsightFacade", function() {
 
         //* **********************************************SUCCESSES******************************************************
 		it ("should successfully add one dataset", async function() {
-            // const result = facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections)
-            //
-            // return expect(result).to.eventually.have.members(["CPSC110"]);
-
-            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
-            //     expect(result).to.eventually.equal(["CPSC110"]);
-            // }).catch((error) => {
-            //     expect.fail("should have added");
-            // });
-
-			try {
+            try {
 				const result = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
 				expect(result).to.deep.equal(["CPSC110"]);
 			} catch (error) {
@@ -278,34 +174,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should successfully add two different datasets", async () => {
-            // facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-            // return facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result) => {
-            //     //expect(result).to.eventually.have.members(["CPSC110", "CPSC210"]);
-            //     expect(result).to.have.members(["CPSC110", "CPSC210"]);
-            // }).catch((error) => {
-            //     expect.fail("should have added");
-            // })
-
-            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
-            //     facade.addDataset("CPSC210", sections, InsightDatasetKind.Sections).then((result2) => {
-            //         expect(result2).to.eventually.equal(["CPSC110", "CPSC210"]);
-            //     }).catch((error2) => {
-            //         expect.fail("should have added");
-            //     });
-            // }).catch((error) => {
-            //     expect.fail("should have added");
-            // });
-
-            // return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result1) => {
-            //     expect(result1).to.eventually.equal(["CPSC110"]);
-            //     return facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
-            // }).then((result2) => {
-            //     expect(result2).to.eventually.equal(["CPSC110", "CPSC210"]);
-            // }).catch((error) => {
-            //     expect.fail("should have added");
-            // });
-
-			try {
+            try {
 				const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
 				expect(result1).to.deep.equal(["CPSC110"]);
 
@@ -318,9 +187,6 @@ describe("InsightFacade", function() {
 			} catch (error1) {
 				expect.fail("should have added");
 			}
-
-            // return expect(result2).to.eventually.have.members(["CPSC110", "CPSC210"]);
-
 		});
 
         // pass, contains one valid section------------------------------------------------------------------------------
@@ -358,9 +224,6 @@ describe("InsightFacade", function() {
 
 		before(async function() {
 			sections = await getContentFromArchives("shorterCourses.zip");
-			// let chai = require("chai");
-			// let chaiAsPromised = require("chai-as-promised");
-
 			chai.use(chaiAsPromised);
 		});
 
@@ -379,13 +242,7 @@ describe("InsightFacade", function() {
 
         // id containing underscore -------------------------------------------------------------------------------------
 		it ("should reject if id removed contains an underscore (at the front)", async () => {
-            // return facade.removeDataset("_CPSC110").then((result) => {
-            //     expect.fail("should not have been removed");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-			try {
+            try {
 				await facade.removeDataset("_CPSC110");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -394,13 +251,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id removed contains an underscore (at the back)", async () => {
-            // return facade.removeDataset("CPSC110_").then((result) => {
-            //     expect.fail("should not have been removed");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-			try {
+            try {
 				await facade.removeDataset("CPSC110_");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -409,13 +260,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id removed contains an underscore (in the middle)", async () => {
-            // return facade.removeDataset("CPSC_110").then((result) => {
-            //     expect.fail("should not have been removed");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-			try {
+            try {
 				await facade.removeDataset("CPSC_110");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -424,13 +269,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id removed contains an underscore (multiple)", async () => {
-            // return facade.removeDataset("C_P_S_C110").then((result) => {
-            //     expect.fail("should not have been removed");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-			try {
+            try {
 				await facade.removeDataset("C_P_S_C110");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -440,22 +279,7 @@ describe("InsightFacade", function() {
 
         // non-existent id-----------------------------------------------------------------------------------------------
 		it ("should fail if try and remove an id that is non-existent", async () => {
-            // return facade.removeDataset("CPEN211").then((result) => {
-            //     expect.fail("should not have been removed");
-            // }).catch((error) => {
-            //     expect(error).to.eventually.be.rejectedWith(InsightError);
-            // })
-
-            // await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-            //
-            // try {
-            //     await facade.removeDataset("hello");
-            //     expect.fail("should not have removed");
-            // } catch (error) {
-            //     expect(error).to.be.an.instanceof(NotFoundError);
-            // }
-
-			try {
+            try {
 				const result1 = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(result1).to.deep.equal(["CAPS449"]);
 				try {
@@ -478,47 +302,9 @@ describe("InsightFacade", function() {
 			}
 		});
 
-        // it ("should not be able to remove dataset from a different instance of facade after already removed", async () => {
-        //     await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-        //
-        //     // try {
-        //     //     const result = facade.removeDataset("CAPS449");
-        //     //     await result;
-        //     //
-        //     //     expect(result).to.eventually.equal("CAPS449");
-        //     //
-        //     //     try {
-        //     //         const facade2 = new InsightFacade();
-        //     //         const result2 = facade2.removeDataset("CAPS449");
-        //     //         await result2;
-        //     //         expect.fail("should not have removed");
-        //     //     } catch (error2) {
-        //     //         return expect(error2).to.be.an.instanceof(InsightError);
-        //     //     }
-        //     // } catch (error) {
-        //     //     expect.fail("should have removed");
-        //     // }
-        //     await facade.removeDataset("CAPS449");
-        //     try {
-        //         const facade2 = new InsightFacade();
-        //         const result2 = facade2.removeDataset("CAPS449");
-        //         await result2;
-        //         expect.fail("should not have removed");
-        //     } catch (error) {
-        //         return expect(error).to.be.an.instanceof(InsightError);
-        //     }
-        // });
-
         //* **********************************************SUCCESSES******************************************************
 		it ("should successfully remove one dataset", async function() {
-            // return facade.removeDataset("CAPS449").then((result) => {
-            //     expect(result).to.eventually.equal("CAPS449");
-            // }).catch((error) => {
-            //     expect.fail("should have removed");
-            // });
-
-            // await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-			try {
+            try {
 				const result1 = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(result1).to.deep.equal(["CAPS449"]);
 				try {
@@ -535,21 +321,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should successfully remove two different datasets", async () => {
-            // return facade.removeDataset("CAPS449").then((result) => {
-            //     facade.removeDataset("CAPS430").then((result2) => {
-            //         expect(result2).to.eventually.equal("CAPS430");
-            //     }).catch((error2) => {
-            //         expect.fail("should have removed");
-            //     });
-            // }).catch((error) => {
-            //     expect.fail("should have removed");
-            // });
-
-            // await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-            // await facade.addDataset("CAPS430", sections, InsightDatasetKind.Sections);
-
-
-			try {
+            try {
 				const res = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(res).to.deep.equal(["CAPS449"]);
 				try {
@@ -574,39 +346,10 @@ describe("InsightFacade", function() {
 			} catch (error) {
 				expect.fail("should have added");
 			}
-
-            // try {
-            //     const result1 = facade.removeDataset("CAPS449");
-            //     await result1;
-            //     expect(result1).to.eventually.equal("CAPS449");
-            //
-            //     try {
-            //         const result2 = facade.removeDataset("CAPS430");
-            //         await result2;
-            //         expect(result2).to.eventually.equal("CAPS430");
-            //     } catch (error2) {
-            //         expect.fail("should have removed");
-            //     }
-            // } catch (error1) {
-            //     expect.fail("should have removed");
-            // }
-
 		});
 
 		it ("should be able to remove dataset from a different instance of facade", async () => {
-            // await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
-            //
-            // let facade2 = new InsightFacade();
-            //
-            // try {
-            //     const result2 = facade2.removeDataset("CAPS449");
-            //     await result2;
-            //     expect(result2).to.eventually.equal("CAPS430");
-            // } catch (error) {
-            //     expect.fail("should have removed");
-            // }
-
-			try {
+            try {
 				const result = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(result).to.deep.equal(["CAPS449"]);
 
@@ -633,9 +376,6 @@ describe("InsightFacade", function() {
 
 		before(async function() {
 			sections = await getContentFromArchives("pair.zip");
-			// let chai = require("chai");
-			// let chaiAsPromised = require("chai-as-promised");
-
 			chai.use(chaiAsPromised);
 		});
 
@@ -709,8 +449,6 @@ describe("InsightFacade", function() {
 			sections = await getContentFromArchives("pair.zip");
 			facade = new InsightFacade();
 
-			// let chai = require("chai");
-			// let chaiAsPromised = require("chai-as-promised");
 			chai.use(chaiAsPromised);
 			await clearDisk();
 			await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
@@ -727,14 +465,8 @@ describe("InsightFacade", function() {
 			validQueries.forEach(function(test: any) {
 				it(`${test.title}`, async function () {
 					return facade.performQuery(test.input).then((result) => {
-                        // assert.fail("Write your assertions here!");
-                        // expect(result).to.equal(test.expected);
-
-
-						if (!test.errorExpected) {
-                            // assert.fail("asdlfkjasdfkla");
+                        if (!test.errorExpected) {
 							expect(result).to.be.deep.equal(test.result);
-                            // expect(result).to.be.deep.members(test.result);
 
 						} else {
 							throw new Error("error expected");
@@ -743,14 +475,6 @@ describe("InsightFacade", function() {
 					}).catch((err: string) => {
 						assert.fail(`performQuery threw unexpected error: ${err}`);
 					});
-
-                    // try {
-                    //     const result = facade.performQuery(test.input);
-                    //     await result;
-                    //     expect(result).to.eventually.equal(test.expected);
-                    // } catch (err: unknown) {
-                    //     assert.fail(`performQuery threw unexpected error: ${err}`);
-                    // }
 				});
 			});
 		});
@@ -770,8 +494,6 @@ describe("InsightFacade", function() {
 						await result;
 						assert.fail("should have thrown an error");
 					} catch (err: unknown) {
-                        // expect(err).to.be.an.instanceof(InsightError);
-                        // expect(err).to.be.an.instanceof(ResultTooLargeError);
 						expect(err).to.be.an.instanceof(Error);
 					}
 				});
