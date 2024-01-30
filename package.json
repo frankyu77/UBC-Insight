@@ -19,20 +19,23 @@
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "*"
   },
   "scripts": {
-      "build": "tsc",
-      "clear": "tsc --build --clean",
-      "coverage": "nyc npm run test",
-      "lint_src": "eslint ./src --ext .ts",
-      "lint_test": "eslint ./test --ext .ts"
-    },
-    "devDependencies": {
-      "@typescript-eslint/eslint-plugin": "^6.20.0",
-      "@typescript-eslint/parser": "^6.20.0",
-      "eslint": "^8.56.0",
-      "eslint-plugin-import": "^2.29.1",
-      "eslint-plugin-jsdoc": "^48.0.4"
-    }
+    "build": "tsc",
+    "clear": "tsc --build --clean",
+    "coverage": "nyc npm run test",
+    "lint_src": "eslint ./src --ext .ts",
+    "lint_test": "eslint ./test --ext .ts"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.20.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsdoc": "^48.0.4",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0"
+  }
 }

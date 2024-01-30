@@ -1,21 +1,24 @@
 import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult} from "./IInsightFacade";
 
 export default class InsightFacade implements IInsightFacade {
-    addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-        return Promise.resolve([]);
-    }
+	constructor() {
+		console.log("InsightFacadeImpl::init()");
+	}
 
-    listDatasets(): Promise<InsightDataset[]> {
-        return Promise.resolve([]);
-    }
+	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		return Promise.reject("Not implemented.");
+	}
 
-    performQuery(query: unknown): Promise<InsightResult[]> {
-        return Promise.resolve([]);
-    }
+	public async removeDataset(id: string): Promise<string> {
+		return Promise.reject("Not implemented.");
+	}
 
-    removeDataset(id: string): Promise<string> {
-        return Promise.resolve("");
-    }
+	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		return Promise.reject("Not implemented.");
+	}
 
+	public async listDatasets(): Promise<InsightDataset[]> {
+		return Promise.reject("Not implemented.");
+	}
 }
 
