@@ -104,7 +104,7 @@ describe("InsightFacade", function() {
 
         // id containing underscore -------------------------------------------------------------------------------------
 		it ("should reject if id added contains an underscore (at the front)", async () => {
-           try {
+			try {
 				await facade.addDataset("_CPSC110", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -113,7 +113,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id added contains an underscore (at the back)", async () => {
-            try {
+			try {
 				await facade.addDataset("CPSC110_", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -122,7 +122,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id added contains an underscore (in the middle)", async () => {
-            try {
+			try {
 				await facade.addDataset("CPSC_110", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -131,7 +131,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id added contains an underscore (multiple)", async () => {
-            try {
+			try {
 				await facade.addDataset("C_P_S_C110", sections, InsightDatasetKind.Sections);
 				return expect.fail("should not have added");
 			} catch (error) {
@@ -140,7 +140,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject when adding two duplicate datasets with same id", async () => {
-            return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
+			return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result) => {
 				return facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections).then((result1) => {
 					return expect.fail("should not have added");
 				});
@@ -150,7 +150,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if adding same dataset to a new instance of facade", async () => {
-            await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 			try {
 				const facade2 = new InsightFacade();
 				const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
@@ -165,7 +165,7 @@ describe("InsightFacade", function() {
 
         //* **********************************************SUCCESSES******************************************************
 		it ("should successfully add one dataset", async function() {
-            try {
+			try {
 				const result = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
 				expect(result).to.deep.equal(["CPSC110"]);
 			} catch (error) {
@@ -174,7 +174,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should successfully add two different datasets", async () => {
-            try {
+			try {
 				const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
 				expect(result1).to.deep.equal(["CPSC110"]);
 
@@ -242,7 +242,7 @@ describe("InsightFacade", function() {
 
         // id containing underscore -------------------------------------------------------------------------------------
 		it ("should reject if id removed contains an underscore (at the front)", async () => {
-            try {
+			try {
 				await facade.removeDataset("_CPSC110");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -251,7 +251,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id removed contains an underscore (at the back)", async () => {
-            try {
+			try {
 				await facade.removeDataset("CPSC110_");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -260,7 +260,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id removed contains an underscore (in the middle)", async () => {
-            try {
+			try {
 				await facade.removeDataset("CPSC_110");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -269,7 +269,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should reject if id removed contains an underscore (multiple)", async () => {
-            try {
+			try {
 				await facade.removeDataset("C_P_S_C110");
 				expect.fail("should not have removed");
 			} catch (error) {
@@ -279,7 +279,7 @@ describe("InsightFacade", function() {
 
         // non-existent id-----------------------------------------------------------------------------------------------
 		it ("should fail if try and remove an id that is non-existent", async () => {
-            try {
+			try {
 				const result1 = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(result1).to.deep.equal(["CAPS449"]);
 				try {
@@ -304,7 +304,7 @@ describe("InsightFacade", function() {
 
         //* **********************************************SUCCESSES******************************************************
 		it ("should successfully remove one dataset", async function() {
-            try {
+			try {
 				const result1 = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(result1).to.deep.equal(["CAPS449"]);
 				try {
@@ -321,7 +321,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should successfully remove two different datasets", async () => {
-            try {
+			try {
 				const res = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(res).to.deep.equal(["CAPS449"]);
 				try {
@@ -349,7 +349,7 @@ describe("InsightFacade", function() {
 		});
 
 		it ("should be able to remove dataset from a different instance of facade", async () => {
-            try {
+			try {
 				const result = await facade.addDataset("CAPS449", sections, InsightDatasetKind.Sections);
 				expect(result).to.deep.equal(["CAPS449"]);
 
@@ -465,7 +465,7 @@ describe("InsightFacade", function() {
 			validQueries.forEach(function(test: any) {
 				it(`${test.title}`, async function () {
 					return facade.performQuery(test.input).then((result) => {
-                        if (!test.errorExpected) {
+						if (!test.errorExpected) {
 							expect(result).to.be.deep.equal(test.result);
 
 						} else {
