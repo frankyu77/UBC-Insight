@@ -1,5 +1,5 @@
 {
-  "name": "310_Project",
+  "name": "310-project",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.students.cs.ubc.ca/CPSC310-2023W-T2/c0_team158.git",
@@ -22,6 +22,17 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "test": "mocha --require ts-node/register --timeout 10000 test/**/*.spec.ts"
-  }
+      "build": "tsc",
+      "clear": "tsc --build --clean",
+      "coverage": "nyc npm run test",
+      "lint_src": "eslint ./src --ext .ts",
+      "lint_test": "eslint ./test --ext .ts"
+    },
+    "devDependencies": {
+      "@typescript-eslint/eslint-plugin": "^6.20.0",
+      "@typescript-eslint/parser": "^6.20.0",
+      "eslint": "^8.56.0",
+      "eslint-plugin-import": "^2.29.1",
+      "eslint-plugin-jsdoc": "^48.0.4"
+    }
 }
