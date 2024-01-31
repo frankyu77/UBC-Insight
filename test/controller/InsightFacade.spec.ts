@@ -41,6 +41,30 @@ describe("InsightFacade", function() {
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
+		it ("should reject if id contains space front", function() {
+			const result = facade.addDataset(" cpsc110", sections, InsightDatasetKind.Sections);
+
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject if id contains space back", function() {
+			const result = facade.addDataset("cpsc110 ", sections, InsightDatasetKind.Sections);
+
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject if id contains space middle", function() {
+			const result = facade.addDataset("cpsc 110", sections, InsightDatasetKind.Sections);
+
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
+		it ("should reject if id contains space multiple", function() {
+			const result = facade.addDataset(" c psc 11 0 ", sections, InsightDatasetKind.Sections);
+
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
+		});
+
         // invalid content ----------------------------------------------------------------------------------------------
 		it ("should reject with an invalid content when adding", function() {
 			const result = facade.addDataset("hello", "blah blah", InsightDatasetKind.Sections);
@@ -180,13 +204,22 @@ describe("InsightFacade", function() {
 
 				try {
 					const result2 = await facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
-					expect(result2).to.deep.equal(["CPSC110", "CPSC210"]);
+					return expect(result2).to.have.members(["CPSC110", "CPSC210"]);
 				} catch (error2) {
 					expect.fail("should have added 2");
 				}
-			} catch (error1) {
-				expect.fail("should have added");
+			} catch (error1: any) {
+				expect.fail(error1);
 			}
+		});
+
+		it ("should successfully add two different datasets v2", async () => {
+
+				const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+
+				const result2 = facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
+				return expect(result2).to.eventually.deep.equal(["CPSC110", "CPSC210"]);
+
 		});
 
         // pass, contains one valid section------------------------------------------------------------------------------

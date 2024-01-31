@@ -7,8 +7,15 @@ import {
 	NotFoundError
 } from "./IInsightFacade";
 import Section from "./Sections";
+import * as fs from "fs";
+const fsPromises = require('fs').promises;
+import path from "node:path";
 
 export default class InsightFacade implements IInsightFacade {
+	//private readonly dataDirectory: string = 'data/';
+	private readonly dataDirectory: string = path.join(__dirname, 'data/');
+	private listID: string[] = [];
+
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		//	template for how to create a section
 		//	let section = new Section(
@@ -24,20 +31,65 @@ export default class InsightFacade implements IInsightFacade {
 		// 	10
 		// );
 
-		return new Promise<string[]> (() => {
+		return new Promise<string[]> ((resolve, reject) => {
+			// check if the id is valid
+			if (!this.isValidID(id)) {
+				reject(new InsightError("Not a valid ID"));
+				return;
+			}
+
+			// check if the dataset is already added
+			const dataAlreadyAdded = this.isDatasetAdded(id);
+			console.log(dataAlreadyAdded);
+			if (dataAlreadyAdded) {
+				console.log('asfasfasf')
+				reject(new InsightError("Dataset already added"));
+				return;
+			}
+
+			const path = this.getDatasetFilePath(id);
+			//console.log('hello');
+			// try {
+			// 	fs.writeFileSync(path, content);    // ERROR HERE FOR SOME REASON***************************************
+			// 	console.log("first one done")
+			// 	resolve([id]);
+			// } catch (err) {
+			// 	reject(new InsightError("did not write properly"));
+			// }
+			//fs.writeFile(path, content, (err) => {})
+			fsPromises.writeFile(path, content).then(() => {
+				console.log("File written successfully");
+				this.listID.push(id);
+				resolve(this.listID);
+			}).catch(() => {
+				console.log("error when writing file");
+			})
+
 
 
 		});
 
+	}
 
-        // stub
-        // return new Promise<string[]> ((resolve) => {
-        //     let test: string[] = [];
-        //     test.push(id);
-        //     resolve(test);
-        // })
-		// return Promise.resolve([id]);
-        // throw new InsightError("errrrrr");
+	private isDatasetAdded(id: string): boolean {
+		const filePath = this.getDatasetFilePath(id);
+		// try {
+		// 	fs.readFileSync(filePath);
+		// 	return true;
+		// } catch (error) {
+		// 	console.log('false thrown')
+		// 	return false;
+		// }
+		return fs.existsSync(filePath); // Check if the file exists
+
+	}
+
+	private getDatasetFilePath(id: string): string {
+		//return `${this.dataDirectory}${id}.json`;
+		return path.join(this.dataDirectory, `${id}.json`);
+	}
+	private isValidID(id: string): boolean {
+		return /^[^\s_]+$/.test(id);
 	}
 
 	public removeDataset(id: string): Promise<string> {
