@@ -23,11 +23,11 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-	  "build": "tsc",
-	  "clear": "tsc --build --clean",
-	  "coverage": "nyc npm run test",
-	  "lint_src": "eslint ./src --ext .ts",
-	  "lint_test": "eslint ./test --ext .ts"
+    "build": "tsc",
+    "clear": "tsc --build --clean",
+    "coverage": "nyc npm run test",
+    "lint_src": "eslint ./src --ext .ts",
+    "lint_test": "eslint ./test --ext .ts"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.20.0",

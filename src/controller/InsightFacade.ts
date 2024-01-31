@@ -1,3 +1,4 @@
+import JSZip from "jszip";
 import {
 	IInsightFacade,
 	InsightDataset,
@@ -8,12 +9,12 @@ import {
 } from "./IInsightFacade";
 import Section from "./Sections";
 import * as fs from "fs";
-const fsPromises = require('fs').promises;
+const fsPromises = require("fs").promises;
 import path from "node:path";
 
 export default class InsightFacade implements IInsightFacade {
-	//private readonly dataDirectory: string = 'data/';
-	private readonly dataDirectory: string = path.join(__dirname, 'data/');
+	// private readonly dataDirectory: string = 'data/';
+	private readonly dataDirectory: string = path.join(__dirname, "data/");
 	private listID: string[] = [];
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -42,29 +43,59 @@ export default class InsightFacade implements IInsightFacade {
 			const dataAlreadyAdded = this.isDatasetAdded(id);
 			console.log(dataAlreadyAdded);
 			if (dataAlreadyAdded) {
-				console.log('asfasfasf')
+				console.log("asfasfasf");
 				reject(new InsightError("Dataset already added"));
 				return;
 			}
 
-			const path = this.getDatasetFilePath(id);
-			//console.log('hello');
-			// try {
-			// 	fs.writeFileSync(path, content);    // ERROR HERE FOR SOME REASON***************************************
-			// 	console.log("first one done")
-			// 	resolve([id]);
-			// } catch (err) {
-			// 	reject(new InsightError("did not write properly"));
-			// }
-			//fs.writeFile(path, content, (err) => {})
-			fsPromises.writeFile(path, content).then(() => {
-				console.log("File written successfully");
-				this.listID.push(id);
-				resolve(this.listID);
-			}).catch(() => {
-				console.log("error when writing file");
-			})
+			// iterate through the zip folder //------------------------------->>>>>>>>> not sure why this is failing
+			// ------------------------------->>>>>>>>> idk if readFile takes in the file name or base-64
+			// ------------------------------->>>>>>>>> maybe have to convert content back to file name
+			fsPromises.readFile(content)
+				.then((dataRead: Buffer) => {
+					return JSZip.loadAsync(dataRead);
+				})
+				.then((zip: JSZip) => {
+					// iterate through the zip folder
+					zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
+						if (!zipEntry.dir && relativePath.endsWith(".json")) { // check if it's a .json file
 
+							// read the content in the file
+							zipEntry.async("string").then((contentInFile) => {
+
+								// parses the file into a list of JSON objects
+								let parsedJSONObjects = JSON.parse(contentInFile);
+
+								// iterate through the JSON objects in the file
+								for (let i = 0; i < parsedJSONObjects.length; i++) {
+									console.log(parsedJSONObjects[i]);
+									// in here want to have a condition to check that the said json object it valid
+									// if so, then you add that to the disk, if not then you dont add it, etc.
+									// continue until it iterates through the entire file of json objects
+								}
+
+							}).catch((error) => {
+								reject(new InsightError("Error while adding dataset"));
+							});
+						} else {
+							reject(new InsightError("Invalid JSON file"));
+						}
+					});
+				})
+				.catch(() => {
+					reject(new InsightError("Error while adding dataset"));
+				});
+
+
+			// add the data set to disk, and also store the id to a local array
+			// const path = this.getDatasetFilePath(id);
+			// fsPromises.writeFile(path, content).then(() => {
+			// 	console.log("File written successfully");
+			// 	this.listID.push(id);
+			// 	resolve(this.listID);
+			// }).catch(() => {
+			// 	console.log("error when writing file");
+			// })
 
 
 		});
@@ -85,9 +116,10 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	private getDatasetFilePath(id: string): string {
-		//return `${this.dataDirectory}${id}.json`;
+		// return `${this.dataDirectory}${id}.json`;
 		return path.join(this.dataDirectory, `${id}.json`);
 	}
+
 	private isValidID(id: string): boolean {
 		return /^[^\s_]+$/.test(id);
 	}
