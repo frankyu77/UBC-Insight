@@ -39,6 +39,8 @@ export default class InsightFacade implements IInsightFacade {
 				return;
 			}
 
+			// NEED TO CHECK IF VALID BASE64 STRING
+
 			// check if the dataset is already added
 			const dataAlreadyAdded = this.isDatasetAdded(id);
 			console.log(dataAlreadyAdded);
@@ -64,14 +66,25 @@ export default class InsightFacade implements IInsightFacade {
 							zipEntry.async("string").then((contentInFile) => {
 
 								// parses the file into a list of JSON objects
-								let parsedJSONObjects = JSON.parse(contentInFile);
+								let parsedCourseJSONObjects = JSON.parse(contentInFile);
 
 								// iterate through the JSON objects in the file
-								for (let i = 0; i < parsedJSONObjects.length; i++) {
-									console.log(parsedJSONObjects[i]);
-									// in here want to have a condition to check that the said json object it valid
+								for (let i = 0; i < parsedCourseJSONObjects.length; i++) {
+									console.log(parsedCourseJSONObjects[i]);
+									// in here want to have a condition to check that the said json object is valid
 									// if so, then you add that to the disk, if not then you dont add it, etc.
 									// continue until it iterates through the entire file of json objects
+									for (var key in parsedCourseJSONObjects[i]) { // iterate through the keys in object
+										var sectionsList: any[] = [];
+										if (parsedCourseJSONObjects[i].hasOwnProperty(key)) {
+											if (key === "result") {
+												// checks that is there is a key that exists in the file,
+												// if so it is the result key
+												sectionsList = parsedCourseJSONObjects[i][key]; // now has the list of sections inside the course
+											}
+										}
+									}
+
 								}
 
 							}).catch((error) => {
