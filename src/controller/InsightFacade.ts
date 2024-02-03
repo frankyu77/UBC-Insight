@@ -7,7 +7,6 @@ import {
 	InsightResult,
 	NotFoundError
 } from "./IInsightFacade";
-import Section from "./Sections";
 import * as fs from "fs";
 const fsPromises = require("fs").promises;
 import path from "node:path";
@@ -66,9 +65,11 @@ export default class InsightFacade implements IInsightFacade {
 			// iterate through the zip folder //------------------------------->>>>>>>>> not sure why this is failing
 			// ------------------------------->>>>>>>>> idk if readFile takes in the file name or base-64
 			// ------------------------------->>>>>>>>> maybe have to convert content back to file name
-			fsPromises.readFile("/Users/frank/IdeaProjects/c0_team328/test/resources/archives/oneValidSection.zip")
+			fsPromises.readFile("/Users/frank/IdeaProjects/c0_team328/test/resources/archives/fileNotJSONFormatted.zip")
 				.then(async (dataRead: Buffer) => {
-					return await JSZip.loadAsync(dataRead);
+					return await JSZip.loadAsync(dataRead).catch(() => {
+						console.log("error while reading zip");
+					});
 				})
 				.catch((error: any) => {
 					console.log(error);
@@ -98,11 +99,16 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	private handleZip(zip: JSZip, reject: (reason?: any) => void) {
+		let atLeastOneValidSection: boolean = false;
 		// iterate through the zip folder
 		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
 			// if (!zipEntry.dir && relativePath.endsWith(".json")) { // check if it's a .json file
-			console.log(relativePath);
-			if (relativePath.startsWith("courses")) {
+			// console.log(relativePath);
+			if (relativePath.startsWith("courses")
+				&& !relativePath.includes("courses/.")
+				&& !relativePath.endsWith("/")) {
+
+				console.log(relativePath);
 				// read the content in the file
 				zipEntry.async("string").then((contentInFile) => {
 
@@ -111,33 +117,36 @@ export default class InsightFacade implements IInsightFacade {
 					// parses the file into a list of JSON objects
 
 					try {
-						let test = JSON.parse(contentInFile);
-						// console.log(test);
+						let parsedCourseJSONObjects = JSON.parse(contentInFile);
+						let result = parsedCourseJSONObjects.result;
+						if (result.length === 0) {
+							console.log("invalid section");
+						} else {
+							// iterate through the JSON objects in the file
+							for (const object of result) {
+								// let test: string = object.Course;
+								// console.log(test);
+								let newSection = this.createSection(object);
+								if (newSection === false) {
+									// do nothing
+									console.log("invalid section detected");
+								} else {
+									// add section to disk????
+									atLeastOneValidSection = true;
+									console.log("valid section!!");
+								}
+
+								// pass into the Sections class and have it handle assigning each field to the object
+								// if the object has one field that is undefined, then you want to skip that section
+								// as long as the ENTIRE DATASET has AT LEAST ONE VALID SECTION, then it is okay
+							}
+							console.log("end of for loop");
+						}
 					} catch(error) {
+						console.log("error while parsing file: invalid json format");
 						console.log("this is the error: " + error);
 					}
 
-					let parsedCourseJSONObjects = JSON.parse(contentInFile);
-					let result = parsedCourseJSONObjects.result;
-
-					// iterate through the JSON objects in the file
-					for (const object of result) {
-						// let test: string = object.Course;
-						// console.log(test);
-						let newSection = this.createSection(object);
-						if (newSection === false) {
-							// do nothing
-							console.log("invalid section detected");
-						} else {
-							// add section to disk????
-							console.log("valid section!!");
-						}
-
-						// pass into the Sections class and have it handle assigning each field to the object
-						// if the object has one field that is undefined, then you want to skip that section
-						// as long as the ENTIRE DATASET has AT LEAST ONE VALID SECTION, then it is okay
-					}
-					console.log("end of for loop");
 
 					// for (const item of parsedCourseJSONObjects) {
 					// 	// console.log("for loop");
@@ -169,8 +178,6 @@ export default class InsightFacade implements IInsightFacade {
 					console.log(error);
 					reject(new InsightError("Error while adding dataset"));
 				});
-			} else {
-				reject(new InsightError("Invalid JSON file"));
 			}
 		});
 	}
