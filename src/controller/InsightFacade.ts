@@ -11,14 +11,16 @@ import Section from "./Sections";
 import * as fs from "fs";
 const fsPromises = require("fs").promises;
 import path from "node:path";
+import Sections from "./Sections";
 
 export default class InsightFacade implements IInsightFacade {
 	// private readonly dataDirectory: string = 'data/';
 	private readonly dataDirectory: string = path.join(__dirname, "data/");
 	private listID: string[] = [];
-	private VALIDKEYS: string[] = ['id', 'Course', 'Title', 'Professor', 'Subject', 'Year', 'Avg', 'Pass', 'Fail', 'Audit']
+	private VALIDKEYS: string[] =
+		["id", "Course", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 
-	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		//	template for how to create a section
 		//	let section = new Section(
 		// 	"CPSC",
@@ -33,7 +35,7 @@ export default class InsightFacade implements IInsightFacade {
 		// 	10
 		// );
 
-		return new Promise<string[]> ((resolve, reject) => {
+		return new Promise<string[]> ( (resolve, reject) => {
 			// check if the id is valid
 			if (!this.isValidID(id)) {
 				reject(new InsightError("Not a valid ID"));
@@ -64,57 +66,15 @@ export default class InsightFacade implements IInsightFacade {
 			// iterate through the zip folder //------------------------------->>>>>>>>> not sure why this is failing
 			// ------------------------------->>>>>>>>> idk if readFile takes in the file name or base-64
 			// ------------------------------->>>>>>>>> maybe have to convert content back to file name
-			fsPromises.readFile('/Users/frank/IdeaProjects/c0_team328/test/resources/archives/oneValidSection.zip')
-				.then((dataRead: Buffer) => {
-					return JSZip.loadAsync(dataRead);
+			fsPromises.readFile("/Users/frank/IdeaProjects/c0_team328/test/resources/archives/oneValidSection.zip")
+				.then(async (dataRead: Buffer) => {
+					return await JSZip.loadAsync(dataRead);
 				})
 				.catch((error: any) => {
 					console.log(error);
 				})
 				.then((zip: JSZip) => {
-					// iterate through the zip folder
-					zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
-						//if (!zipEntry.dir && relativePath.endsWith(".json")) { // check if it's a .json file
-						if (!zipEntry.dir) {
-							// read the content in the file
-							zipEntry.async("string").then((contentInFile) => {
-
-								// parses the file into a list of JSON objects
-								let parsedCourseJSONObjects = JSON.parse(contentInFile);
-
-								// iterate through the JSON objects in the file
-								for (let i = 0; i < parsedCourseJSONObjects.length; i++) {
-									console.log(parsedCourseJSONObjects[i]);
-									// in here want to have a condition to check that the said json object is valid
-									// if so, then you add that to the disk, if not then you don't add it, etc.
-									// continue until it iterates through the entire file of json objects
-									for (var key in parsedCourseJSONObjects[i]) { // iterate through the keys in object
-										var sectionsList: any[] = [];
-										if (parsedCourseJSONObjects[i].hasOwnProperty(key)) {
-											if (key === "result") {
-												// checks that is there is a key that exists in the file,
-												// if so it is the result key
-												sectionsList = parsedCourseJSONObjects[i][key]; // now has the list of sections inside the course
-												var count = 0;
-												for (var field in sectionsList) {
-													// check if this section includes all the valid fields
-													if (this.VALIDKEYS.includes(sectionsList[field])) {
-														count++;
-													}
-												}
-											}
-										}
-									}
-
-								}
-
-							}).catch((error) => {
-								reject(new InsightError("Error while adding dataset"));
-							});
-						} else {
-							reject(new InsightError("Invalid JSON file"));
-						}
-					});
+					this.handleZip(zip, reject);
 				})
 				.catch((error: any) => {
 					console.log(error);
@@ -135,6 +95,118 @@ export default class InsightFacade implements IInsightFacade {
 
 		});
 
+	}
+
+	private handleZip(zip: JSZip, reject: (reason?: any) => void) {
+		// iterate through the zip folder
+		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
+			// if (!zipEntry.dir && relativePath.endsWith(".json")) { // check if it's a .json file
+			console.log(relativePath);
+			if (relativePath.startsWith("courses")) {
+				// read the content in the file
+				zipEntry.async("string").then((contentInFile) => {
+
+					// console.log("reached zipEntry.async");
+					// console.log(contentInFile);
+					// parses the file into a list of JSON objects
+
+					try {
+						let test = JSON.parse(contentInFile);
+						// console.log(test);
+					} catch(error) {
+						console.log("this is the error: " + error);
+					}
+
+					let parsedCourseJSONObjects = JSON.parse(contentInFile);
+					let result = parsedCourseJSONObjects.result;
+
+					// iterate through the JSON objects in the file
+					for (const object of result) {
+						// let test: string = object.Course;
+						// console.log(test);
+						let newSection = this.createSection(object);
+						if (newSection === false) {
+							// do nothing
+							console.log("invalid section detected");
+						} else {
+							// add section to disk????
+							console.log("valid section!!");
+						}
+
+						// pass into the Sections class and have it handle assigning each field to the object
+						// if the object has one field that is undefined, then you want to skip that section
+						// as long as the ENTIRE DATASET has AT LEAST ONE VALID SECTION, then it is okay
+					}
+					console.log("end of for loop");
+
+					// for (const item of parsedCourseJSONObjects) {
+					// 	// console.log("for loop");
+					// 	// console.log(item);
+					// 	// in here want to have a condition to check that the said json object is valid
+					// 	// if so, then you add that to the disk, if not then you don't add it, etc.
+					// 	// continue until it iterates through the entire file of json objects
+					// 	for (let key in item) { // iterate through the keys in object
+					// 		let sectionsList: any[] = [];
+					// 		if (item.hasOwnProperty(key)) {
+					// 			if (key === "result") {
+					// 				// checks that is there is a key that exists in the file,
+					// 				// if so it is the result key
+					// 				sectionsList = item[key]; // now has the list of sections inside the course
+					// 				let count = 0;
+					// 				for (let field in sectionsList) {
+					// 					// check if this section includes all the valid fields
+					// 					if (this.VALIDKEYS.includes(sectionsList[field])) {
+					// 						count++;
+					// 					}
+					// 				}
+					// 				console.log(count);
+					// 			}
+					// 		}
+					// 	}
+					// }
+
+				}).catch((error) => {
+					console.log(error);
+					reject(new InsightError("Error while adding dataset"));
+				});
+			} else {
+				reject(new InsightError("Invalid JSON file"));
+			}
+		});
+	}
+
+	private createSection(object: any): Sections|boolean {
+		let currentSection = new Sections(
+			object.id,
+			object.Course,
+			object.Title,
+			object.Professor,
+			object.Subject,
+			object.Year,
+			object.Avg,
+			object.Pass,
+			object.Fail,
+			object.Audit
+		);
+
+		if (this.isAValidSection(currentSection)) {
+			return currentSection;
+		} else {
+			return false;
+		}
+	}
+
+	private isAValidSection(section: Sections): boolean {
+		return !(section.getSectionID() === undefined ||
+			section.getCourseID() === undefined ||
+			section.getTitle() === undefined ||
+			section.getInstructor() === undefined ||
+			section.getDepartment() === undefined ||
+			section.getYear() === undefined ||
+			section.getAvg() === undefined ||
+			section.getPass() === undefined ||
+			section.getFail() === undefined ||
+			section.getAudit() === undefined);
 	}
 
 	private isDatasetAdded(id: string): boolean {

@@ -35,6 +35,46 @@ export default class Sections {
 		this.audit = audit;
 	}
 
+	public getSectionID(): string {
+		return this.sectionID;
+	}
+
+	public getCourseID(): string {
+		return this.courseID;
+	}
+
+	public getTitle(): string {
+		return this.title;
+	}
+
+	public getInstructor(): string {
+		return this.instructor;
+	}
+
+	public getDepartment(): string {
+		return this.department;
+	}
+
+	public getYear(): number {
+		return this.year;
+	}
+
+	public getAvg(): number {
+		return this.avg;
+	}
+
+	public getPass(): number {
+		return this.pass;
+	}
+
+	public getFail(): number {
+		return this.fail;
+	}
+
+	public getAudit(): number {
+		return this.audit;
+	}
+
 
 }
 

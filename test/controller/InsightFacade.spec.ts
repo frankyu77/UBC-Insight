@@ -193,6 +193,7 @@ describe("InsightFacade", function() {
 				const result = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
 				expect(result).to.deep.equal(["CPSC110"]);
 			} catch (error) {
+				console.log(error);
 				expect.fail("should have added");
 			}
 		});
@@ -215,10 +216,10 @@ describe("InsightFacade", function() {
 
 		it ("should successfully add two different datasets v2", async () => {
 
-				const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+			const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
 
-				const result2 = facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
-				return expect(result2).to.eventually.deep.equal(["CPSC110", "CPSC210"]);
+			const result2 = facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
+			return expect(result2).to.eventually.deep.equal(["CPSC110", "CPSC210"]);
 
 		});
 
