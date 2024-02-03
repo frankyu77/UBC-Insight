@@ -5,6 +5,11 @@
     "noImplicitAny": true,
     "outDir": "dist"
   },
-  "include": ["src/**/*", "test/**/*"],
-  "exclude": ["**/*.spec.ts"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

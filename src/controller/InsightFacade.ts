@@ -16,14 +16,17 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
 
+
 		// Check if it is a JSON file
 		if (typeof query !== "string") {
 			return Promise.reject("Not a string input."); // Not a string, can't be JSON
 		}
 
 		try {
-			// const jsonData = JSON.parse(input as string);
-			// return typeof jsonData === "object" && jsonData !== null;
+			 const jsonData = JSON.parse(query);
+
+
+
 		} catch (error) {
 			return Promise.reject("Not av valid JSON."); // Not a string, can't be JSON
 		}
@@ -31,6 +34,10 @@ export default class InsightFacade implements IInsightFacade {
 		return Promise.reject("Not implemented.");
 	}
 
+	private  parseJson(query: unknown) : string {
+		const new_s : string = "S";
+		return new_s
+	}
 	public async listDatasets(): Promise<InsightDataset[]> {
 		return Promise.reject("Not implemented.");
 	}
