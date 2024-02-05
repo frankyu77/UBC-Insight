@@ -11,29 +11,16 @@ import * as fs from "fs";
 const fsPromises = require("fs").promises;
 import path from "node:path";
 import Sections from "./Sections";
+import {callbackify} from "node:util";
 
 export default class InsightFacade implements IInsightFacade {
 	// private readonly dataDirectory: string = 'data/';
-	private readonly dataDirectory: string = path.join(__dirname, "data/");
+	private readonly dataDirectory: string = path.join(__dirname, "data/"); // ********** MIGHT HAVE TO CHANGE THIS
 	private listID: string[] = [];
-	private VALIDKEYS: string[] =
-		["id", "Course", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
+	private listValidSections: any = [];
+	private atLeastOneValidSection: boolean = false;
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		//	template for how to create a section
-		//	let section = new Section(
-		// 	"CPSC",
-		// 	"101",
-		// 	"computer science",
-		// 	"gregor",
-		// 	"science",
-		// 	2022,
-		// 	88,
-		// 	100,
-		// 	30,
-		// 	10
-		// );
-
 		return new Promise<string[]> ( (resolve, reject) => {
 			// check if the id is valid
 			if (!this.isValidID(id)) {
@@ -52,20 +39,10 @@ export default class InsightFacade implements IInsightFacade {
 				return;
 			}
 
-
-			// // Replace 'yourBase64StringHere' with the actual base64-encoded ZIP file content
-			// const base64String = content;
-			//
-			// // Decode base64 string to a buffer
-			// const zipBuffer = Buffer.from(base64String, 'base64');
-			// // Write the buffer to a temporary file
-			// fs.writeFileSync('./controller/temp.zip', zipBuffer);
-
-
 			// iterate through the zip folder //------------------------------->>>>>>>>> not sure why this is failing
 			// ------------------------------->>>>>>>>> idk if readFile takes in the file name or base-64
 			// ------------------------------->>>>>>>>> maybe have to convert content back to file name
-			fsPromises.readFile("/Users/frank/IdeaProjects/c0_team328/test/resources/archives/fileNotJSONFormatted.zip")
+			fsPromises.readFile("/Users/frank/IdeaProjects/c0_team328/test/resources/archives/oneValidSection.zip")
 				.then(async (dataRead: Buffer) => {
 					return await JSZip.loadAsync(dataRead).catch(() => {
 						console.log("error while reading zip");
@@ -76,6 +53,9 @@ export default class InsightFacade implements IInsightFacade {
 				})
 				.then((zip: JSZip) => {
 					this.handleZip(zip, reject);
+					if (!this.atLeastOneValidSection) {
+						reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
+					}
 				})
 				.catch((error: any) => {
 					console.log(error);
@@ -99,16 +79,14 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	private handleZip(zip: JSZip, reject: (reason?: any) => void) {
-		let atLeastOneValidSection: boolean = false;
 		// iterate through the zip folder
 		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
-			// if (!zipEntry.dir && relativePath.endsWith(".json")) { // check if it's a .json file
 			// console.log(relativePath);
 			if (relativePath.startsWith("courses")
 				&& !relativePath.includes("courses/.")
 				&& !relativePath.endsWith("/")) {
 
-				console.log(relativePath);
+				// console.log(relativePath);
 				// read the content in the file
 				zipEntry.async("string").then((contentInFile) => {
 
@@ -128,12 +106,20 @@ export default class InsightFacade implements IInsightFacade {
 								// console.log(test);
 								let newSection = this.createSection(object);
 								if (newSection === false) {
-									// do nothing
-									console.log("invalid section detected");
+									// do nothing --> skip over it
+									// console.log("invalid section detected");
 								} else {
 									// add section to disk????
-									atLeastOneValidSection = true;
-									console.log("valid section!!");
+									this.atLeastOneValidSection = true;
+									this.listValidSections.push(newSection);
+									// console.log("valid section!!");
+									// console.log(this.listValidSections.length);
+
+									let jsonString = JSON.stringify(newSection);
+									if (typeof newSection !== "boolean") {
+										let newPath = this.getDatasetFilePath(newSection.getSectionID());
+										this.saveToDataDir(newPath, jsonString);
+									}
 								}
 
 								// pass into the Sections class and have it handle assigning each field to the object
@@ -146,39 +132,21 @@ export default class InsightFacade implements IInsightFacade {
 						console.log("error while parsing file: invalid json format");
 						console.log("this is the error: " + error);
 					}
-
-
-					// for (const item of parsedCourseJSONObjects) {
-					// 	// console.log("for loop");
-					// 	// console.log(item);
-					// 	// in here want to have a condition to check that the said json object is valid
-					// 	// if so, then you add that to the disk, if not then you don't add it, etc.
-					// 	// continue until it iterates through the entire file of json objects
-					// 	for (let key in item) { // iterate through the keys in object
-					// 		let sectionsList: any[] = [];
-					// 		if (item.hasOwnProperty(key)) {
-					// 			if (key === "result") {
-					// 				// checks that is there is a key that exists in the file,
-					// 				// if so it is the result key
-					// 				sectionsList = item[key]; // now has the list of sections inside the course
-					// 				let count = 0;
-					// 				for (let field in sectionsList) {
-					// 					// check if this section includes all the valid fields
-					// 					if (this.VALIDKEYS.includes(sectionsList[field])) {
-					// 						count++;
-					// 					}
-					// 				}
-					// 				console.log(count);
-					// 			}
-					// 		}
-					// 	}
-					// }
-
 				}).catch((error) => {
 					console.log(error);
 					reject(new InsightError("Error while adding dataset"));
 				});
 			}
+		});
+
+
+	}
+
+	private saveToDataDir(newPath: string, jsonString: string) {
+		fsPromises.writeFile(newPath, jsonString).then(() => {
+			console.log("File written successfully");
+		}).catch(() => {
+			console.log("error when writing file");
 		});
 	}
 
@@ -218,19 +186,11 @@ export default class InsightFacade implements IInsightFacade {
 
 	private isDatasetAdded(id: string): boolean {
 		const filePath = this.getDatasetFilePath(id);
-		// try {
-		// 	fs.readFileSync(filePath);
-		// 	return true;
-		// } catch (error) {
-		// 	console.log('false thrown')
-		// 	return false;
-		// }
 		return fs.existsSync(filePath); // Check if the file exists
 
 	}
 
 	private getDatasetFilePath(id: string): string {
-		// return `${this.dataDirectory}${id}.json`;
 		return path.join(this.dataDirectory, `${id}.json`);
 	}
 

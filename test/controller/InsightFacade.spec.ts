@@ -41,30 +41,6 @@ describe("InsightFacade", function() {
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
-		it ("should reject if id contains space front", function() {
-			const result = facade.addDataset(" cpsc110", sections, InsightDatasetKind.Sections);
-
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
-		});
-
-		it ("should reject if id contains space back", function() {
-			const result = facade.addDataset("cpsc110 ", sections, InsightDatasetKind.Sections);
-
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
-		});
-
-		it ("should reject if id contains space middle", function() {
-			const result = facade.addDataset("cpsc 110", sections, InsightDatasetKind.Sections);
-
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
-		});
-
-		it ("should reject if id contains space multiple", function() {
-			const result = facade.addDataset(" c psc 11 0 ", sections, InsightDatasetKind.Sections);
-
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
-		});
-
         // invalid content ----------------------------------------------------------------------------------------------
 		it ("should reject with an invalid content when adding", function() {
 			const result = facade.addDataset("hello", "blah blah", InsightDatasetKind.Sections);

@@ -24,6 +24,7 @@
   },
   "scripts": {
     "build": "tsc",
+	"test-all": "mocha --require ts-node/register --timeout 10000 test/**/*.spec.ts",
     "clear": "tsc --build --clean",
     "coverage": "nyc npm run test",
     "lint_src": "eslint ./src --ext .ts",

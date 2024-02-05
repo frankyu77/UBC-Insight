@@ -1,5 +1,5 @@
 {
-	"title": "OPTIONS key is wrong, fail",
+	"title": "COLUMN key is wrong, fail",
 	"input": {
 		"WHERE": {
 			"EQ": {

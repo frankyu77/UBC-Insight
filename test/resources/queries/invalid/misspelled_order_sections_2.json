@@ -1,5 +1,5 @@
 {
-	"title": "misspelled ORDER section, fail",
+	"title": "misspelled ORDER section 2, fail",
 	"input": {
 		"WHERE": {
 			"EQ": {
