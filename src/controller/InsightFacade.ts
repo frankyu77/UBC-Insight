@@ -51,11 +51,13 @@ export default class InsightFacade implements IInsightFacade {
 				.catch((error: any) => {
 					console.log(error);
 				})
-				.then((zip: JSZip) => {
-					this.handleZip(zip, reject);
-					if (!this.atLeastOneValidSection) {
-						reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
-					}
+				.then(async (zip: JSZip) => {
+					await this.handleZip(zip, reject);
+					// if (!this.atLeastOneValidSection) {
+					// 	reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
+					// }
+					this.listID.push(id);
+					resolve(this.listID);
 				})
 				.catch((error: any) => {
 					console.log(error);
@@ -78,7 +80,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	}
 
-	private handleZip(zip: JSZip, reject: (reason?: any) => void) {
+	private async handleZip(zip: JSZip, reject: (reason?: any) => void) {
 		// iterate through the zip folder
 		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
 			// console.log(relativePath);
