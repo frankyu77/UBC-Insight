@@ -174,30 +174,36 @@ describe("InsightFacade", function() {
 			}
 		});
 
-		// it ("should successfully add two different datasets", async () => {
-		// 	try {
-		// 		const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-		// 		expect(result1).to.deep.equal(["CPSC110"]);
-		//
-		// 		try {
-		// 			const result2 = await facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
-		// 			return expect(result2).to.have.members(["CPSC110", "CPSC210"]);
-		// 		} catch (error2) {
-		// 			expect.fail("should have added 2");
-		// 		}
-		// 	} catch (error1: any) {
-		// 		expect.fail(error1);
-		// 	}
-		// });
-		//
-		// it ("should successfully add two different datasets v2", async () => {
-		//
-		// 	const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
-		//
-		// 	const result2 = facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
-		// 	return expect(result2).to.eventually.deep.equal(["CPSC110", "CPSC210"]);
-		//
-		// });
+		it ("should successfully add two different datasets", async () => {
+			// try {
+			// 	const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+			// 	expect(result1).to.deep.equal(["CPSC110"]);
+			//
+			// 	try {
+			// 		const result2 = await facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
+			// 		return expect(result2).to.have.members(["CPSC110", "CPSC210"]);
+			// 	} catch (error2) {
+			// 		expect.fail("should have added 2");
+			// 	}
+			// } catch (error1: any) {
+			// 	expect.fail(error1);
+			// }
+			try {
+				const result = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+				expect(result).to.deep.equal(["CPSC110"]);
+			} catch (error) {
+				console.log(error);
+				expect.fail("should have added");
+			}
+
+			try {
+				const result = await facade.addDataset("CPSC12345", sections, InsightDatasetKind.Sections);
+				expect(result).to.deep.equal(["CPSC110", "CPSC12345"]);
+			} catch (error) {
+				console.log(error);
+				expect.fail("should have added");
+			}
+		});
 
         // pass, contains one valid section------------------------------------------------------------------------------
 		it ("contains one singular valid section", async function() {

@@ -15,13 +15,18 @@ import {callbackify} from "node:util";
 
 export default class InsightFacade implements IInsightFacade {
 	// private readonly dataDirectory: string = 'data/';
-	private readonly dataDirectory: string = path.join(__dirname, "data/"); // ********** MIGHT HAVE TO CHANGE THIS
+	// private readonly dataDirectory: string = path.join(__dirname, "data/"); // ********** MIGHT HAVE TO CHANGE THIS
 	private listID: string[] = [];
 	private listValidSections: any = [];
-	private atLeastOneValidSection: boolean = false;
+	private validDataset: boolean = false;
+	private dir = "./data";
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		return new Promise<string[]> ( (resolve, reject) => {
+			if (!fs.existsSync(this.dir)){
+				fs.mkdirSync(this.dir);
+			}
+
 			// check if the id is valid
 			if (!this.isValidID(id)) {
 				reject(new InsightError("Not a valid ID"));
@@ -31,13 +36,14 @@ export default class InsightFacade implements IInsightFacade {
 			// NEED TO CHECK IF VALID BASE64 STRING ************************************************
 
 			// check if the dataset is already added
-			const dataAlreadyAdded = this.isDatasetAdded(id);
+			const dataAlreadyAdded = this.isThereDatasetDir(id);
 			console.log(dataAlreadyAdded);
 			if (dataAlreadyAdded) {
 				console.log("asfasfasf");
 				reject(new InsightError("Dataset already added"));
 				return;
 			}
+			this.createDatasetDir(id);  // creates a directory for the dataset inside data dir
 
 			// iterate through the zip folder //------------------------------->>>>>>>>> not sure why this is failing
 			// ------------------------------->>>>>>>>> idk if readFile takes in the file name or base-64
@@ -48,12 +54,9 @@ export default class InsightFacade implements IInsightFacade {
 						console.log("error while reading zip");
 					});
 				})
-				.catch((error: any) => {
-					console.log(error);
-				})
 				.then(async (zip: JSZip) => {
-					await this.handleZip(zip, reject);
-					// if (!this.atLeastOneValidSection) {
+					await this.handleZip(zip, reject, id);
+					// if (!this.validDataset) {
 					// 	reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
 					// }
 					this.listID.push(id);
@@ -66,7 +69,7 @@ export default class InsightFacade implements IInsightFacade {
 
 
 			// add the data set to disk, and also store the id to a local array
-			// const path = this.getDatasetFilePath(id);
+			// const path = this.getSectionPath(id);
 			// fsPromises.writeFile(path, content).then(() => {
 			// 	console.log("File written successfully");
 			// 	this.listID.push(id);
@@ -80,7 +83,16 @@ export default class InsightFacade implements IInsightFacade {
 
 	}
 
-	private async handleZip(zip: JSZip, reject: (reason?: any) => void) {
+	private createDatasetDir(id: string) {
+		fs.mkdirSync(path.join(this.dir, `${id}`));
+		return path.join(this.dir, `${id}`);
+	}
+
+	private getDatasetDirPath(id: string) {
+		return path.join(this.dir, `${id}`);
+	}
+
+	private async handleZip(zip: JSZip, reject: (reason?: any) => void, datasetID: string) {
 		// iterate through the zip folder
 		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
 			// console.log(relativePath);
@@ -112,14 +124,14 @@ export default class InsightFacade implements IInsightFacade {
 									// console.log("invalid section detected");
 								} else {
 									// add section to disk????
-									this.atLeastOneValidSection = true;
+									this.validDataset = true;
 									this.listValidSections.push(newSection);
 									// console.log("valid section!!");
 									// console.log(this.listValidSections.length);
 
 									let jsonString = JSON.stringify(newSection);
 									if (typeof newSection !== "boolean") {
-										let newPath = this.getDatasetFilePath(newSection.getSectionID());
+										let newPath = this.getSectionPath(newSection.getSectionID(), datasetID);
 										this.saveToDataDir(newPath, jsonString);
 									}
 								}
@@ -186,14 +198,14 @@ export default class InsightFacade implements IInsightFacade {
 			section.getAudit() === undefined);
 	}
 
-	private isDatasetAdded(id: string): boolean {
-		const filePath = this.getDatasetFilePath(id);
+	private isThereDatasetDir(id: string): boolean {
+		const filePath = this.getDatasetDirPath(id);
 		return fs.existsSync(filePath); // Check if the file exists
 
 	}
 
-	private getDatasetFilePath(id: string): string {
-		return path.join(this.dataDirectory, `${id}.json`);
+	private getSectionPath(sectionID: string, datasetID: string): string {
+		return path.join(path.join(this.dir, `${datasetID}`), `${sectionID}.json`);
 	}
 
 	private isValidID(id: string): boolean {
