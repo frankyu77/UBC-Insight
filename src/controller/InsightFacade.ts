@@ -10,19 +10,40 @@ import {
 import * as fs from "fs";
 const fsPromises = require("fs").promises;
 import path from "node:path";
-import Sections from "./Sections";
+import Section from "./Section";
 import {callbackify} from "node:util";
+import Dataset from "./Dataset";
 
 export default class InsightFacade implements IInsightFacade {
-	// private readonly dataDirectory: string = 'data/';
-	// private readonly dataDirectory: string = path.join(__dirname, "data/"); // ********** MIGHT HAVE TO CHANGE THIS
+/* *********************************************************************************************************************
+	✅create a datasetClass along with the sectionsClass so that you can store the list of valid sections inside the
+	datasetClass and that way you can you just parse the entire datasetClass as a JSONObject and then just store that
+	into the disk
+	makes it easier, so that you don't have to read the fold and check that the folder name matches whatever id ur
+	getting and going from there
+
+	✅also want to store the list of datasetClass Objects so that you can have access to it in memory rather than only
+	relying on the disk since that is very costly. This way if youre still working on the same instance of
+	InsightFacade itll be easier to access the datasets that you have added, but if you create a new instance of
+	InsightFacade, you can access all the previously added datasets from the disk
+
+TODO
+	must handle the case of new instance of InsightFacade having access to all the previously added datasets, so that
+	when you addDataset, it will return all the previously added datasets as well, also for listDataset and stuff. Must
+	create some array where it can read the data directory and if the datasets are not in the locally created array,
+	then you would add those datasets from the disk into the local array??
+*/ // ******************************************************************************************************************
+
 	private listID: string[] = [];
-	private listValidSections: any = [];
-	private validDataset: boolean = false;
+	private datasetsAddedSoFar: Dataset[] = [];
+	private idDatasetsAddedSoFar: string[] = [];
 	private dir = "./data";
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		console.log("😀");
+
 		return new Promise<string[]> ( (resolve, reject) => {
+			// check if there is a data dir
 			if (!fs.existsSync(this.dir)){
 				fs.mkdirSync(this.dir);
 			}
@@ -33,8 +54,6 @@ export default class InsightFacade implements IInsightFacade {
 				return;
 			}
 
-			// NEED TO CHECK IF VALID BASE64 STRING ************************************************
-
 			// check if the dataset is already added
 			const dataAlreadyAdded = this.isThereDatasetDir(id);
 			console.log(dataAlreadyAdded);
@@ -43,56 +62,49 @@ export default class InsightFacade implements IInsightFacade {
 				reject(new InsightError("Dataset already added"));
 				return;
 			}
-			this.createDatasetDir(id);  // creates a directory for the dataset inside data dir
 
-			// iterate through the zip folder //------------------------------->>>>>>>>> not sure why this is failing
-			// ------------------------------->>>>>>>>> idk if readFile takes in the file name or base-64
-			// ------------------------------->>>>>>>>> maybe have to convert content back to file name
-			fsPromises.readFile("/Users/frank/IdeaProjects/c0_team328/test/resources/archives/oneValidSection.zip")
-				.then(async (dataRead: Buffer) => {
-					return await JSZip.loadAsync(dataRead).catch(() => {
-						console.log("error while reading zip");
-					});
-				})
+			// this.createDatasetDir(id);  // creates a directory for the dataset inside data dir
+			let currentDataset = new Dataset();
+			currentDataset.setIDName(id);
+
+			JSZip.loadAsync(content, {base64: true})
 				.then(async (zip: JSZip) => {
-					await this.handleZip(zip, reject, id);
-					// if (!this.validDataset) {
-					// 	reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
-					// }
-					this.listID.push(id);
-					resolve(this.listID);
+					await this.handleZip(zip, reject, currentDataset);
+					if (!currentDataset.getValidity()) {
+						reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
+					}
+
+					this.addDatasetToDisk(currentDataset);
+					this.datasetsAddedSoFar.push(currentDataset);
+					/*
+					* TODO
+					*  change how to implement this part. probably want to iterate through disk and check if there are
+					*  datasets that are not in your local array and add those in, then you return the total list of ids
+					* */
+					// change this
+					this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
+					resolve(this.idDatasetsAddedSoFar);
 				})
 				.catch((error: any) => {
 					console.log(error);
-					reject(new InsightError("Error while adding dataset"));
+					reject(new InsightError("Not base64"));
 				});
-
-
-			// add the data set to disk, and also store the id to a local array
-			// const path = this.getSectionPath(id);
-			// fsPromises.writeFile(path, content).then(() => {
-			// 	console.log("File written successfully");
-			// 	this.listID.push(id);
-			// 	resolve(this.listID);
-			// }).catch(() => {
-			// 	console.log("error when writing file");
-			// })
-
-
 		});
 
 	}
 
-	private createDatasetDir(id: string) {
-		fs.mkdirSync(path.join(this.dir, `${id}`));
+	private addDatasetToDisk(dataset: Dataset) {
+		let jsonString = JSON.stringify(dataset, null, "\t");
+		let newPath = this.getDatasetDirPath(dataset.getIDName());
+		this.saveToDataDir(newPath, jsonString);
+	}
+
+	private getDatasetDirPath(id: string): string {
 		return path.join(this.dir, `${id}`);
 	}
 
-	private getDatasetDirPath(id: string) {
-		return path.join(this.dir, `${id}`);
-	}
-
-	private async handleZip(zip: JSZip, reject: (reason?: any) => void, datasetID: string) {
+	private async handleZip(zip: JSZip, reject: (reason?: any) => void, dataset: Dataset) {
+		const promises: unknown[] = [];
 		// iterate through the zip folder
 		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
 			// console.log(relativePath);
@@ -102,57 +114,58 @@ export default class InsightFacade implements IInsightFacade {
 
 				// console.log(relativePath);
 				// read the content in the file
-				zipEntry.async("string").then((contentInFile) => {
+				promises.push(
+					zipEntry.async("string").then((contentInFile) => {
 
-					// console.log("reached zipEntry.async");
-					// console.log(contentInFile);
-					// parses the file into a list of JSON objects
+						// console.log("reached zipEntry.async");
+						// console.log(contentInFile);
+						// parses the file into a list of JSON objects
+						try {
+							let parsedCourseJSONObjects = JSON.parse(contentInFile);
+							let result = parsedCourseJSONObjects.result;
+							if (result.length === 0) {
+								console.log("invalid section");
+							} else {
+								// iterate through the JSON objects in the file
+								for (const object of result) {
+									// console.log(test);
+									let newSection = this.createSection(object);
+									if (!(newSection.getCourseID() === "invalid")) {
+										dataset.setValidity(true);
+										dataset.addValidSection(newSection);
 
-					try {
-						let parsedCourseJSONObjects = JSON.parse(contentInFile);
-						let result = parsedCourseJSONObjects.result;
-						if (result.length === 0) {
-							console.log("invalid section");
-						} else {
-							// iterate through the JSON objects in the file
-							for (const object of result) {
-								// let test: string = object.Course;
-								// console.log(test);
-								let newSection = this.createSection(object);
-								if (newSection === false) {
-									// do nothing --> skip over it
-									// console.log("invalid section detected");
-								} else {
-									// add section to disk????
-									this.validDataset = true;
-									this.listValidSections.push(newSection);
-									// console.log("valid section!!");
-									// console.log(this.listValidSections.length);
+										// this.listValidSections.push(newSection);
 
-									let jsonString = JSON.stringify(newSection);
-									if (typeof newSection !== "boolean") {
-										let newPath = this.getSectionPath(newSection.getSectionID(), datasetID);
-										this.saveToDataDir(newPath, jsonString);
+										// console.log("valid section!!");
+										// console.log(this.listValidSections.length);
+
+
+										// let jsonString = JSON.stringify(newSection);
+										// if (typeof newSection !== "boolean") {
+										// 	let newPath = this.getSectionPath(newSection.getSectionID(), datasetID);
+										// 	this.saveToDataDir(newPath, jsonString);
+										// }
 									}
 								}
-
-								// pass into the Sections class and have it handle assigning each field to the object
-								// if the object has one field that is undefined, then you want to skip that section
-								// as long as the ENTIRE DATASET has AT LEAST ONE VALID SECTION, then it is okay
+								console.log("end of for loop");
 							}
-							console.log("end of for loop");
+						} catch(error) {
+							console.log("this is the error: " + error);
+							reject(new InsightError("Error while parsing file"));
 						}
-					} catch(error) {
-						console.log("error while parsing file: invalid json format");
-						console.log("this is the error: " + error);
-					}
-				}).catch((error) => {
-					console.log(error);
-					reject(new InsightError("Error while adding dataset"));
-				});
+					}).catch((error) => {
+						console.log(error);
+						reject(new InsightError("Error while adding dataset"));
+					})
+				);
+
+
 			}
 		});
 
+		await Promise.all(promises);
+		console.log("end of for each*********");
+		console.log(dataset.getValidSections().length);
 
 	}
 
@@ -164,8 +177,8 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
-	private createSection(object: any): Sections|boolean {
-		let currentSection = new Sections(
+	private createSection(object: any): Section {
+		let currentSection = new Section(
 			object.id,
 			object.Course,
 			object.Title,
@@ -181,11 +194,22 @@ export default class InsightFacade implements IInsightFacade {
 		if (this.isAValidSection(currentSection)) {
 			return currentSection;
 		} else {
-			return false;
+			return new Section(
+				"invalid",
+				"",
+				"",
+				"",
+				"",
+				0,
+				0,
+				0,
+				0,
+				0
+			);
 		}
 	}
 
-	private isAValidSection(section: Sections): boolean {
+	private isAValidSection(section: Section): boolean {
 		return !(section.getSectionID() === undefined ||
 			section.getCourseID() === undefined ||
 			section.getTitle() === undefined ||
@@ -202,10 +226,6 @@ export default class InsightFacade implements IInsightFacade {
 		const filePath = this.getDatasetDirPath(id);
 		return fs.existsSync(filePath); // Check if the file exists
 
-	}
-
-	private getSectionPath(sectionID: string, datasetID: string): string {
-		return path.join(path.join(this.dir, `${datasetID}`), `${sectionID}.json`);
 	}
 
 	private isValidID(id: string): boolean {
@@ -245,7 +265,7 @@ export default class InsightFacade implements IInsightFacade {
         //     let test: InsightDataset[] = [];
         //     resolve(test);
         // });
-        // return Promise.resolve([{id: "ubc", kind: InsightDatasetKind.Sections, numRows: 64612}]);
+        // return Promise.resolve([{id: "ubc", kind: InsightDatasetKind.Section, numRows: 64612}]);
 		return Promise.resolve([]);
 
 	}

@@ -1,4 +1,4 @@
-export default class Sections {
+export default class Section {
 	private readonly sectionID: string;
 	private readonly courseID: string;
 	private readonly title: string;

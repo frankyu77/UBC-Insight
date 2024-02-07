@@ -176,11 +176,11 @@ describe("InsightFacade", function() {
 
 		it ("should successfully add two different datasets", async () => {
 			// try {
-			// 	const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
+			// 	const result1 = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Section);
 			// 	expect(result1).to.deep.equal(["CPSC110"]);
 			//
 			// 	try {
-			// 		const result2 = await facade.addDataset("CSPC210", sections, InsightDatasetKind.Sections);
+			// 		const result2 = await facade.addDataset("CSPC210", sections, InsightDatasetKind.Section);
 			// 		return expect(result2).to.have.members(["CPSC110", "CPSC210"]);
 			// 	} catch (error2) {
 			// 		expect.fail("should have added 2");
