@@ -16,28 +16,22 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
 
-
-		// Check if it is a JSON file
-		if (typeof query !== "string") {
-			return Promise.reject("Not a string input."); // Not a string, can't be JSON
+		let queryS: any;
+		try {
+			JSON.stringify(query);
+			queryS = query;
+		} catch (error) {
+			return Promise.reject("Not a valid JSON."); // Not a string, can't be JSON
 		}
 
-		try {
-			 const jsonData = JSON.parse(query);
-
-
-
-		} catch (error) {
-			return Promise.reject("Not av valid JSON."); // Not a string, can't be JSON
+		for (const key in queryS){
+			console.log(key);
 		}
 
 		return Promise.reject("Not implemented.");
 	}
 
-	private  parseJson(query: unknown) : string {
-		const new_s : string = "S";
-		return new_s
-	}
+
 	public async listDatasets(): Promise<InsightDataset[]> {
 		return Promise.reject("Not implemented.");
 	}
