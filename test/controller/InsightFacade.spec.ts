@@ -208,59 +208,60 @@ describe ("InsightFacade performQuery Tests", function() {
 		//await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
 	});
 
-	describe("valid queries", function() {
-
-		let validQueries: ITestQuery[];
-
-		try {
-			validQueries = readFileQueries("valid");
-		} catch (e: unknown) {
-			expect.fail(`Failed to read one or more test queries. ${e}`);
-		}
-
-		validQueries.forEach(function(test: any) {
-			it(`${test.title}`, function () {
-				return facade.performQuery(test.input).then((result) => {
-
-					expect(result).to.deep.equal(test.expected);
-
-				}).catch((err: any) => {
-                            // should NOT throw insightError
-					assert.fail(`performQuery threw unexpected error: ${err}`);
-
-				});
-			});
-		});
-	});
-
-
-
-	// describe("invalid queries", function() {
+	// describe("valid queries", function() {
 	//
-	// 	let invalidQueries: ITestQuery[];
+	// 	let validQueries: ITestQuery[];
 	//
 	// 	try {
-	// 		invalidQueries = readFileQueries("invalid");
+	// 		validQueries = readFileQueries("valid");
 	// 	} catch (e: unknown) {
 	// 		expect.fail(`Failed to read one or more test queries. ${e}`);
 	// 	}
 	//
-	// 	invalidQueries.forEach(function(test: any) {
+	// 	validQueries.forEach(function(test: any) {
 	// 		it(`${test.title}`, function () {
 	// 			return facade.performQuery(test.input).then((result) => {
 	//
-	// 				assert.fail("performQuery completed with no expected error thrown");
+	// 				expect(result).to.deep.equal(test.expected);
 	//
 	// 			}).catch((err: any) => {
-    //                         // SHOULD throw insightError OR MaxResultsError
-    //                         // assert.equal(err, InsightError || ResultTooLargeError);
-    //                         // expect(err).to.eventually.be.rejectedWith(errors[test.expected as keyof typeof errors]);
-	//
+    //                         // should NOT throw insightError
+	// 				assert.fail(`performQuery threw unexpected error: ${err}`);
 	//
 	// 			});
 	// 		});
 	// 	});
 	// });
+
+
+
+	describe("invalid queries", function() {
+
+		let invalidQueries: ITestQuery[];
+
+		try {
+			invalidQueries = readFileQueries("invalid");
+		} catch (e: unknown) {
+			expect.fail(`Failed to read one or more test queries. ${e}`);
+		}
+
+		invalidQueries.forEach(function(test: any) {
+			it(`${test.title}`, function () {
+				return facade.performQuery(test.input).then((result) => {
+
+					assert.fail("performQuery completed with no expected error thrown"); //!!!!!!! assert fail?
+
+				}).catch((err: any) => {
+					console.log(err)
+                            // SHOULD throw insightError OR MaxResultsError
+                            // assert.equal(err, InsightError || ResultTooLargeError);
+                            // expect(err).to.eventually.be.rejectedWith(errors[test.expected as keyof typeof errors]);
+
+
+				});
+			});
+		});
+	});
 
 });
 
