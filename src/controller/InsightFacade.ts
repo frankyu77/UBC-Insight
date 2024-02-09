@@ -30,30 +30,35 @@ export default class InsightFacade implements IInsightFacade {
 				return reject("Not a valid JSON."); // Not a string, can't be JSON
 			}
 
-
-			for (const key in queryS) {
-				if (key == "WHERE") {
-
-				} else if (key == "OPTIONS") {
-
-				} else {
-					return reject("Invalid query! (No OPTIONS or WHERE)")
-				}
+			// Check if where and options are present
+			try {
+				this.handleBaseEbnf(queryS);
+			} catch (error) {
+				return reject("No where or options")
 			}
+
+			// this.handleWhere(queryS.WHERE);
+
 
 			return reject("Not implemented.")
 		});
 
 	}
 
-
-	private async handleBaseEbnf() {
-
+	private  handleBaseEbnf(queryS : any) {
+		const keysArray = Object.keys(queryS);
+		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
+			return
+		}
+		throw new Error("Invalid query! (No OPTIONS or WHERE)")
 	}
-	private async handleWhere() {
+	// private  handleWhere(queryS : any) : InsightResult[] {
+	// 	console.log(queryS)
+	//
+	// }
 
-	}
-
+	// private handleGt( queryS: any, prevResult : InsightResult[]) : InsightResult[] {
+	// }
 	public async listDatasets(): Promise<InsightDataset[]> {
 		return Promise.reject("Not implemented.");
 	}
