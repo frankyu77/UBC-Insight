@@ -149,19 +149,34 @@ describe("InsightFacade", function() {
 			});
 		});
 
-		it ("should reject if adding same dataset to a new instance of facade", async () => {
-			await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-			try {
-				const facade2 = new InsightFacade();
-				const result2 = facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
-				await result2;
-				return expect.fail("should not have added");
-			} catch (error) {
-				return expect(error).to.be.an.instanceof(InsightError);
+		describe("testing", () => {
+			for (let i = 0; i < 100; i++) {
+				it ("" + i, async () => {
+					await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+					try {
+						const facade2 = new InsightFacade();
+						const result2 = await facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
+						// await result2;
+						return expect.fail("should not have added");
+					} catch (error) {
+						console.log(error);
+						return expect(error).to.be.an.instanceof(InsightError);
+					}
+				});
 			}
-
-
 		});
+		// it ("should reject if adding same dataset to a new instance of facade", async () => {
+		// 	await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+		// 	try {
+		// 		const facade2 = new InsightFacade();
+		// 		const result2 = await facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
+		// 		// await result2;
+		// 		return expect.fail("should not have added");
+		// 	} catch (error) {
+		// 		console.log(error);
+		// 		return expect(error).to.be.an.instanceof(InsightError);
+		// 	}
+		// });
 
         //* **********************************************SUCCESSES******************************************************
 		it ("should successfully add one dataset", async function() {

@@ -1,5 +1,12 @@
 import JSZip from "jszip";
-import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, InsightResult} from "./IInsightFacade";
+import {
+	IInsightFacade,
+	InsightDataset,
+	InsightDatasetKind,
+	InsightError,
+	InsightResult,
+	NotFoundError
+} from "./IInsightFacade";
 import * as fs from "fs";
 import path from "node:path";
 import Section from "./Section";
@@ -32,7 +39,7 @@ TODO
 	private idDatasetsAddedSoFar: string[] = [];
 	private dir = "./data";
 
-	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		console.log("😀");
 
 		return new Promise<string[]> ( (resolve, reject) => {
@@ -53,40 +60,88 @@ TODO
 				return;
 			}
 
+			// fs.stat(this.getDatasetDirPath(id), (exists) => {
+			// 	if (exists == null) {
+			// 		console.log(exists);
+			// 	} else if (exists.code === "ENOENT") {
+			// 		reject(new InsightError("Dataset already added"));
+			// 		return;
+			// 	}
+			// });
+
 			// check if the dataset is already added
-			if (this.isDatasetAlreadyAdded(id) || this.idDatasetsAddedSoFar.includes(id)) {
-				console.log("asfasfasf");
-				reject(new InsightError("Dataset already added"));
-				return;
-			}
+			// if (this.isThereDatasetDir(id) || this.idDatasetsAddedSoFar.includes(id)) {
+			// 	console.log("asfasfasf");
+			// 	reject(new InsightError("Dataset already added"));
+			// 	return;
+			// }
 
-			// this.createDatasetDir(id);  // creates a directory for the dataset inside data dir
-			let currentDataset = new Dataset();
-			currentDataset.setIDName(id);
+			this.isThereDatasetDir(id)
+				.then(async (exists) => {
+					console.log("CHECKING CHECKING");
+					if (exists || this.idDatasetsAddedSoFar.includes(id)) {
+						console.log("asfasfasf");
+						// reject(new InsightError("Dataset already added"));
+						throw new InsightError("Dataset already added");
+					}
 
-			JSZip.loadAsync(content, {base64: true})
-				.then(async (zip: JSZip) => {
+					return await JSZip.loadAsync(content, {base64: true});
+				}).then(async (zip: JSZip) => {
+					let currentDataset = new Dataset();
+					currentDataset.setIDName(id);
+
 					await this.handleZip(zip, reject, currentDataset);
 					if (!currentDataset.getValidity()) {
-						reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
+						// reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
+						throw new InsightError("No valid sections in dataset");
 					}
 
 
 					this.addDatasetToDisk(currentDataset);
 					this.datasetsAddedSoFar.push(currentDataset);
-					/*
-					* TODO
-					*  change how to implement this part. probably want to iterate through disk and check if there are
-					*  datasets that are not in your local array and add those in, then you return the total list of ids
-					* */
-					// change this
+				/*
+				* TODO
+				*  change how to implement this part. probably want to iterate through disk and check if there are
+				*  datasets that are not in your local array and add those in, then you return the total list of ids
+				* */
+				// change this
 					this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
 					resolve(this.idDatasetsAddedSoFar);
 				})
 				.catch((error: any) => {
 					console.log(error);
 					reject(new InsightError("Invalid Content"));
+				}).catch((error) => {
+					console.log(error);
 				});
+
+			// this.createDatasetDir(id);  // creates a directory for the dataset inside data dir
+			// let currentDataset = new Dataset();
+			// currentDataset.setIDName(id);
+			//
+			// JSZip.loadAsync(content, {base64: true})
+			// 	.then(async (zip: JSZip) => {
+			// 		await this.handleZip(zip, reject, currentDataset);
+			// 		if (!currentDataset.getValidity()) {
+			// 			reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
+			// 		}
+			//
+			//
+			// 		this.addDatasetToDisk(currentDataset);
+			// 		this.datasetsAddedSoFar.push(currentDataset);
+			// 		/*
+			// 		* TODO
+			// 		*  change how to implement this part. probably want to iterate through disk and check if there are
+			// 		*  datasets that are not in your local array and add those in, then you return the total list of ids
+			// 		* */
+			// 		// change this
+			// 		this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
+			// 		resolve(this.idDatasetsAddedSoFar);
+			// 	})
+			// 	.catch((error: any) => {
+			// 		console.log(error);
+			// 		reject(new InsightError("Invalid Content"));
+			// 	});
 
 			console.log("🥐");
 		});
@@ -115,7 +170,7 @@ TODO
 							let parsedCourseJSONObjects = JSON.parse(contentInFile);
 							let result = parsedCourseJSONObjects.result;
 							if (result.length === 0) {
-								console.log("invalid section");
+								// console.log("invalid section");
 							} else {
 								// iterate through the JSON objects in the file
 								for (const object of result) {
@@ -124,21 +179,9 @@ TODO
 									if (!(newSection.getCourseID() === "invalid")) {
 										dataset.setValidity(true);
 										dataset.addValidSection(newSection);
-
-										// this.listValidSections.push(newSection);
-
-										// console.log("valid section!!");
-										// console.log(this.listValidSections.length);
-
-
-										// let jsonString = JSON.stringify(newSection);
-										// if (typeof newSection !== "boolean") {
-										// 	let newPath = this.getSectionPath(newSection.getSectionID(), datasetID);
-										// 	this.saveToDataDir(newPath, jsonString);
-										// }
 									}
 								}
-								console.log("end of for loop");
+								// console.log("end of for loop**");
 							}
 						} catch(error) {
 							console.log("this is the error: " + error);
@@ -155,21 +198,30 @@ TODO
 		});
 
 		await Promise.all(promises);
-		console.log("end of for each*********");
-		console.log(dataset.getValidSections().length);
+		// console.log("end of for each*********");
+		// console.log(dataset.getValidSections().length);
 
 	}
 
-	private isDatasetAlreadyAdded(id: string): boolean {
-		const dataAlreadyAdded = this.isThereDatasetDir(id);
-		console.log(dataAlreadyAdded);
-		return dataAlreadyAdded;
-	}
+	// private isDatasetAlreadyAdded(id: string): boolean {
+	// 	// fs.stat(this.getDatasetDirPath(id), (exists) => {
+	// 	// 	if (exists == null) {
+	// 	// 		return true;
+	// 	// 	} else if (exists.code === "ENOENT") {
+	// 	// 		return false;
+	// 	// 	}
+	// 	// });
+	//
+	// 	const dataAlreadyAdded = this.isThereDatasetDir(id);
+	// 	console.log(dataAlreadyAdded);
+	// 	return dataAlreadyAdded;
+	// }
 
 	private addDatasetToDisk(dataset: Dataset) {
 		let jsonString = JSON.stringify(dataset, null, "\t");
 		let newPath = this.getDatasetDirPath(dataset.getIDName());
 		this.saveToDataDir(newPath, jsonString);
+		console.log("ADDED TO DISK%%%%%%%%%%%%%%");
 	}
 
 	private getDatasetDirPath(id: string): string {
@@ -230,9 +282,36 @@ TODO
 			section.getAudit() === undefined);
 	}
 
-	private isThereDatasetDir(id: string): boolean {
-		const filePath = this.getDatasetDirPath(id);
-		return fs.existsSync(filePath); // Check if the file exists
+	private async isThereDatasetDir(id: string): Promise<boolean> {
+		// const filePath = this.getDatasetDirPath(id);
+		// return fs.existsSync(filePath);
+		// // return fsPromises.existsAsync(filePath).catch((error: any) => {
+		// // 	console.log("error when finding file");
+		// // }); // Check if the file exists
+
+		// const filePath = this.getDatasetDirPath(id);
+		// try {
+		// 	await fsPromises.access(filePath);
+		// 	return true;
+		// } catch (error: any) {
+		// 	return false;
+		// }
+
+		return new Promise<boolean>( (resolve, reject) => {
+			const filePath = this.getDatasetDirPath(id);
+			// try {
+			// 	await fsPromises.access(filePath);
+			// 	resolve(true);
+			// } catch (error: any) {
+			// 	resolve(false);
+			// }
+
+			fsPromises.access(filePath).then(() => {
+				resolve(true);
+			}).catch(() => {
+				resolve(false);
+			});
+		});
 
 	}
 
@@ -242,13 +321,34 @@ TODO
 
 	public removeDataset(id: string): Promise<string> {
 
-        // stub
-        // return new Promise<string> ((resolve) => {
-        //     resolve("");
-        // });
-		return Promise.resolve(id);
-        // throw new InsightError("remove error");
-        // throw new NotFoundError();
+		return new Promise<string> ((resolve, reject) => {
+			// check if the id is valid
+			if (!this.isValidID(id)) {
+				reject(new InsightError("Not a valid ID"));
+				return;
+			}
+
+			// check if dataset exists
+			this.isThereDatasetDir(id)
+				.then(async (exists) => {
+					if (!exists) {
+						throw new NotFoundError("Valid ID has not been added yet");
+					} else {
+						// resolve(id);
+						fs.unlink(this.getDatasetDirPath(id), (error) => {
+							if (error) {
+								throw new InsightError("Error while removing file");
+							} else {
+								console.log("File removed successfully");
+								resolve(id);
+							}
+						});
+					}
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
 	}
 
 	public performQuery(query: unknown): Promise<InsightResult[]> {
