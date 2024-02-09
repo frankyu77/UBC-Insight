@@ -1,18 +1,11 @@
 import JSZip from "jszip";
-import {
-	IInsightFacade,
-	InsightDataset,
-	InsightDatasetKind,
-	InsightError,
-	InsightResult,
-	NotFoundError
-} from "./IInsightFacade";
+import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, InsightResult} from "./IInsightFacade";
 import * as fs from "fs";
-const fsPromises = require("fs").promises;
 import path from "node:path";
 import Section from "./Section";
-import {callbackify} from "node:util";
 import Dataset from "./Dataset";
+
+const fsPromises = require("fs").promises;
 
 export default class InsightFacade implements IInsightFacade {
 /* *********************************************************************************************************************
@@ -54,10 +47,14 @@ TODO
 				return;
 			}
 
+			// check if the kind is Sections and not Rooms
+			if (!(kind === InsightDatasetKind.Sections)) {
+				reject(new InsightError("Not a valid kind"));
+				return;
+			}
+
 			// check if the dataset is already added
-			const dataAlreadyAdded = this.isThereDatasetDir(id);
-			console.log(dataAlreadyAdded);
-			if (dataAlreadyAdded) {
+			if (this.isDatasetAlreadyAdded(id) || this.idDatasetsAddedSoFar.includes(id)) {
 				console.log("asfasfasf");
 				reject(new InsightError("Dataset already added"));
 				return;
@@ -74,6 +71,7 @@ TODO
 						reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
 					}
 
+
 					this.addDatasetToDisk(currentDataset);
 					this.datasetsAddedSoFar.push(currentDataset);
 					/*
@@ -87,20 +85,13 @@ TODO
 				})
 				.catch((error: any) => {
 					console.log(error);
-					reject(new InsightError("Not base64"));
+					reject(new InsightError("Invalid Content"));
 				});
+
+			console.log("🥐");
 		});
 
-	}
 
-	private addDatasetToDisk(dataset: Dataset) {
-		let jsonString = JSON.stringify(dataset, null, "\t");
-		let newPath = this.getDatasetDirPath(dataset.getIDName());
-		this.saveToDataDir(newPath, jsonString);
-	}
-
-	private getDatasetDirPath(id: string): string {
-		return path.join(this.dir, `${id}`);
 	}
 
 	private async handleZip(zip: JSZip, reject: (reason?: any) => void, dataset: Dataset) {
@@ -167,6 +158,23 @@ TODO
 		console.log("end of for each*********");
 		console.log(dataset.getValidSections().length);
 
+	}
+
+	private isDatasetAlreadyAdded(id: string): boolean {
+		const dataAlreadyAdded = this.isThereDatasetDir(id);
+		console.log(dataAlreadyAdded);
+		return dataAlreadyAdded;
+	}
+
+	private addDatasetToDisk(dataset: Dataset) {
+		let jsonString = JSON.stringify(dataset, null, "\t");
+		let newPath = this.getDatasetDirPath(dataset.getIDName());
+		this.saveToDataDir(newPath, jsonString);
+	}
+
+	private getDatasetDirPath(id: string): string {
+		console.log(path.join(this.dir, `${id}`));
+		return path.join(this.dir, `${id}`);
 	}
 
 	private saveToDataDir(newPath: string, jsonString: string) {
@@ -254,8 +262,16 @@ TODO
         //     [{"sections_dept":"adhe","sections_id":"329","sections_avg":90.02},{"sections_dept":"adhe","sections_id":"412","sections_avg":90.16},{"sections_dept":"adhe","sections_id":"330","sections_avg":90.17},{"sections_dept":"adhe","sections_id":"412","sections_avg":90.18},{"sections_dept":"adhe","sections_id":"330","sections_avg":90.5},{"sections_dept":"adhe","sections_id":"330","sections_avg":90.72},{"sections_dept":"adhe","sections_id":"329","sections_avg":90.82},{"sections_dept":"adhe","sections_id":"330","sections_avg":90.85},{"sections_dept":"adhe","sections_id":"330","sections_avg":91.29},{"sections_dept":"adhe","sections_id":"330","sections_avg":91.33},{"sections_dept":"adhe","sections_id":"330","sections_avg":91.33},{"sections_dept":"adhe","sections_id":"330","sections_avg":91.48},{"sections_dept":"adhe","sections_id":"329","sections_avg":92.54},{"sections_dept":"adhe","sections_id":"329","sections_avg":93.33},{"sections_dept":"sowk","sections_id":"570","sections_avg":95},{"sections_dept":"rhsc","sections_id":"501","sections_avg":95},{"sections_dept":"psyc","sections_id":"501","sections_avg":95},{"sections_dept":"psyc","sections_id":"501","sections_avg":95},{"sections_dept":"obst","sections_id":"549","sections_avg":95},{"sections_dept":"nurs","sections_id":"424","sections_avg":95},{"sections_dept":"nurs","sections_id":"424","sections_avg":95},{"sections_dept":"musc","sections_id":"553","sections_avg":95},{"sections_dept":"musc","sections_id":"553","sections_avg":95},{"sections_dept":"musc","sections_id":"553","sections_avg":95},{"sections_dept":"musc","sections_id":"553","sections_avg":95},{"sections_dept":"musc","sections_id":"553","sections_avg":95},{"sections_dept":"musc","sections_id":"553","sections_avg":95},{"sections_dept":"mtrl","sections_id":"599","sections_avg":95},{"sections_dept":"mtrl","sections_id":"564","sections_avg":95},{"sections_dept":"mtrl","sections_id":"564","sections_avg":95},{"sections_dept":"math","sections_id":"532","sections_avg":95},{"sections_dept":"math","sections_id":"532","sections_avg":95},{"sections_dept":"kin","sections_id":"500","sections_avg":95},{"sections_dept":"kin","sections_id":"500","sections_avg":95},{"sections_dept":"kin","sections_id":"499","sections_avg":95},{"sections_dept":"epse","sections_id":"682","sections_avg":95},{"sections_dept":"epse","sections_id":"682","sections_avg":95},{"sections_dept":"epse","sections_id":"606","sections_avg":95},{"sections_dept":"edcp","sections_id":"473","sections_avg":95},{"sections_dept":"edcp","sections_id":"473","sections_avg":95},{"sections_dept":"econ","sections_id":"516","sections_avg":95},{"sections_dept":"econ","sections_id":"516","sections_avg":95},{"sections_dept":"crwr","sections_id":"599","sections_avg":95},{"sections_dept":"crwr","sections_id":"599","sections_avg":95},{"sections_dept":"crwr","sections_id":"599","sections_avg":95},{"sections_dept":"crwr","sections_id":"599","sections_avg":95},{"sections_dept":"crwr","sections_id":"599","sections_avg":95},{"sections_dept":"crwr","sections_id":"599","sections_avg":95},{"sections_dept":"crwr","sections_id":"599","sections_avg":95},{"sections_dept":"cpsc","sections_id":"589","sections_avg":95},{"sections_dept":"cpsc","sections_id":"589","sections_avg":95},{"sections_dept":"cnps","sections_id":"535","sections_avg":95},{"sections_dept":"cnps","sections_id":"535","sections_avg":95},{"sections_dept":"bmeg","sections_id":"597","sections_avg":95},{"sections_dept":"bmeg","sections_id":"597","sections_avg":95},{"sections_dept":"adhe","sections_id":"329","sections_avg":96.11}]
         // )
 
+
+		try {
+			JSON.stringify(query);
+			console.log("json object");
+		} catch (error) {
+			console.log("not json");
+		}
+
 		throw new InsightError();
-        // return Promise.resolve([]);
+		// return Promise.resolve([]);
 	}
 
 	public listDatasets(): Promise<InsightDataset[]>{

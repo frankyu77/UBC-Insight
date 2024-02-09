@@ -462,7 +462,7 @@ describe("InsightFacade", function() {
 		let facade: InsightFacade;
 
 		before(async function() {
-			sections = await getContentFromArchives("pair.zip");
+			sections = await getContentFromArchives("oneValidSection.zip");
 			facade = new InsightFacade();
 
 			chai.use(chaiAsPromised);
