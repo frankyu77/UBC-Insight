@@ -1,0 +1,9 @@
+{
+  "title": "empty WHERE, fail",
+  "input": {
+    "WHERE": {},
+    "OPTIONS": {}
+  },
+  "errorExpected": true,
+  "result": "InsightError"
+}

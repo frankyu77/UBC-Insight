@@ -1,0 +1,19 @@
+{
+  "title": "misspelled WHERE",
+  "input": {
+    "WEHRE": {
+      "GT": {
+        "sections_avg": 97
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "sections_dept",
+        "sections_avg"
+      ],
+      "ORDER": "sections_avg"
+    }
+  },
+  "errorExpected": true,
+  "result": "InsightError"
+}

@@ -1,5 +1,6 @@
 import * as fs from "fs-extra";
-import {ITestQuery} from "./controller/InsightFacade.spec";
+import {ITestQuery} from "../../controller/InsightFacade.spec";
+
 
 /**
  * The directory where data is persisted.
@@ -8,6 +9,7 @@ import {ITestQuery} from "./controller/InsightFacade.spec";
  */
 const persistDir = "./data";
 
+
 /**
  * Convert a file into a base64 string.
  *
@@ -15,10 +17,17 @@ const persistDir = "./data";
  *
  * @return Promise A base 64 representation of the file
  */
-async function getContentFromArchives(name: string): Promise<string> {
+// async function getContentFromArchives(name: string): Promise<string> {
+//     const buffer = await fs.readFile("test/resources/archives/" + name);
+//     return buffer.toString("base64");
+// }
+
+async function getContentFromArchives (name: string): Promise<string> {
 	const buffer = await fs.readFile("test/resources/archives/" + name);
+
 	return buffer.toString("base64");
 }
+
 
 /**
  * Removes all files within the persistDir.
@@ -28,11 +37,15 @@ async function clearDisk(): Promise<void> {
 }
 
 /**
+ *
  * Searches for test query JSON files in the path.
+ *
  * @param path The path to the sample query JSON files.
+ *
  */
+
 function readFileQueries(path: string): ITestQuery[] {
-	// Note: This method *must* be synchronous for Mocha
+    // Note: This method *must* be synchronous for Mocha
 	const fileNames = fs.readdirSync(`test/resources/queries/${path}`);
 
 	const allQueries: ITestQuery[] = [];
@@ -44,5 +57,6 @@ function readFileQueries(path: string): ITestQuery[] {
 
 	return allQueries;
 }
+
 
 export {getContentFromArchives, clearDisk, readFileQueries};
