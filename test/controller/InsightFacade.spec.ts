@@ -406,7 +406,7 @@ describe("InsightFacade", function() {
 		let facade: InsightFacade;
 
 		before(async function() {
-			sections = await getContentFromArchives("pair.zip");
+			sections = await getContentFromArchives("oneValidSection.zip");
 			chai.use(chaiAsPromised);
 		});
 
@@ -433,7 +433,7 @@ describe("InsightFacade", function() {
 			expect(datasets).to.deep.equal([{
 				id: "ubc",
 				kind: InsightDatasetKind.Sections,
-				numRows: 64612
+				numRows: 39
 			}]);
 		});
 
@@ -445,9 +445,9 @@ describe("InsightFacade", function() {
 			const datasets = await facade.listDatasets();
 
 			expect(datasets).to.deep.equal([
-				{id: "ubc", kind: InsightDatasetKind.Sections, numRows: 64612},
-				{id: "sfu", kind: InsightDatasetKind.Sections, numRows: 64612},
-				{id: "uofc", kind: InsightDatasetKind.Sections, numRows: 64612}
+				{id: "ubc", kind: InsightDatasetKind.Sections, numRows: 39},
+				{id: "sfu", kind: InsightDatasetKind.Sections, numRows: 39},
+				{id: "uofc", kind: InsightDatasetKind.Sections, numRows: 39}
 			]);
 		});
 
@@ -463,7 +463,7 @@ describe("InsightFacade", function() {
 			expect(datasets).to.deep.equal([{
 				id: "uofc",
 				kind: InsightDatasetKind.Sections,
-				numRows: 64612
+				numRows: 39
 			}]);
 		});
 

@@ -11,6 +11,7 @@ import * as fs from "fs";
 import path from "node:path";
 import Section from "./Section";
 import Dataset from "./Dataset";
+import InsightDatasetObject from "./InsightDatasetObject";
 
 const fsPromises = require("fs").promises;
 
@@ -40,7 +41,7 @@ TODO
 	private dir = "./data";
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		console.log("😀");
+		// console.log("😀");
 
 		return new Promise<string[]> ( (resolve, reject) => {
 			// check if there is a data dir
@@ -78,7 +79,7 @@ TODO
 
 			this.isThereDatasetDir(id)
 				.then(async (exists) => {
-					console.log("CHECKING CHECKING");
+					// console.log("CHECKING CHECKING");
 					if (exists || this.idDatasetsAddedSoFar.includes(id)) {
 						console.log("asfasfasf");
 						// reject(new InsightError("Dataset already added"));
@@ -143,7 +144,7 @@ TODO
 			// 		reject(new InsightError("Invalid Content"));
 			// 	});
 
-			console.log("🥐");
+			// console.log("🥐");
 		});
 
 
@@ -221,11 +222,11 @@ TODO
 		let jsonString = JSON.stringify(dataset, null, "\t");
 		let newPath = this.getDatasetDirPath(dataset.getIDName());
 		this.saveToDataDir(newPath, jsonString);
-		console.log("ADDED TO DISK%%%%%%%%%%%%%%");
+		// console.log("ADDED TO DISK%%%%%%%%%%%%%%");
 	}
 
 	private getDatasetDirPath(id: string): string {
-		console.log(path.join(this.dir, `${id}`));
+		// console.log(path.join(this.dir, `${id}`));
 		return path.join(this.dir, `${id}`);
 	}
 
@@ -375,14 +376,60 @@ TODO
 	}
 
 	public listDatasets(): Promise<InsightDataset[]>{
+		let result: InsightDataset[] = [];
 
-        // stub
-        // return new Promise<InsightDataset[]> ((resolve) => {
-        //     let test: InsightDataset[] = [];
-        //     resolve(test);
-        // });
-        // return Promise.resolve([{id: "ubc", kind: InsightDatasetKind.Section, numRows: 64612}]);
-		return Promise.resolve([]);
+		return new Promise<InsightDataset[]> ((resolve, reject) => {
+			fs.readdir(this.dir,  (error, files) => {
+				if (error) {
+					resolve(result);
+					return;
+				}
 
+				let pendingFiles = files.length;
+				if (pendingFiles === 0) {
+					resolve(result);
+				}
+
+				this.iterateThroughFiles(files, reject, result, pendingFiles, resolve);
+			});
+		});
+
+	}
+
+	private iterateThroughFiles(files: string[],
+		reject: (reason?: any) => void,
+		result: InsightDataset[],
+		pendingFiles: number,
+		resolve: (value: (PromiseLike<InsightDataset[]> | InsightDataset[])) => void) {
+
+		files.forEach(async (file) => {
+			console.log(file);
+			// resolve([]);
+
+			fs.readFile(this.getDatasetDirPath(file), "utf8", (err, data) => {
+				if (err) {
+					reject(new InsightError("Error when reading file"));
+				}
+
+				const object = JSON.parse(data);
+				const currentInsightDataset: InsightDataset = {
+					id: object.idName,
+					kind: InsightDatasetKind.Sections,
+					numRows: object.validSections.length
+				};
+
+				if (object.kind === "sections") {
+					currentInsightDataset.kind = InsightDatasetKind.Sections;
+				} else {
+					currentInsightDataset.kind = InsightDatasetKind.Rooms;
+				}
+				result.push(currentInsightDataset);
+				pendingFiles--;
+
+				if (pendingFiles === 0) {
+					resolve(result);
+				}
+			});
+		});
 	}
 }
