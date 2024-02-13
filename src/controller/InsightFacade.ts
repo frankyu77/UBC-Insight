@@ -44,7 +44,6 @@ export default class InsightFacade implements IInsightFacade {
 			this.isThereDatasetDir(id)
 				.then(async (exists) => {
 					if (exists || this.idDatasetsAddedSoFar.includes(id)) {
-						console.log("asfasfasf");
 						throw new InsightError("Dataset already added");
 					}
 
@@ -70,14 +69,8 @@ export default class InsightFacade implements IInsightFacade {
 					resolve(this.idDatasetsAddedSoFar);
 				})
 				.catch((error: any) => {
-					console.log(error);
 					reject(new InsightError("Invalid Content"));
-				}).catch((error) => {
-					console.log(error);
 				});
-
-
-			// console.log("🥐");
 		});
 
 
@@ -110,11 +103,9 @@ export default class InsightFacade implements IInsightFacade {
 								}
 							}
 						} catch(error) {
-							console.log("this is the error: " + error);
 							reject(new InsightError("Error while parsing file"));
 						}
 					}).catch((error) => {
-						console.log(error);
 						reject(new InsightError("Error while adding dataset"));
 					})
 				);
@@ -130,13 +121,12 @@ export default class InsightFacade implements IInsightFacade {
 		try {
 			await this.saveToDataDir(newPath, jsonString);
 		} catch (error) {
-			console.log(error);
+			throw new InsightError("Error when saving to disk");
 		}
 	}
 
 	// gets the path to the dataset
 	private getDatasetDirPath(id: string): string {
-		// console.log(path.join(this.dir, `${id}`));
 		return path.join(this.dir, `${id}`);
 	}
 
@@ -144,9 +134,8 @@ export default class InsightFacade implements IInsightFacade {
 	private async saveToDataDir(newPath: string, jsonString: string): Promise<void> {
 		try {
 			await fsPromises.writeFile(newPath, jsonString);
-			console.log("File written successfully");
 		} catch (e) {
-			console.log("error when writing file");
+			throw new InsightError("Error when writing to disk");
 		}
 	}
 
@@ -234,7 +223,6 @@ export default class InsightFacade implements IInsightFacade {
 							if (error) {
 								throw new InsightError("Error while removing file");
 							} else {
-								console.log("File removed successfully");
 								resolve(id);
 							}
 						});
