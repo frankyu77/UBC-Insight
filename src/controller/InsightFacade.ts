@@ -166,6 +166,9 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		];
 
+		const searcher : RegExp = this.createNewRegex(String(toCompare));
+
+
 		var i = insightsArray.length
 		while (i--) {
 			console.log(insightsArray[i][key]);
@@ -178,7 +181,11 @@ export default class InsightFacade implements IInsightFacade {
 		return insightsArray;
 	}
 
+	private createNewRegex(toCompare: string) : RegExp {
 
+
+		return new RegExp(toCompare, "gi")
+	}
 
 
 
