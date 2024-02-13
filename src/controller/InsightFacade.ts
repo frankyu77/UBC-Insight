@@ -104,8 +104,21 @@ export default class InsightFacade implements IInsightFacade {
 
 	// Takes a query key and returns a valid dataset id to search for and valid mfield and sfield.
 	// Throws Insight Error if not a valid query string.
-	private queryKeyParser(queryKey : string) : any {
+	private queryKeyParser(queryKey : any) : any {
+		const keys = Object.keys(queryKey);
+		const vals : any = Object.values(queryKey);
 
+		//Strores idstring and m or s field into parsedArray
+		let parsedArray : (number | string)[] = keys[0].split("_", 2);
+
+		//Add the val
+		parsedArray.push(vals[0]);
+
+
+		//Validate parsedArray
+
+
+		return parsedArray;
 	}
 
 
@@ -113,20 +126,28 @@ export default class InsightFacade implements IInsightFacade {
 	// This insight result will have all the fields and sections of the requested dataset
 	private handleEq( queryS: any, prevResult : any) : InsightResult[] {
 
-		console.log(queryS);
-		const parsedQueryKey : any = this.queryKeyParser(queryS);
-		const mField : string = "avg";
-		const idString : string = "sections";
-		const toCompare: number = 99;
+		const parsedQueryKey : any = this.queryKeyParser(queryS.EQ);
+		const key : string = queryS.EQ;
+		const idString : string = parsedQueryKey[0];
+		const mField : string = parsedQueryKey[1];
+		const toCompare: number = parsedQueryKey[2];
 
 
-
+		// Check if InsightResult is empty, if it is grab all dataset and create InsightResult
+		//Assume below is the given InsightResult
 		let insightsArray: InsightResult[] = [
 			{
 				sections_avg: 99
 			}
 		];
-		return insightsArray;
+
+		//Apply condition and shorten InsightResult array
+		insightsArray.forEach((element, index) => {
+		});
+
+
+		//Return InsightResult Array
+		return  insightsArray;
 	}
 	private handleOptions(queryS : any, result :  InsightResult[]) : InsightResult[] {
 		// Create an array of InsightResult objects
