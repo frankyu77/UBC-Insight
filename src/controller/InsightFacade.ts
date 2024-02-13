@@ -11,37 +11,16 @@ import * as fs from "fs";
 import path from "node:path";
 import Section from "./Section";
 import Dataset from "./Dataset";
-import InsightDatasetObject from "./InsightDatasetObject";
 
 const fsPromises = require("fs").promises;
 
 export default class InsightFacade implements IInsightFacade {
-/* *********************************************************************************************************************
-	✅create a datasetClass along with the sectionsClass so that you can store the list of valid sections inside the
-	datasetClass and that way you can you just parse the entire datasetClass as a JSONObject and then just store that
-	into the disk
-	makes it easier, so that you don't have to read the fold and check that the folder name matches whatever id ur
-	getting and going from there
-
-	✅also want to store the list of datasetClass Objects so that you can have access to it in memory rather than only
-	relying on the disk since that is very costly. This way if youre still working on the same instance of
-	InsightFacade itll be easier to access the datasets that you have added, but if you create a new instance of
-	InsightFacade, you can access all the previously added datasets from the disk
-
-TODO
-	must handle the case of new instance of InsightFacade having access to all the previously added datasets, so that
-	when you addDataset, it will return all the previously added datasets as well, also for listDataset and stuff. Must
-	create some array where it can read the data directory and if the datasets are not in the locally created array,
-	then you would add those datasets from the disk into the local array??
-*/ // ******************************************************************************************************************
-
-	private listID: string[] = [];
 	private datasetsAddedSoFar: Dataset[] = [];
 	private idDatasetsAddedSoFar: string[] = [];
 	private dir = "./data";
 
+
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		// console.log("😀");
 
 		return new Promise<string[]> ( (resolve, reject) => {
 			// check if there is a data dir
@@ -61,51 +40,32 @@ TODO
 				return;
 			}
 
-			// fs.stat(this.getDatasetDirPath(id), (exists) => {
-			// 	if (exists == null) {
-			// 		console.log(exists);
-			// 	} else if (exists.code === "ENOENT") {
-			// 		reject(new InsightError("Dataset already added"));
-			// 		return;
-			// 	}
-			// });
-
-			// check if the dataset is already added
-			// if (this.isThereDatasetDir(id) || this.idDatasetsAddedSoFar.includes(id)) {
-			// 	console.log("asfasfasf");
-			// 	reject(new InsightError("Dataset already added"));
-			// 	return;
-			// }
-
+			// checks if dataset already exists
 			this.isThereDatasetDir(id)
 				.then(async (exists) => {
-					// console.log("CHECKING CHECKING");
 					if (exists || this.idDatasetsAddedSoFar.includes(id)) {
 						console.log("asfasfasf");
-						// reject(new InsightError("Dataset already added"));
 						throw new InsightError("Dataset already added");
 					}
 
+					// if it does not exist then unzip the dataset and read it
 					return await JSZip.loadAsync(content, {base64: true});
 				}).then(async (zip: JSZip) => {
 					let currentDataset = new Dataset();
 					currentDataset.setIDName(id);
 
+					// call to helper to handle reading the zip file
 					await this.handleZip(zip, reject, currentDataset);
+
+					// reject if there are no valid sections
 					if (!currentDataset.getValidity()) {
-						// reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
-						throw new InsightError("No valid sections in dataset");
+						reject(new InsightError("No valid sections in dataset"));
+						return;
 					}
 
-
-					this.addDatasetToDisk(currentDataset);
+					await this.addDatasetToDisk(currentDataset);
 					this.datasetsAddedSoFar.push(currentDataset);
-				/*
-				* TODO
-				*  change how to implement this part. probably want to iterate through disk and check if there are
-				*  datasets that are not in your local array and add those in, then you return the total list of ids
-				* */
-				// change this
+
 					this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
 					resolve(this.idDatasetsAddedSoFar);
 				})
@@ -116,33 +76,6 @@ TODO
 					console.log(error);
 				});
 
-			// this.createDatasetDir(id);  // creates a directory for the dataset inside data dir
-			// let currentDataset = new Dataset();
-			// currentDataset.setIDName(id);
-			//
-			// JSZip.loadAsync(content, {base64: true})
-			// 	.then(async (zip: JSZip) => {
-			// 		await this.handleZip(zip, reject, currentDataset);
-			// 		if (!currentDataset.getValidity()) {
-			// 			reject(new InsightError("No valid sections in dataset"));   // SOMEHOW HANDLE IS ZERO VALID DS
-			// 		}
-			//
-			//
-			// 		this.addDatasetToDisk(currentDataset);
-			// 		this.datasetsAddedSoFar.push(currentDataset);
-			// 		/*
-			// 		* TODO
-			// 		*  change how to implement this part. probably want to iterate through disk and check if there are
-			// 		*  datasets that are not in your local array and add those in, then you return the total list of ids
-			// 		* */
-			// 		// change this
-			// 		this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
-			// 		resolve(this.idDatasetsAddedSoFar);
-			// 	})
-			// 	.catch((error: any) => {
-			// 		console.log(error);
-			// 		reject(new InsightError("Invalid Content"));
-			// 	});
 
 			// console.log("🥐");
 		});
@@ -150,39 +83,31 @@ TODO
 
 	}
 
+	// iterates through all courses and sections and adds only valid sections to the dataset
 	private async handleZip(zip: JSZip, reject: (reason?: any) => void, dataset: Dataset) {
 		const promises: unknown[] = [];
 		// iterate through the zip folder
 		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
-			// console.log(relativePath);
 			if (relativePath.startsWith("courses")
 				&& !relativePath.includes("courses/.")
 				&& !relativePath.endsWith("/")) {
 
-				// console.log(relativePath);
 				// read the content in the file
 				promises.push(
 					zipEntry.async("string").then((contentInFile) => {
-
-						// console.log("reached zipEntry.async");
-						// console.log(contentInFile);
 						// parses the file into a list of JSON objects
 						try {
 							let parsedCourseJSONObjects = JSON.parse(contentInFile);
 							let result = parsedCourseJSONObjects.result;
-							if (result.length === 0) {
-								// console.log("invalid section");
-							} else {
+							if (result.length !== 0) {
 								// iterate through the JSON objects in the file
 								for (const object of result) {
-									// console.log(test);
 									let newSection = this.createSection(object);
 									if (!(newSection.getCourseID() === "invalid")) {
 										dataset.setValidity(true);
 										dataset.addValidSection(newSection);
 									}
 								}
-								// console.log("end of for loop**");
 							}
 						} catch(error) {
 							console.log("this is the error: " + error);
@@ -193,51 +118,39 @@ TODO
 						reject(new InsightError("Error while adding dataset"));
 					})
 				);
-
-
 			}
 		});
-
 		await Promise.all(promises);
-		// console.log("end of for each*********");
-		// console.log(dataset.getValidSections().length);
-
 	}
 
-	// private isDatasetAlreadyAdded(id: string): boolean {
-	// 	// fs.stat(this.getDatasetDirPath(id), (exists) => {
-	// 	// 	if (exists == null) {
-	// 	// 		return true;
-	// 	// 	} else if (exists.code === "ENOENT") {
-	// 	// 		return false;
-	// 	// 	}
-	// 	// });
-	//
-	// 	const dataAlreadyAdded = this.isThereDatasetDir(id);
-	// 	console.log(dataAlreadyAdded);
-	// 	return dataAlreadyAdded;
-	// }
-
-	private addDatasetToDisk(dataset: Dataset) {
+	// converts dataset object to JSON string then add to disk
+	private async addDatasetToDisk(dataset: Dataset) {
 		let jsonString = JSON.stringify(dataset, null, "\t");
 		let newPath = this.getDatasetDirPath(dataset.getIDName());
-		this.saveToDataDir(newPath, jsonString);
-		// console.log("ADDED TO DISK%%%%%%%%%%%%%%");
+		try {
+			await this.saveToDataDir(newPath, jsonString);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
+	// gets the path to the dataset
 	private getDatasetDirPath(id: string): string {
 		// console.log(path.join(this.dir, `${id}`));
 		return path.join(this.dir, `${id}`);
 	}
 
-	private saveToDataDir(newPath: string, jsonString: string) {
-		fsPromises.writeFile(newPath, jsonString).then(() => {
+	// writes the file to data directory
+	private async saveToDataDir(newPath: string, jsonString: string): Promise<void> {
+		try {
+			await fsPromises.writeFile(newPath, jsonString);
 			console.log("File written successfully");
-		}).catch(() => {
+		} catch (e) {
 			console.log("error when writing file");
-		});
+		}
 	}
 
+	// creates a Section object, if invalid, then create a Section that is invalid
 	private createSection(object: any): Section {
 		let currentSection = new Section(
 			object.id,
@@ -270,6 +183,7 @@ TODO
 		}
 	}
 
+	// checks if the Section is valid or not
 	private isAValidSection(section: Section): boolean {
 		return !(section.getSectionID() === undefined ||
 			section.getCourseID() === undefined ||
@@ -283,30 +197,10 @@ TODO
 			section.getAudit() === undefined);
 	}
 
+	// checks if dataset already exists
 	private async isThereDatasetDir(id: string): Promise<boolean> {
-		// const filePath = this.getDatasetDirPath(id);
-		// return fs.existsSync(filePath);
-		// // return fsPromises.existsAsync(filePath).catch((error: any) => {
-		// // 	console.log("error when finding file");
-		// // }); // Check if the file exists
-
-		// const filePath = this.getDatasetDirPath(id);
-		// try {
-		// 	await fsPromises.access(filePath);
-		// 	return true;
-		// } catch (error: any) {
-		// 	return false;
-		// }
-
 		return new Promise<boolean>( (resolve, reject) => {
 			const filePath = this.getDatasetDirPath(id);
-			// try {
-			// 	await fsPromises.access(filePath);
-			// 	resolve(true);
-			// } catch (error: any) {
-			// 	resolve(false);
-			// }
-
 			fsPromises.access(filePath).then(() => {
 				resolve(true);
 			}).catch(() => {
@@ -316,12 +210,12 @@ TODO
 
 	}
 
+	// checks if id provided is valid
 	private isValidID(id: string): boolean {
 		return /^[^\s_]+$/.test(id);
 	}
 
 	public removeDataset(id: string): Promise<string> {
-
 		return new Promise<string> ((resolve, reject) => {
 			// check if the id is valid
 			if (!this.isValidID(id)) {
@@ -335,7 +229,7 @@ TODO
 					if (!exists) {
 						throw new NotFoundError("Valid ID has not been added yet");
 					} else {
-						// resolve(id);
+						// if so then remove the dataset
 						fs.unlink(this.getDatasetDirPath(id), (error) => {
 							if (error) {
 								throw new InsightError("Error while removing file");
@@ -379,38 +273,42 @@ TODO
 		let result: InsightDataset[] = [];
 
 		return new Promise<InsightDataset[]> ((resolve, reject) => {
+			// read the directory
 			fs.readdir(this.dir,  (error, files) => {
 				if (error) {
 					resolve(result);
 					return;
 				}
 
+				// keeps track of asynchronous code so that it iterates through all the files before returning
 				let pendingFiles = files.length;
 				if (pendingFiles === 0) {
 					resolve(result);
 				}
 
+				// iterate through all the added datasets
 				this.iterateThroughFiles(files, reject, result, pendingFiles, resolve);
 			});
 		});
 
 	}
 
+	// iterate through all datasets and make them into InsightDatasets and add to the return list
 	private iterateThroughFiles(files: string[],
 		reject: (reason?: any) => void,
 		result: InsightDataset[],
 		pendingFiles: number,
 		resolve: (value: (PromiseLike<InsightDataset[]> | InsightDataset[])) => void) {
 
+		// iterate through each file in data dir
 		files.forEach(async (file) => {
-			console.log(file);
-			// resolve([]);
-
+			// read the file
 			fs.readFile(this.getDatasetDirPath(file), "utf8", (err, data) => {
 				if (err) {
 					reject(new InsightError("Error when reading file"));
 				}
 
+				// this sections just makes the InsightDataset object for each dataset
 				const object = JSON.parse(data);
 				const currentInsightDataset: InsightDataset = {
 					id: object.idName,
@@ -424,6 +322,8 @@ TODO
 					currentInsightDataset.kind = InsightDatasetKind.Rooms;
 				}
 				result.push(currentInsightDataset);
+
+				// to keep track of asynchronous code
 				pendingFiles--;
 
 				if (pendingFiles === 0) {

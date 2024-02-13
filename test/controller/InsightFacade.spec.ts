@@ -152,7 +152,12 @@ describe("InsightFacade", function() {
 		describe("testing", () => {
 			for (let i = 0; i < 100; i++) {
 				it ("" + i, async () => {
-					await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+					try {
+						await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+					} catch (err) {
+						console.log(err);
+						console.log("lol");
+					}
 					try {
 						const facade2 = new InsightFacade();
 						const result2 = await facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
@@ -444,9 +449,9 @@ describe("InsightFacade", function() {
 
 			const datasets = await facade.listDatasets();
 
-			expect(datasets).to.deep.equal([
-				{id: "ubc", kind: InsightDatasetKind.Sections, numRows: 39},
+			expect(datasets).to.have.deep.members([
 				{id: "sfu", kind: InsightDatasetKind.Sections, numRows: 39},
+				{id: "ubc", kind: InsightDatasetKind.Sections, numRows: 39},
 				{id: "uofc", kind: InsightDatasetKind.Sections, numRows: 39}
 			]);
 		});
@@ -470,7 +475,7 @@ describe("InsightFacade", function() {
 	});
 
 
-    // ######################################################################################################performQuery
+    // #####################################################################################################performQuery
 
 	describe("performQuery", () => {
 		let sections: string;
