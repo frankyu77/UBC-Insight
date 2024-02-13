@@ -88,13 +88,13 @@ export default class InsightFacade implements IInsightFacade {
 			case "OR":
 				return insightsArray;
 			case "IS":
-				return insightsArray;
+				return this.handleSComparison(queryS, undefined);
 			case "EQ":
-				return this.handleEq(queryS, undefined, "EQ");
+				return this.handleMComparison(queryS, undefined, "EQ");
 			case "GT":
-				return this.handleEq(queryS, undefined, "GT");
+				return this.handleMComparison(queryS, undefined, "GT");
 			case "LT":
-				return this.handleEq(queryS, undefined, "LT");
+				return this.handleMComparison(queryS, undefined, "LT");
 			case "NOT":
 				return insightsArray;
 			default:
@@ -104,7 +104,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	// Takes a query key and returns a valid dataset id to search for and valid mfield and sfield.
 	// Throws Insight Error if not a valid query string.
-	private queryKeyParser(queryKey : any) : number {
+	private queryKeyParser(queryKey : any) : any {
 		const keys = Object.keys(queryKey);
 		const vals : any = Object.values(queryKey);
 
@@ -113,31 +113,84 @@ export default class InsightFacade implements IInsightFacade {
 
 		//Add the val
 		parsedArray.push(vals[0]);
-		parsedArray.push(keys[0]);
 
 
 		//Validate parsedArray
 
 
-		return vals[0];
+		return parsedArray;
 	}
 
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
-	private handleEq( queryS: any, prevResult : any, comparator : string) : InsightResult[] {
+	private handleSComparison( queryS: any, prevResult : any) : any {
+		const parsedQueryKey : any = this.queryKeyParser(queryS["IS"]);
+		const idString : string = parsedQueryKey[0];
+		const sField : string = parsedQueryKey[1];
+		const toCompare: number = parsedQueryKey[2];
+		const key : string = idString+"_"+sField;
 
-		// const parsedQueryKey : any = this.queryKeyParser(queryS.EQ);
-		// const idString : string = parsedQueryKey[0];
-		// const mField : string = parsedQueryKey[1];
+		// Check if prev InsightResult is empty,
+		// if empty is grab all dataset and create InsightResult
+		//Assume below is the given prev InsightResult
+		let insightsArray: InsightResult[] = [
+			{
+				"sections_uuid": "76508",
+				"sections_dept": "rhsc",
+				"sections_id": "509",
+				"sections_avg": 100,
+				"sections_title": "rehab learning",
+				"sections_instructor": "",
+				"sections_year": 2008,
+				"sections_pass": 1,
+				"sections_fail": 0,
+				"sections_audit": 6
+			},
+			{
+				"sections_uuid": "18497",
+				"sections_dept": "eece",
+				"sections_id": "579",
+				"sections_avg": 97,
+				"sections_title": "ad top vlsi desg",
+				"sections_instructor": "",
+				"sections_year": 1900,
+				"sections_pass": 2,
+				"sections_fail": 0,
+				"sections_audit": 2
+			},
+			{
+				"sections_dept": "busi",
+				"sections_id": "330",
+				"sections_avg": 4
+			}
+		];
 
-		// console.log(queryS[comparator]);
-		const toCompare: number = this.queryKeyParser(queryS[comparator]);
-		const keyArray : string[] = Object.keys(queryS[comparator]);
-		const key : string = keyArray[0];
+		var i = insightsArray.length
+		while (i--) {
+			console.log(insightsArray[i][key]);
+			if (String(insightsArray[i][key]).search(/.*mark/gi) == -1) {
+				insightsArray.splice(i, 1);
+			}
+		}
 
-		// console.log(key);
-		 console.log(toCompare + "to compare");
+		console.log(insightsArray);
+		return insightsArray;
+	}
+
+
+
+
+
+	// If there is no InsightResult passed in, create an insight result based on the queryKey
+	// This insight result will have all the fields and sections of the requested dataset
+	private handleMComparison( queryS: any, prevResult : any, comparator : string) : InsightResult[] {
+
+		const parsedQueryKey : any = this.queryKeyParser(queryS[comparator]);
+		const idString : string = parsedQueryKey[0];
+		const mField : string = parsedQueryKey[1];
+		const toCompare: number = parsedQueryKey[2];
+		const key : string = idString+"_"+mField;
 
 
 		// Check if prev InsightResult is empty,
@@ -176,21 +229,17 @@ export default class InsightFacade implements IInsightFacade {
 		];
 
 		//Apply condition and shorten InsightResult array
-		//var i = insightsArray.length
 		var i = insightsArray.length
 		switch (comparator) {
 			case "EQ" :
 				while (i--) {
-					console.log(insightsArray[i][key]);
 					if (Number(insightsArray[i][key]) != toCompare) {
 						insightsArray.splice(i, 1);
 					}
 				}
 				break;
 			case "LT" :
-
 				while (i--) {
-					console.log(insightsArray[i][key]);
 					if (Number(insightsArray[i][key]) > toCompare) {
 						insightsArray.splice(i, 1);
 					}
@@ -198,7 +247,6 @@ export default class InsightFacade implements IInsightFacade {
 				break;
 			case "GT" :
 				while (i--) {
-					console.log(insightsArray[i][key]);
 					if (Number(insightsArray[i][key]) < toCompare) {
 						insightsArray.splice(i, 1);
 					}
