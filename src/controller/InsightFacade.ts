@@ -90,11 +90,11 @@ export default class InsightFacade implements IInsightFacade {
 			case "IS":
 				return insightsArray;
 			case "EQ":
-				return this.handleEq(queryS, undefined);
+				return this.handleEq(queryS, undefined, "EQ");
 			case "GT":
-				return insightsArray;
+				return this.handleEq(queryS, undefined, "GT");
 			case "LT":
-				return insightsArray;
+				return this.handleEq(queryS, undefined, "LT");
 			case "NOT":
 				return insightsArray;
 			default:
@@ -125,41 +125,87 @@ export default class InsightFacade implements IInsightFacade {
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
-	private handleEq( queryS: any, prevResult : any) : InsightResult[] {
+	private handleEq( queryS: any, prevResult : any, comparator : string) : InsightResult[] {
 
 		// const parsedQueryKey : any = this.queryKeyParser(queryS.EQ);
 		// const idString : string = parsedQueryKey[0];
 		// const mField : string = parsedQueryKey[1];
-		const toCompare: number = this.queryKeyParser(queryS.EQ);
-		const keyArray : string[] = Object.keys(queryS.EQ);
+
+		// console.log(queryS[comparator]);
+		const toCompare: number = this.queryKeyParser(queryS[comparator]);
+		const keyArray : string[] = Object.keys(queryS[comparator]);
 		const key : string = keyArray[0];
 
-		console.log(key);
-		// Check if InsightResult is empty, if it is grab all dataset and create InsightResult
-		//Assume below is the given InsightResult
+		// console.log(key);
+		 console.log(toCompare + "to compare");
+
+
+		// Check if prev InsightResult is empty,
+		// if empty is grab all dataset and create InsightResult
+		//Assume below is the given prev InsightResult
 		let insightsArray: InsightResult[] = [
 			{
-				sections_avg: -12
+				"sections_uuid": "76508",
+				"sections_dept": "rhsc",
+				"sections_id": "509",
+				"sections_avg": 100,
+				"sections_title": "rehab learning",
+				"sections_instructor": "",
+				"sections_year": 2008,
+				"sections_pass": 1,
+				"sections_fail": 0,
+				"sections_audit": 6
+			},
+			{
+				"sections_uuid": "18497",
+				"sections_dept": "eece",
+				"sections_id": "579",
+				"sections_avg": 97,
+				"sections_title": "ad top vlsi desg",
+				"sections_instructor": "",
+				"sections_year": 1900,
+				"sections_pass": 2,
+				"sections_fail": 0,
+				"sections_audit": 2
+			},
+			{
+				"sections_dept": "busi",
+				"sections_id": "330",
+				"sections_avg": 4
 			}
 		];
 
 		//Apply condition and shorten InsightResult array
-
-		//insightsArray.filter(element => element[key] === toCompare)
-
+		//var i = insightsArray.length
 		var i = insightsArray.length
-		while (i--) {
-			if (insightsArray[i][key] != toCompare) {
-				insightsArray.splice(i, 1);
-			}
-		}
+		switch (comparator) {
+			case "EQ" :
+				while (i--) {
+					console.log(insightsArray[i][key]);
+					if (Number(insightsArray[i][key]) != toCompare) {
+						insightsArray.splice(i, 1);
+					}
+				}
+				break;
+			case "LT" :
 
+				while (i--) {
+					console.log(insightsArray[i][key]);
+					if (Number(insightsArray[i][key]) > toCompare) {
+						insightsArray.splice(i, 1);
+					}
+				}
+				break;
+			case "GT" :
+				while (i--) {
+					console.log(insightsArray[i][key]);
+					if (Number(insightsArray[i][key]) < toCompare) {
+						insightsArray.splice(i, 1);
+					}
+				}
+				break;
+		}
 		console.log(insightsArray);
-		// insightsArray.forEach((element, index) => {
-		// 	if (element[key] != toCompare) {
-		// 		insightsArray
-		// 	}
-		// });
 
 		//Return InsightResult Array
 		return  insightsArray;
