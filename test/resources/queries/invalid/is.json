@@ -3,7 +3,7 @@
 	"input": {
 		"WHERE": {
 			"IS": {
-				"sections_title": "mark*"
+				"sections_instructor": "mark*"
 			}
 		},
 		"OPTIONS": {

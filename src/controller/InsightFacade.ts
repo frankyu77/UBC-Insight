@@ -109,6 +109,7 @@ export default class InsightFacade implements IInsightFacade {
 		const vals : any = Object.values(queryKey);
 
 		//Strores idstring and m or s field into parsedArray
+		//Does this need to be number | string !!!!!!!!
 		let parsedArray : (number | string)[] = keys[0].split("_", 2);
 
 		//Add the val
@@ -128,7 +129,7 @@ export default class InsightFacade implements IInsightFacade {
 		const parsedQueryKey : any = this.queryKeyParser(queryS["IS"]);
 		const idString : string = parsedQueryKey[0];
 		const sField : string = parsedQueryKey[1];
-		const toCompare: number = parsedQueryKey[2];
+		const toCompare: string = parsedQueryKey[2];
 		const key : string = idString+"_"+sField;
 
 		// Check if prev InsightResult is empty,
@@ -153,7 +154,7 @@ export default class InsightFacade implements IInsightFacade {
 				"sections_id": "579",
 				"sections_avg": 97,
 				"sections_title": "ad top vlsi desg",
-				"sections_instructor": "",
+				"sections_instructor": "mark",
 				"sections_year": 1900,
 				"sections_pass": 2,
 				"sections_fail": 0,
@@ -172,7 +173,7 @@ export default class InsightFacade implements IInsightFacade {
 		var i = insightsArray.length
 		while (i--) {
 			console.log(insightsArray[i][key]);
-			if (String(insightsArray[i][key]).search(/.*mark/gi) == -1) {
+			if (String(insightsArray[i][key]).search(searcher) == -1) {
 				insightsArray.splice(i, 1);
 			}
 		}
@@ -182,9 +183,8 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	private createNewRegex(toCompare: string) : RegExp {
-
-
-		return new RegExp(toCompare, "gi")
+		const updatedToCompare : string = toCompare.replace("*", ".*")
+		return new RegExp(updatedToCompare, "gi")
 	}
 
 
