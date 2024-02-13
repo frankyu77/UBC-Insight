@@ -40,7 +40,7 @@ export default class InsightFacade implements IInsightFacade {
 			let result : InsightResult[];
 
 			try {
-				 result = this.handleWhere(queryS.WHERE);
+				 result = this.handleWhere(queryS.WHERE, undefined);
 			} catch (error: any) {
 				return reject(error.message);
 			}
@@ -62,7 +62,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 
-	private  handleWhere(queryS : any) : InsightResult[] {
+	private  handleWhere(queryS : any, prevResult: any) : InsightResult[] {
 
 		const keys = Object.keys(queryS);
 
@@ -78,23 +78,22 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		];
 
-
 		// Terminating calls are IS, EQ, GT, LT
 		// AND, OR, NOT have to be recursive
 		// TODO: query key parser;
 		switch (keys[0]) {
 			case "AND":
-				return insightsArray;
+				return this.handleAnd(queryS,prevResult);
 			case "OR":
-				return insightsArray;
+				return this.handleOr(queryS, prevResult);
 			case "IS":
-				return this.handleSComparison(queryS, undefined);
+				return this.handleSComparison(queryS, prevResult);
 			case "EQ":
-				return this.handleMComparison(queryS, undefined, "EQ");
+				return this.handleMComparison(queryS, prevResult, "EQ");
 			case "GT":
-				return this.handleMComparison(queryS, undefined, "GT");
+				return this.handleMComparison(queryS, prevResult, "GT");
 			case "LT":
-				return this.handleMComparison(queryS, undefined, "LT");
+				return this.handleMComparison(queryS, prevResult, "LT");
 			case "NOT":
 				return insightsArray;
 			default:
@@ -102,11 +101,17 @@ export default class InsightFacade implements IInsightFacade {
 		}
 	}
 
+
+
+
+
 	// Takes a query key and returns a valid dataset id to search for and valid mfield and sfield.
 	// Throws Insight Error if not a valid query string.
 	private queryKeyParser(queryKey : any) : any {
 		const keys = Object.keys(queryKey);
 		const vals : any = Object.values(queryKey);
+
+
 
 		//Strores idstring and m or s field into parsedArray
 		//Does this need to be number | string !!!!!!!!
@@ -117,11 +122,41 @@ export default class InsightFacade implements IInsightFacade {
 
 
 		//Validate parsedArray
+		//Check if there are more than 1 key in
+		if (keys.length > 1 || keys.length == 0) {
+			throw new InsightError("Wrong number of keys");
+		}
 
+		//Check if a valid m or sfield is passed and check if the types are numbrs are right
+		switch (parsedArray[1]) {
+			case "dept" :
+				break;
+
+		}
 
 		return parsedArray;
 	}
 
+
+	// Takes two insight result arrays and joins the two together
+	private handleOr(queryS : any, prevResult : any ) : any {
+		const keys = Object.keys(queryS);
+
+		//Add to a set
+		let result1 : InsightResult[] = this.handleWhere(queryS[keys[0]], prevResult);
+		let result2 : InsightResult[] = this.handleWhere(queryS[keys[1]], prevResult);
+
+		let joinedArray : InsightResult[] = result1.concat(result2);
+
+		console.log(joinedArray);
+
+		return joinedArray;
+	}
+
+	// Takes two insight result arrays and only joins the same sections together
+	private handleAnd(queryS: any, prevResult: any) : any {
+
+	}
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
@@ -134,46 +169,42 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Check if prev InsightResult is empty,
 		// if empty is grab all dataset and create InsightResult
-		//Assume below is the given prev InsightResult
+		// Assume below is the given prev InsightResult
 		let insightsArray: InsightResult[] = [
 			{
-				"sections_uuid": "76508",
-				"sections_dept": "rhsc",
-				"sections_id": "509",
-				"sections_avg": 100,
-				"sections_title": "rehab learning",
-				"sections_instructor": "",
-				"sections_year": 2008,
-				"sections_pass": 1,
-				"sections_fail": 0,
-				"sections_audit": 6
+				"sections_instructor": "hodgson, antony",
+				"sections_id": "501",
+				"sections_avg": 95.15
 			},
 			{
-				"sections_uuid": "18497",
-				"sections_dept": "eece",
-				"sections_id": "579",
-				"sections_avg": 97,
-				"sections_title": "ad top vlsi desg",
-				"sections_instructor": "mark",
-				"sections_year": 1900,
-				"sections_pass": 2,
-				"sections_fail": 0,
-				"sections_audit": 2
+				"sections_instructor": "hodgson, antony",
+				"sections_id": "597",
+				"sections_avg": 83.83
+			},
+			{
+				"sections_instructor": "hodgson, antony",
+				"sections_id": "597",
+				"sections_avg": 84.33
 			},
 			{
 				"sections_dept": "busi",
 				"sections_id": "330",
+				"sections_instructor" : "ASDDD",
 				"sections_avg": 4
+			},
+			{
+				"sections_instructor": "",
+				"sections_id": "475",
+				"sections_avg": 1
 			}
 		];
 
-		const searcher : RegExp = this.createNewRegex(String(toCompare));
-
+		const updatedToCompare : RegExp = this.createNewRegex(String(toCompare));
 
 		var i = insightsArray.length
 		while (i--) {
 			console.log(insightsArray[i][key]);
-			if (String(insightsArray[i][key]).search(searcher) == -1) {
+			if (String(insightsArray[i][key]).search(updatedToCompare) == -1) {
 				insightsArray.splice(i, 1);
 			}
 		}
@@ -205,33 +236,30 @@ export default class InsightFacade implements IInsightFacade {
 		//Assume below is the given prev InsightResult
 		let insightsArray: InsightResult[] = [
 			{
-				"sections_uuid": "76508",
-				"sections_dept": "rhsc",
-				"sections_id": "509",
-				"sections_avg": 100,
-				"sections_title": "rehab learning",
-				"sections_instructor": "",
-				"sections_year": 2008,
-				"sections_pass": 1,
-				"sections_fail": 0,
-				"sections_audit": 6
+				"sections_instructor": "hodgson, antony",
+				"sections_id": "501",
+				"sections_avg": 95.15
 			},
 			{
-				"sections_uuid": "18497",
-				"sections_dept": "eece",
-				"sections_id": "579",
-				"sections_avg": 97,
-				"sections_title": "ad top vlsi desg",
-				"sections_instructor": "",
-				"sections_year": 1900,
-				"sections_pass": 2,
-				"sections_fail": 0,
-				"sections_audit": 2
+				"sections_instructor": "hodgson, antony",
+				"sections_id": "597",
+				"sections_avg": 83.83
+			},
+			{
+				"sections_instructor": "hodgson, antony",
+				"sections_id": "597",
+				"sections_avg": 84.33
 			},
 			{
 				"sections_dept": "busi",
 				"sections_id": "330",
+				"sections_instructor" : "ASDDD",
 				"sections_avg": 4
+			},
+			{
+				"sections_instructor": "",
+				"sections_id": "475",
+				"sections_avg": 1
 			}
 		];
 
