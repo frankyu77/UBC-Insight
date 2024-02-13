@@ -48,7 +48,7 @@ export default class InsightFacade implements IInsightFacade {
 			this.handleOptions(queryS.OPTIONS, result);
 
 
-			return reject("Not implemented.")
+			return reject("result");
 		});
 
 	}
@@ -113,6 +113,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		//Add the val
 		parsedArray.push(vals[0]);
+		parsedArray.push(keys[0]);
 
 
 		//Validate parsedArray
@@ -127,28 +128,37 @@ export default class InsightFacade implements IInsightFacade {
 	private handleEq( queryS: any, prevResult : any) : InsightResult[] {
 
 		const parsedQueryKey : any = this.queryKeyParser(queryS.EQ);
-		const key : string = queryS.EQ;
 		const idString : string = parsedQueryKey[0];
 		const mField : string = parsedQueryKey[1];
 		const toCompare: number = parsedQueryKey[2];
+		const key : string = idString +"_"+ mField;
 
-
+		console.log(toCompare);
 		// Check if InsightResult is empty, if it is grab all dataset and create InsightResult
 		//Assume below is the given InsightResult
 		let insightsArray: InsightResult[] = [
 			{
-				sections_avg: 99
+				sections_avg: 2
 			}
 		];
 
 		//Apply condition and shorten InsightResult array
-		insightsArray.forEach((element, index) => {
-		});
 
+		insightsArray.filter(element => element[key] === toCompare)
+
+		console.log(insightsArray);
+		// insightsArray.forEach((element, index) => {
+		// 	if (element[key] != toCompare) {
+		// 		insightsArray
+		// 	}
+		// });
 
 		//Return InsightResult Array
 		return  insightsArray;
 	}
+
+
+
 	private handleOptions(queryS : any, result :  InsightResult[]) : InsightResult[] {
 		// Create an array of InsightResult objects
 		let insightsArray: InsightResult[] = [
