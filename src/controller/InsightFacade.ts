@@ -104,7 +104,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	// Takes a query key and returns a valid dataset id to search for and valid mfield and sfield.
 	// Throws Insight Error if not a valid query string.
-	private queryKeyParser(queryKey : any) : any {
+	private queryKeyParser(queryKey : any) : number {
 		const keys = Object.keys(queryKey);
 		const vals : any = Object.values(queryKey);
 
@@ -119,7 +119,7 @@ export default class InsightFacade implements IInsightFacade {
 		//Validate parsedArray
 
 
-		return parsedArray;
+		return vals[0];
 	}
 
 
@@ -127,24 +127,32 @@ export default class InsightFacade implements IInsightFacade {
 	// This insight result will have all the fields and sections of the requested dataset
 	private handleEq( queryS: any, prevResult : any) : InsightResult[] {
 
-		const parsedQueryKey : any = this.queryKeyParser(queryS.EQ);
-		const idString : string = parsedQueryKey[0];
-		const mField : string = parsedQueryKey[1];
-		const toCompare: number = parsedQueryKey[2];
-		const key : string = idString +"_"+ mField;
+		// const parsedQueryKey : any = this.queryKeyParser(queryS.EQ);
+		// const idString : string = parsedQueryKey[0];
+		// const mField : string = parsedQueryKey[1];
+		const toCompare: number = this.queryKeyParser(queryS.EQ);
+		const keyArray : string[] = Object.keys(queryS.EQ);
+		const key : string = keyArray[0];
 
-		console.log(toCompare);
+		console.log(key);
 		// Check if InsightResult is empty, if it is grab all dataset and create InsightResult
 		//Assume below is the given InsightResult
 		let insightsArray: InsightResult[] = [
 			{
-				sections_avg: 2
+				sections_avg: -12
 			}
 		];
 
 		//Apply condition and shorten InsightResult array
 
-		insightsArray.filter(element => element[key] === toCompare)
+		//insightsArray.filter(element => element[key] === toCompare)
+
+		var i = insightsArray.length
+		while (i--) {
+			if (insightsArray[i][key] != toCompare) {
+				insightsArray.splice(i, 1);
+			}
+		}
 
 		console.log(insightsArray);
 		// insightsArray.forEach((element, index) => {
