@@ -112,7 +112,6 @@ export default class InsightFacade implements IInsightFacade {
 		const vals : any = Object.values(queryKey);
 
 
-
 		//Strores idstring and m or s field into parsedArray
 		//Does this need to be number | string !!!!!!!!
 		let parsedArray : (number | string)[] = keys[0].split("_", 2);
@@ -140,21 +139,35 @@ export default class InsightFacade implements IInsightFacade {
 
 	// Takes two insight result arrays and joins the two together
 	private handleOr(queryS : any, prevResult : any ) : any {
-		const keys = Object.keys(queryS);
+		//const keys = Object.keys(queryS["OR"]);
+
+
+		//Validate whether you have two many keys in OR
 
 		//Add to a set
-		let result1 : InsightResult[] = this.handleWhere(queryS[keys[0]], prevResult);
-		let result2 : InsightResult[] = this.handleWhere(queryS[keys[1]], prevResult);
+		let result1 : InsightResult[] = this.handleWhere(queryS["OR"][0], prevResult);
+		let result2 : InsightResult[] = this.handleWhere(queryS["OR"][1], prevResult);
 
 		let joinedArray : InsightResult[] = result1.concat(result2);
+		const uniqueArray = [...new Set(joinedArray)];
 
-		console.log(joinedArray);
+		console.log(uniqueArray);
 
-		return joinedArray;
+		return uniqueArray;
 	}
+
+
 
 	// Takes two insight result arrays and only joins the same sections together
 	private handleAnd(queryS: any, prevResult: any) : any {
+		let result1 : InsightResult[] = this.handleWhere(queryS["AND"][0], prevResult);
+		let result2 : InsightResult[] = this.handleWhere(queryS["AND"][1], prevResult);
+
+		const intersection = result1.filter(value => result2.includes(value));
+
+		console.log(intersection);
+
+		return intersection;
 
 	}
 
@@ -189,7 +202,7 @@ export default class InsightFacade implements IInsightFacade {
 			{
 				"sections_dept": "busi",
 				"sections_id": "330",
-				"sections_instructor" : "ASDDD",
+				"sections_instructor" : "markwe",
 				"sections_avg": 4
 			},
 			{
@@ -208,14 +221,16 @@ export default class InsightFacade implements IInsightFacade {
 				insightsArray.splice(i, 1);
 			}
 		}
-
-		console.log(insightsArray);
 		return insightsArray;
 	}
 
 	private createNewRegex(toCompare: string) : RegExp {
 		const updatedToCompare : string = toCompare.replace("*", ".*")
-		return new RegExp(updatedToCompare, "gi")
+		try {
+			return new RegExp(updatedToCompare, "gi")
+		} catch (error) {
+			throw new InsightError("Special characters used incorrectly.")
+		}
 	}
 
 
@@ -231,10 +246,22 @@ export default class InsightFacade implements IInsightFacade {
 		const key : string = idString+"_"+mField;
 
 
+		let insightsArray : InsightResult[] = prevResult
+
+
+		if (insightsArray == undefined) {
+			// 1. Validate dataset ID
+			// 2. Bring in entire data as InsightResult[]
+
+
+		}
+
+
+
 		// Check if prev InsightResult is empty,
 		// if empty is grab all dataset and create InsightResult
 		//Assume below is the given prev InsightResult
-		let insightsArray: InsightResult[] = [
+		 insightsArray = [
 			{
 				"sections_instructor": "hodgson, antony",
 				"sections_id": "501",
@@ -288,7 +315,6 @@ export default class InsightFacade implements IInsightFacade {
 				}
 				break;
 		}
-		console.log(insightsArray);
 
 		//Return InsightResult Array
 		return  insightsArray;
