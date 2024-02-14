@@ -45,6 +45,8 @@ export default class InsightFacade implements IInsightFacade {
 				return reject(error.message);
 			}
 
+			//console.log(result);
+
 			this.handleOptions(queryS.OPTIONS, result);
 
 
@@ -95,7 +97,7 @@ export default class InsightFacade implements IInsightFacade {
 			case "LT":
 				return this.handleMComparison(queryS, prevResult, "LT");
 			case "NOT":
-				return insightsArray;
+				return this.handleNot(queryS, prevResult);
 			default:
 				throw new InsightError("Invalid filter key")
 		}
@@ -137,6 +139,18 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 
+
+	//All sections in the dataset outside of the given conditions
+	private handleNot(queryS: any, prevResult : any) : any {
+		//Finds
+
+		let result1 : InsightResult[] = this.handleWhere(queryS["NOT"], prevResult);
+
+		console.log(result1);
+
+
+	}
+
 	// Takes two insight result arrays and joins the two together
 	private handleOr(queryS : any, prevResult : any ) : any {
 		//const keys = Object.keys(queryS["OR"]);
@@ -154,15 +168,17 @@ export default class InsightFacade implements IInsightFacade {
 		return uniqueArray;
 	}
 
+	//Checks if 2 InsightResult objects are equal
+	private isInsightResultsEqual(insight1 : InsightResult, insight2 : InsightResult) : boolean {
 
-	private isInsightResultsEqual(obj1 : InsightResult, obj2 : InsightResult) {
-		const keys1 = Object.keys(obj1);
-		const keys2 = Object.keys(obj2);
+
+		const keys1 = Object.keys(insight1);
+		const keys2 = Object.keys(insight2);
 		if (keys1.length !== keys2.length) {
 			return false;
 		}
 		for (const key of keys1) {
-			if (obj1[key] !== obj2[key]) {
+			if (insight1[key] !== insight2[key]) {
 				return false;
 			}
 		}
@@ -173,6 +189,8 @@ export default class InsightFacade implements IInsightFacade {
 
 	// Takes two insight result arrays and only joins the same sections together
 	private handleAnd(queryS: any, prevResult: any) : any {
+		//Validate whether you have two many keys in AND !!!!!!
+
 		let resultArray1 : InsightResult[] = this.handleWhere(queryS["AND"][0], prevResult);
 		let resultArray2 : InsightResult[] = this.handleWhere(queryS["AND"][1], prevResult);
 
@@ -275,17 +293,17 @@ export default class InsightFacade implements IInsightFacade {
 			 {
 				 "sections_dept": "rhsc",
 				 "sections_instructor": "",
-				 "sections_avg": 95
+				 "sections_avg": 100
 			 },
 			 {
 				 "sections_dept": "epse",
 				 "sections_instructor": "",
-				 "sections_avg": 95
+				 "sections_avg": 96
 			 },
 			 {
 				 "sections_dept": "epse",
 				 "sections_instructor": "zumbo, bruno",
-				 "sections_avg": 95
+				 "sections_avg": 99
 			 },
 			 {
 				 "sections_dept": "econ",
@@ -295,7 +313,7 @@ export default class InsightFacade implements IInsightFacade {
 			 {
 				 "sections_dept": "econ",
 				 "sections_instructor": "gallipoli, giovanni",
-				 "sections_avg": 95
+				 "sections_avg": 12
 			 }
 		 ];
 
@@ -311,14 +329,14 @@ export default class InsightFacade implements IInsightFacade {
 				break;
 			case "LT" :
 				while (i--) {
-					if (Number(insightsArray[i][key]) > toCompare) {
+					if (Number(insightsArray[i][key]) >= toCompare) {
 						insightsArray.splice(i, 1);
 					}
 				}
 				break;
 			case "GT" :
 				while (i--) {
-					if (Number(insightsArray[i][key]) < toCompare) {
+					if (Number(insightsArray[i][key]) <= toCompare) {
 						insightsArray.splice(i, 1);
 					}
 				}
