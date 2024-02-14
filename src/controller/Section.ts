@@ -1,41 +1,80 @@
-import Section from "./Section";
-import {InsightDatasetKind} from "./IInsightFacade";
+export default class Section {
+	private readonly sectionID: string;
+	private readonly courseID: string;
+	private readonly title: string;
+	private readonly instructor: string;
+	private readonly department: string;
 
-export default class Dataset {
-	private idName: string = "";
-	private validSections: Section[] = [];
-	private kind: InsightDatasetKind = InsightDatasetKind.Sections;
-	private isValidDataset: boolean = false;
+	private readonly year: number;
+	private readonly avg: number;
+	private readonly pass: number;
+	private readonly fail: number;
+	private readonly audit: number;
 
-	public setIDName(id: string) {
-		this.idName = id;
+	constructor(
+		sectionID: string,
+		courseID: string,
+		title: string,
+		instructor: string,
+		department: string,
+		year: number,
+		avg: number,
+		pass: number,
+		fail: number,
+		audit: number
+	) {
+		this.sectionID = sectionID;
+		this.courseID = courseID;
+		this.title = title;
+		this.instructor = instructor;
+		this.department = department;
+		this.year = year;
+		this.avg = avg;
+		this.pass = pass;
+		this.fail = fail;
+		this.audit = audit;
 	}
 
-	public addValidSection(section: Section) {
-		this.validSections.push(section);
+	public getSectionID(): string {
+		return this.sectionID;
 	}
 
-	public setKind(datasetKind: InsightDatasetKind) {
-		this.kind = datasetKind;
+	public getCourseID(): string {
+		return this.courseID;
 	}
 
-	public setValidity(bool: boolean) {
-		this.isValidDataset = bool;
+	public getTitle(): string {
+		return this.title;
 	}
 
-	public getIDName() {
-		return this.idName;
+	public getInstructor(): string {
+		return this.instructor;
 	}
 
-	public getValidSections() {
-		return this.validSections;
+	public getDepartment(): string {
+		return this.department;
 	}
 
-	public getKind() {
-		return this.kind;
+	public getYear(): number {
+		return this.year;
 	}
 
-	public getValidity() {
-		return this.isValidDataset;
+	public getAvg(): number {
+		return this.avg;
 	}
+
+	public getPass(): number {
+		return this.pass;
+	}
+
+	public getFail(): number {
+		return this.fail;
+	}
+
+	public getAudit(): number {
+		return this.audit;
+	}
+
+
 }
+
