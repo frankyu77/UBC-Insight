@@ -1,0 +1,19 @@
+{
+  "title": "references a not added dataset, fail",
+  "input": {
+    "WHERE": {
+      "IS": {
+        "overall_dept": "cpsc"
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "overall_dept",
+        "overall_avg"
+      ],
+      "ORDER": "overall_avg"
+    }
+  },
+  "errorExpected": true,
+  "result": "InsightError"
+}

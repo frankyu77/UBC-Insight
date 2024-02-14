@@ -1,0 +1,19 @@
+{
+  "title": "result way above 5000 results, fail",
+  "input": {
+    "WHERE": {
+      "GT": {
+        "sections_avg": 50
+      }
+    },
+    "OPTIONS": {
+      "COLUMNS": [
+        "sections_dept",
+        "sections_avg"
+      ],
+      "ORDER": "sections_avg"
+    }
+  },
+  "errorExpected": true,
+  "result": "ResultTooLargeError"
+}

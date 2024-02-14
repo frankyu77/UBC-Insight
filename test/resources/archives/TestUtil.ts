@@ -45,7 +45,7 @@ async function clearDisk(): Promise<void> {
  */
 
 function readFileQueries(path: string): ITestQuery[] {
-	// Note: This method *must* be synchronous for Mocha
+    // Note: This method *must* be synchronous for Mocha
 	const fileNames = fs.readdirSync(`test/resources/queries/${path}`);
 
 	const allQueries: ITestQuery[] = [];
