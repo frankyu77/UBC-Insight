@@ -1,8 +1,8 @@
 ---
 name: User Story
 about: Describe a feature to be implemented or defect to be fixed.
-title: "[User Story] <title>"
-labels: ''
+title: '[User Story] <title>'
+labels: story
 assignees: ''
 
 ---

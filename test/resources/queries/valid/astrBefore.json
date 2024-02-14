@@ -1,0 +1,7065 @@
+{
+	"title": "astrBefore",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_avg": 70
+					}
+				},
+				{
+					"IS": {
+						"sections_dept": "*ol"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_id"
+			],
+			"ORDER": "sections_dept"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "535"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "530"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "509"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "501"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "465"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "464"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "464"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "464"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "464"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "464"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "464"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "463"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "462"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "459"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "459"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "459"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "459"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "459"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "459"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "458"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "457"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "456"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "455"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "454"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "450"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "449"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "447"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "446"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "446"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "446"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "446"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "446"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "446"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "445"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "441"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "440"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "438"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "438"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "438"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "438"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "438"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "438"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "437"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "436"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "434"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "433"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "432"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "432"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "431"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "430"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "428"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "427"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "425"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "421"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "420"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "420"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "420"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "420"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "420"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "420"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "418"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "417"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "416"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "415"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "413"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "412"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "411"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "406"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "404"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "364"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "363"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "362"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "361"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "352"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "351"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "347"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "346"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "345"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "344"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "343"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "342"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "341"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "340"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "337"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "336"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "335"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "331"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "328"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "327"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "326"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "325"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "324"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "323"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "321"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "320"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "317"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "310"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "306"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "301"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "300"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "260"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "234"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "233"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "233"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "230"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "210"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "209"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "205"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "204"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "203"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "203"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "203"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "203"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "203"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "203"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "201"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "200"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "155"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "153"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "140"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "121"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "112"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "biol",
+			"sections_id": "111"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "549"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		},
+		{
+			"sections_dept": "zool",
+			"sections_id": "503"
+		}
+	]
+}

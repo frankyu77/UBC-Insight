@@ -1,0 +1,16 @@
+{
+	"title": "columnsEmptyArray",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sect_dept": "cpsc"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
