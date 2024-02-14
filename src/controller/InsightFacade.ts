@@ -1,7 +1,16 @@
 import {IInsightFacade, InsightDataset, InsightDatasetKind, InsightError, InsightResult} from "./IInsightFacade";
 import * as string_decoder from "string_decoder";
+import * as fs from "fs";
+import path from "node:path";
+import Section from "./Section";
+import Dataset from "./Dataset";
+
+const fsPromises = require("fs").promises;
 
 export default class InsightFacade implements IInsightFacade {
+	private datasetsAddedSoFar: Dataset[] = [];
+	private idDatasetsAddedSoFar: string[] = [];
+	private dir = "./data";
 	constructor() {
 		console.log("InsightFacadeImpl::init()");
 	}
@@ -142,9 +151,10 @@ export default class InsightFacade implements IInsightFacade {
 
 	//All sections in the dataset outside of the given conditions
 	private handleNot(queryS: any, prevResult : any) : any {
-		//Finds
+		//Validate whether you have too many keys in OR !!!!!!
 
 		let result1 : InsightResult[] = this.handleWhere(queryS["NOT"], prevResult);
+
 
 		console.log(result1);
 
@@ -156,7 +166,7 @@ export default class InsightFacade implements IInsightFacade {
 		//const keys = Object.keys(queryS["OR"]);
 
 
-		//Validate whether you have two many keys in OR
+		//Validate whether you have too many keys in OR !!!!!!
 
 		//Add to a set
 		let result1 : InsightResult[] = this.handleWhere(queryS["OR"][0], prevResult);
@@ -189,7 +199,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	// Takes two insight result arrays and only joins the same sections together
 	private handleAnd(queryS: any, prevResult: any) : any {
-		//Validate whether you have two many keys in AND !!!!!!
+		//Validate whether you have too many keys in AND !!!!!!
 
 		let resultArray1 : InsightResult[] = this.handleWhere(queryS["AND"][0], prevResult);
 		let resultArray2 : InsightResult[] = this.handleWhere(queryS["AND"][1], prevResult);
@@ -200,6 +210,22 @@ export default class InsightFacade implements IInsightFacade {
 		);
 
 		return intersection;
+
+	}
+	// gets the path to the dataset
+	private getDatasetDirPath(id: string): string {
+		return path.join(this.dir, `${id}`);
+	}
+	// checks if dataset already exists
+	private async isThereDatasetDir(id: string): Promise<boolean> {
+		return new Promise<boolean>( (resolve, reject) => {
+			const filePath = this.getDatasetDirPath(id);
+			fsPromises.access(filePath).then(() => {
+				resolve(true);
+			}).catch(() => {
+				resolve(false);
+			});
+		});
 
 	}
 
