@@ -309,7 +309,9 @@ export default class InsightFacade implements IInsightFacade {
 			// 1. Validate dataset ID
 			// 2. Bring in entire data as InsightResult[]
 
+			if (this.idDatasetsAddedSoFar.includes(idString)) {
 
+			}
 		}
 
 		// Check if prev InsightResult is empty,
