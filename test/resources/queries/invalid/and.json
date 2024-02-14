@@ -4,8 +4,8 @@
 		"WHERE": {
 			"AND": [
 				{
-					"GT": {
-						"sections_audit": 1
+					"IS": {
+						"sections_dept": "*se"
 					}
 				},
 				{

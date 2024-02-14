@@ -151,21 +151,35 @@ export default class InsightFacade implements IInsightFacade {
 		let joinedArray : InsightResult[] = result1.concat(result2);
 		const uniqueArray = [...new Set(joinedArray)];
 
-		console.log(uniqueArray);
-
 		return uniqueArray;
+	}
+
+
+	private isInsightResultsEqual(obj1 : InsightResult, obj2 : InsightResult) {
+		const keys1 = Object.keys(obj1);
+		const keys2 = Object.keys(obj2);
+		if (keys1.length !== keys2.length) {
+			return false;
+		}
+		for (const key of keys1) {
+			if (obj1[key] !== obj2[key]) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 
 
 	// Takes two insight result arrays and only joins the same sections together
 	private handleAnd(queryS: any, prevResult: any) : any {
-		let result1 : InsightResult[] = this.handleWhere(queryS["AND"][0], prevResult);
-		let result2 : InsightResult[] = this.handleWhere(queryS["AND"][1], prevResult);
+		let resultArray1 : InsightResult[] = this.handleWhere(queryS["AND"][0], prevResult);
+		let resultArray2 : InsightResult[] = this.handleWhere(queryS["AND"][1], prevResult);
 
-		const intersection = result1.filter(value => result2.includes(value));
 
-		console.log(intersection);
+		const intersection = resultArray1.filter(insight1 =>
+			resultArray2.some(insight2 => this.isInsightResultsEqual(insight1, insight2))
+		);
 
 		return intersection;
 
@@ -183,32 +197,31 @@ export default class InsightFacade implements IInsightFacade {
 		// Check if prev InsightResult is empty,
 		// if empty is grab all dataset and create InsightResult
 		// Assume below is the given prev InsightResult
-		let insightsArray: InsightResult[] = [
+		let insightsArray: InsightResult[] =  [
 			{
-				"sections_instructor": "hodgson, antony",
-				"sections_id": "501",
-				"sections_avg": 95.15
-			},
-			{
-				"sections_instructor": "hodgson, antony",
-				"sections_id": "597",
-				"sections_avg": 83.83
-			},
-			{
-				"sections_instructor": "hodgson, antony",
-				"sections_id": "597",
-				"sections_avg": 84.33
-			},
-			{
-				"sections_dept": "busi",
-				"sections_id": "330",
-				"sections_instructor" : "markwe",
-				"sections_avg": 4
-			},
-			{
+				"sections_dept": "rhsc",
 				"sections_instructor": "",
-				"sections_id": "475",
-				"sections_avg": 1
+				"sections_avg": 95
+			},
+			{
+				"sections_dept": "epse",
+				"sections_instructor": "",
+				"sections_avg": 95
+			},
+			{
+				"sections_dept": "epse",
+				"sections_instructor": "zumbo, bruno",
+				"sections_avg": 95
+			},
+			{
+				"sections_dept": "econ",
+				"sections_instructor": "",
+				"sections_avg": 95
+			},
+			{
+				"sections_dept": "econ",
+				"sections_instructor": "gallipoli, giovanni",
+				"sections_avg": 95
 			}
 		];
 
@@ -216,7 +229,6 @@ export default class InsightFacade implements IInsightFacade {
 
 		var i = insightsArray.length
 		while (i--) {
-			console.log(insightsArray[i][key]);
 			if (String(insightsArray[i][key]).search(updatedToCompare) == -1) {
 				insightsArray.splice(i, 1);
 			}
@@ -256,39 +268,36 @@ export default class InsightFacade implements IInsightFacade {
 
 		}
 
-
-
 		// Check if prev InsightResult is empty,
 		// if empty is grab all dataset and create InsightResult
 		//Assume below is the given prev InsightResult
-		 insightsArray = [
-			{
-				"sections_instructor": "hodgson, antony",
-				"sections_id": "501",
-				"sections_avg": 95.15
-			},
-			{
-				"sections_instructor": "hodgson, antony",
-				"sections_id": "597",
-				"sections_avg": 83.83
-			},
-			{
-				"sections_instructor": "hodgson, antony",
-				"sections_id": "597",
-				"sections_avg": 84.33
-			},
-			{
-				"sections_dept": "busi",
-				"sections_id": "330",
-				"sections_instructor" : "ASDDD",
-				"sections_avg": 4
-			},
-			{
-				"sections_instructor": "",
-				"sections_id": "475",
-				"sections_avg": 1
-			}
-		];
+		 insightsArray =  [
+			 {
+				 "sections_dept": "rhsc",
+				 "sections_instructor": "",
+				 "sections_avg": 95
+			 },
+			 {
+				 "sections_dept": "epse",
+				 "sections_instructor": "",
+				 "sections_avg": 95
+			 },
+			 {
+				 "sections_dept": "epse",
+				 "sections_instructor": "zumbo, bruno",
+				 "sections_avg": 95
+			 },
+			 {
+				 "sections_dept": "econ",
+				 "sections_instructor": "",
+				 "sections_avg": 95
+			 },
+			 {
+				 "sections_dept": "econ",
+				 "sections_instructor": "gallipoli, giovanni",
+				 "sections_avg": 95
+			 }
+		 ];
 
 		//Apply condition and shorten InsightResult array
 		var i = insightsArray.length
