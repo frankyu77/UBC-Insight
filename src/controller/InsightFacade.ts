@@ -148,7 +148,7 @@ export default class InsightFacade implements IInsightFacade {
 			object.Title,
 			object.Professor,
 			object.Subject,
-			Number(object.Year),
+			(object.Section === "overall")? 1900 : Number(object.Year),
 			object.Avg,
 			object.Pass,
 			object.Fail,
