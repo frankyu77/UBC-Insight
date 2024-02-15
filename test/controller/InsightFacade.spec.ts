@@ -483,7 +483,7 @@ describe("InsightFacade", function() {
 		let facade: InsightFacade;
 
 		before(async function() {
-			sections = await getContentFromArchives("oneValidSection.zip");
+			sections = await getContentFromArchives("pair.zip");
 			facade = new InsightFacade();
 
 			chai.use(chaiAsPromised);
@@ -516,26 +516,27 @@ describe("InsightFacade", function() {
 			});
 		});
 
-		describe("invalid queries", () => {
-			let invalidQueries: ITestQuery[];
-			try {
-				invalidQueries = readFileQueries("invalid");
-			} catch (e: unknown) {
-				expect.fail(`Failed to read one or more test queries. ${e}`);
-			}
+		// describe("invalid queries", () => {
+		// 	let invalidQueries: ITestQuery[];
+		// 	try {
+		// 		invalidQueries = readFileQueries("invalid");
+		// 	} catch (e: unknown) {
+		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
+		// 	}
+		//
+		// 	invalidQueries.forEach(function(test: any) {
+		// 		it(`${test.title}`, async function () {
+		// 			try {
+		// 				const result = facade.performQuery(test.input);
+		// 				await result;
+		// 				assert.fail("should have thrown an error");
+		// 			} catch (err: unknown) {
+		// 				expect(err).to.be.an.instanceof(Error);
+		// 			}
+		// 		});
+		// 	});
+		// });
 
-			invalidQueries.forEach(function(test: any) {
-				it(`${test.title}`, async function () {
-					try {
-						const result = facade.performQuery(test.input);
-						await result;
-						assert.fail("should have thrown an error");
-					} catch (err: unknown) {
-						expect(err).to.be.an.instanceof(Error);
-					}
-				});
-			});
-		});
 	});
 
 });

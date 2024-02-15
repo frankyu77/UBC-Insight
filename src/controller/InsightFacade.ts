@@ -523,7 +523,6 @@ export default class InsightFacade implements IInsightFacade {
 		if (!this.idDatasetsAddedSoFar.includes(idString)) {
 			throw new InsightError("Dataset not found");
 		}
-		console.log("Dataset found");
 		let insightsArray: InsightResult[];
 		const fsPromises = require('fs').promises;
 		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {throw new InsightError("Error file read.")} )
@@ -568,6 +567,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Apply condition and shorten InsightResult array
 		let i = insightsArray.length;
+		console.log(i);
 		switch (comparator) {
 			case "EQ" :
 				while (i--) {
@@ -585,13 +585,15 @@ export default class InsightFacade implements IInsightFacade {
 				break;
 			case "GT" :
 				while (i--) {
+					console.log(toCompare + " toCompare");
+					console.log(insightsArray[i][key]);
 					if (Number(insightsArray[i][key]) <= toCompare) {
 						insightsArray.splice(i, 1);
 					}
 				}
 				break;
 		}
-
+		console.log(insightsArray);
 		// Return InsightResult Array
 		return  insightsArray;
 	}
