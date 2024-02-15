@@ -27,5 +27,5 @@
 		}
 	},
 	"errorExpected": false,
-	"result": "InsightError"
+	"expected": "InsightError"
 }
