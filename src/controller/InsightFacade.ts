@@ -51,24 +51,24 @@ export default class InsightFacade implements IInsightFacade {
 					// if it does not exist then unzip the dataset and read it
 					return await JSZip.loadAsync(content, {base64: true});
 				}).then(async (zip: JSZip) => {
-				let currentDataset = new Dataset();
-				currentDataset.setIDName(id);
+					let currentDataset = new Dataset();
+					currentDataset.setIDName(id);
 
 				// call to helper to handle reading the zip file
-				await this.handleZip(zip, reject, currentDataset);
+					await this.handleZip(zip, reject, currentDataset);
 
 				// reject if there are no valid sections
-				if (!currentDataset.getValidity()) {
-					reject(new InsightError("No valid sections in dataset"));
-					return;
-				}
+					if (!currentDataset.getValidity()) {
+						reject(new InsightError("No valid sections in dataset"));
+						return;
+					}
 
-				await this.addDatasetToDisk(currentDataset);
-				this.datasetsAddedSoFar.push(currentDataset);
+					await this.addDatasetToDisk(currentDataset);
+					this.datasetsAddedSoFar.push(currentDataset);
 
-				this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
-				resolve(this.idDatasetsAddedSoFar);
-			})
+					this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
+					resolve(this.idDatasetsAddedSoFar);
+				})
 				.catch((error: any) => {
 					reject(new InsightError("Invalid Content"));
 				});
@@ -236,7 +236,6 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 
-
 	public listDatasets(): Promise<InsightDataset[]>{
 		let result: InsightDataset[] = [];
 
@@ -263,10 +262,10 @@ export default class InsightFacade implements IInsightFacade {
 
 	// iterate through all datasets and make them into InsightDatasets and add to the return list
 	private iterateThroughFiles(files: string[],
-								reject: (reason?: any) => void,
-								result: InsightDataset[],
-								pendingFiles: number,
-								resolve: (value: (PromiseLike<InsightDataset[]> | InsightDataset[])) => void) {
+		reject: (reason?: any) => void,
+		result: InsightDataset[],
+		pendingFiles: number,
+		resolve: (value: (PromiseLike<InsightDataset[]> | InsightDataset[])) => void) {
 
 		// iterate through each file in data dir
 		files.forEach(async (file) => {
@@ -301,7 +300,7 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
-	///////////////////////////////////////////////QUERY////////////////////////////////////////////////
+	// /////////////////////////////////////////////QUERY////////////////////////////////////////////////
 	// EVERY QUERY MUST HAVE:
 	// - WHERE
 	// - OPTIONS with non-empty COLUMNS
@@ -421,8 +420,8 @@ export default class InsightFacade implements IInsightFacade {
 		// Finds the complement of result 1 in the fullset datasetToQuery
 		let fullSet: InsightResult[] = this.datasetToQuery;
 
-		let complement: InsightResult[] = fullSet.filter(fullSetItem =>
-			!result1.some(result1Item => this.isInsightResultsEqual(result1Item, fullSetItem)));
+		let complement: InsightResult[] = fullSet.filter((fullSetItem) =>
+			!result1.some((result1Item) => this.isInsightResultsEqual(result1Item, fullSetItem)));
 
 		return complement;
 	}
@@ -508,7 +507,6 @@ export default class InsightFacade implements IInsightFacade {
 				insightsArray.splice(i, 1);
 			}
 		}
-		console.log(insightsArray);
 		return insightsArray;
 	}
 
@@ -536,16 +534,17 @@ export default class InsightFacade implements IInsightFacade {
 		}
 	}
 
-	//Checks if the given idString is a valid dataset name
-	//If it is, it returns an entire dataset in InsightResult form
+	// Checks if the given idString is a valid dataset name
+	// If it is, it returns an entire dataset in InsightResult form
 	private async validateDataset(idString: string): Promise<InsightResult[]> {
 
 		if (!this.idDatasetsAddedSoFar.includes(idString)) {
 			throw new InsightError("Dataset not found");
 		}
 		let insightsArray: InsightResult[];
-		const fsPromises = require('fs').promises;
-		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {throw new InsightError("Error file read.")} )
+		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {
+			throw new InsightError("Error file read.");
+		} );
 
 		const object = JSON.parse(data);
 		insightsArray = object.validSections;
@@ -563,11 +562,10 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 
-
-
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
-	private async handleMComparison( queryS: any, prevResult: InsightResult[], comparator: string): Promise<InsightResult[]> {
+	private async handleMComparison( queryS: any, prevResult: InsightResult[], comparator: string)
+		: Promise<InsightResult[]> {
 
 		const parsedQueryKey: any = this.queryKeyParser(queryS[comparator]);
 		const idString: string = parsedQueryKey[0];
@@ -648,24 +646,23 @@ export default class InsightFacade implements IInsightFacade {
 
 	private handleOptions(queryS: any, prevResult:  InsightResult[]): InsightResult[] {
 
-		//If columns not present throw error
+		// If columns not present throw error
 		let keys = Object.keys(queryS);
-		console.log(keys)
 		if (!keys.includes("COLUMNS")) {
 			throw new InsightError("No columns");
 		}
 
 		// Columns to keep
-		const columns : string[] = queryS.COLUMNS;
+		const columns: string[] = queryS.COLUMNS;
 
 		if (columns.length < 1) {
 			throw new InsightError("Columns is empty");
 		}
 
-		//Filters for the needed columns
-		const updatedArray : InsightResult[] = prevResult.map(insight => {
-			let newInsight : InsightResult = {};
-			columns.forEach(field => {
+		// Filters for the needed columns
+		const updatedArray: InsightResult[] = prevResult.map((insight) => {
+			let newInsight: InsightResult = {};
+			columns.forEach((field) => {
 				if(insight.hasOwnProperty(field)) {
 					newInsight[field] = insight[field];
 				}
@@ -674,14 +671,11 @@ export default class InsightFacade implements IInsightFacade {
 		});
 
 
-
 		if (keys.includes("ORDER")) {
-			const toSortBy : string = queryS.ORDER;
-			//console.log(queryS);
+			const toSortBy: string = queryS.ORDER;
 			if (!columns.includes(toSortBy)) {
 				throw new InsightError("Sort key is not present in columns.");
 			}
-			//console.log(toSortBy);
 			updatedArray.sort((a, b) => {
 				if (a[toSortBy] < b[toSortBy]) {
 					return -1;
@@ -692,8 +686,7 @@ export default class InsightFacade implements IInsightFacade {
 				return 0;
 			});
 		}
-		//If sort present, id must be in columns
-
+		// If sort present, id must be in columns
 
 
 		return updatedArray;
