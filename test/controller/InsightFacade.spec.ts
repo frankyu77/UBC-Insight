@@ -15,7 +15,7 @@ export interface ITestQuery {
     title: string; // title of the test case
     input: unknown; // the query under test
     errorExpected: boolean; // if the query is expected to throw an error
-    result: any; // the expected result
+    expected: any; // the expected result
 }
 
 describe("InsightFacade", function() {
@@ -503,7 +503,9 @@ describe("InsightFacade", function() {
 				it(`${test.title}`, async function () {
 					return facade.performQuery(test.input).then((result) => {
 						if (!test.errorExpected) {
-							expect(result).to.be.deep.equal(test.result);
+							console.log(test.expected);
+							console.log(result);
+							expect(result).to.be.deep.equal(test.expected);
 
 						} else {
 							throw new Error("error expected");

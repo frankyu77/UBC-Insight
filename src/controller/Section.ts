@@ -1,9 +1,9 @@
 export default class Section {
-	private readonly sectionID: string;
-	private readonly courseID: string;
+	private readonly uuid: string;
+	private readonly id: string;
 	private readonly title: string;
 	private readonly instructor: string;
-	private readonly department: string;
+	private readonly dept: string;
 
 	private readonly year: number;
 	private readonly avg: number;
@@ -12,22 +12,22 @@ export default class Section {
 	private readonly audit: number;
 
 	constructor(
-		sectionID: string,
-		courseID: string,
+		uuid: string,
+		id: string,
 		title: string,
 		instructor: string,
-		department: string,
+		dept: string,
 		year: number,
 		avg: number,
 		pass: number,
 		fail: number,
 		audit: number
 	) {
-		this.sectionID = sectionID;
-		this.courseID = courseID;
+		this.uuid = uuid;
+		this.id = id;
 		this.title = title;
 		this.instructor = instructor;
-		this.department = department;
+		this.dept = dept;
 		this.year = year;
 		this.avg = avg;
 		this.pass = pass;
@@ -36,11 +36,11 @@ export default class Section {
 	}
 
 	public getSectionID(): string {
-		return this.sectionID;
+		return this.uuid;
 	}
 
 	public getCourseID(): string {
-		return this.courseID;
+		return this.id;
 	}
 
 	public getTitle(): string {
@@ -52,7 +52,7 @@ export default class Section {
 	}
 
 	public getDepartment(): string {
-		return this.department;
+		return this.dept;
 	}
 
 	public getYear(): number {

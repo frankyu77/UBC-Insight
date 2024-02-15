@@ -18,6 +18,7 @@ export default class InsightFacade implements IInsightFacade {
 	private datasetsAddedSoFar: Dataset[] = [];
 	private idDatasetsAddedSoFar: string[] = [];
 	private dir = "./data";
+	private datasetToQuery: InsightResult[] = [];
 
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -334,7 +335,6 @@ export default class InsightFacade implements IInsightFacade {
 
 			result = this.handleOptions(queryS.OPTIONS, result);
 
-
 			return resolve(result);
 		});
 
@@ -418,8 +418,13 @@ export default class InsightFacade implements IInsightFacade {
 
 		let result1: InsightResult[] = await this.handleWhere(queryS["NOT"], prevResult);
 
-		return result1;
+		// Finds the complement of result 1 in the fullset datasetToQuery
+		let fullSet: InsightResult[] = this.datasetToQuery;
 
+		let complement: InsightResult[] = fullSet.filter(fullSetItem =>
+			!result1.some(result1Item => this.isInsightResultsEqual(result1Item, fullSetItem)));
+
+		return complement;
 	}
 
 	// Takes two insight result arrays and joins the two together
@@ -491,7 +496,7 @@ export default class InsightFacade implements IInsightFacade {
 			// 1. Validate dataset ID
 			// 2. Bring in entire data as InsightResult[]
 
-			// Check if 2 datasets are being checked.
+			// Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!1
 			insightsArray = await this.validateDataset(idString);
 		}
 
@@ -538,6 +543,7 @@ export default class InsightFacade implements IInsightFacade {
 			});
 			return newObj;
 		});
+		this.datasetToQuery = insightsArray;
 		return insightsArray;
 	}
 
@@ -560,14 +566,13 @@ export default class InsightFacade implements IInsightFacade {
 			// 1. Validate dataset ID
 			// 2. Bring in entire data as InsightResult[]
 
-			// Check if 2 datasets are being checked.
+			// Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
 			insightsArray = await this.validateDataset(idString);
 		}
 
 
 		// Apply condition and shorten InsightResult array
 		let i = insightsArray.length;
-		console.log(i);
 		switch (comparator) {
 			case "EQ" :
 				while (i--) {
@@ -585,53 +590,98 @@ export default class InsightFacade implements IInsightFacade {
 				break;
 			case "GT" :
 				while (i--) {
-					console.log(toCompare + " toCompare");
-					console.log(insightsArray[i][key]);
 					if (Number(insightsArray[i][key]) <= toCompare) {
 						insightsArray.splice(i, 1);
 					}
 				}
 				break;
 		}
-		console.log(insightsArray);
 		// Return InsightResult Array
 		return  insightsArray;
 	}
-
-	private getSampleInsightResult() : InsightResult[] {
-		let insightsArray: InsightResult[] =  [
-			{
-				sections_dept: "rhsc",
-				sections_instructor: "",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "epse",
-				sections_instructor: "",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "epse",
-				sections_instructor: "zumbo, bruno",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "econ",
-				sections_instructor: "",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "econ",
-				sections_instructor: "gallipoli, giovanni",
-				sections_avg: 95
-			}
-		];
-		return insightsArray;
-	}
+	//
+	// private getSampleInsightResult() : InsightResult[] {
+	// 	let insightsArray: InsightResult[] =  [
+	// 		{
+	// 			sections_dept: "rhsc",
+	// 			sections_instructor: "",
+	// 			sections_avg: 95
+	// 		},
+	// 		{
+	// 			sections_dept: "epse",
+	// 			sections_instructor: "",
+	// 			sections_avg: 95
+	// 		},
+	// 		{
+	// 			sections_dept: "epse",
+	// 			sections_instructor: "zumbo, bruno",
+	// 			sections_avg: 95
+	// 		},
+	// 		{
+	// 			sections_dept: "econ",
+	// 			sections_instructor: "",
+	// 			sections_avg: 95
+	// 		},
+	// 		{
+	// 			sections_dept: "econ",
+	// 			sections_instructor: "gallipoli, giovanni",
+	// 			sections_avg: 95
+	// 		}
+	// 	];
+	// 	return insightsArray;
+	// }
 
 	private handleOptions(queryS: any, prevResult:  InsightResult[]): InsightResult[] {
 
-		return prevResult;
+		//If columns not present throw error
+		let keys = Object.keys(queryS);
+		console.log(keys)
+		if (!keys.includes("COLUMNS")) {
+			throw new InsightError("No columns");
+		}
+
+		// Columns to keep
+		const columns : string[] = queryS.COLUMNS;
+
+		if (columns.length < 1) {
+			throw new InsightError("Columns is empty");
+		}
+
+		//Filters for the needed columns
+		const updatedArray : InsightResult[] = prevResult.map(insight => {
+			let newInsight : InsightResult = {};
+			columns.forEach(field => {
+				if(insight.hasOwnProperty(field)) {
+					newInsight[field] = insight[field];
+				}
+			});
+			return newInsight;
+		});
+
+
+
+		if (keys.includes("SORT")) {
+			const toSortBy : string = queryS.SORT;
+
+			if (!columns.includes(toSortBy)) {
+				throw new InsightError("Sort key is not present in columns.");
+			}
+
+			updatedArray.sort((a, b) => {
+				if (a[toSortBy] < b[toSortBy]) {
+					return -1;
+				}
+				if (a[toSortBy] > b[toSortBy]) {
+					return 1;
+				}
+				return 0;
+			});
+		}
+		//If sort present, id must be in columns
+
+
+
+		return updatedArray;
 	}
 
 }
