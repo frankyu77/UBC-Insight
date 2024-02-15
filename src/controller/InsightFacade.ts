@@ -143,12 +143,12 @@ export default class InsightFacade implements IInsightFacade {
 	// creates a Section object, if invalid, then create a Section that is invalid
 	private createSection(object: any): Section {
 		let currentSection = new Section(
-			object.id,
+			String(object.id),
 			object.Course,
 			object.Title,
 			object.Professor,
 			object.Subject,
-			object.Year,
+			Number(object.Year),
 			object.Avg,
 			object.Pass,
 			object.Fail,
@@ -558,7 +558,10 @@ export default class InsightFacade implements IInsightFacade {
 			return newObj;
 		});
 		this.datasetToQuery = insightsArray;
+
 		return insightsArray;
+
+
 	}
 
 
