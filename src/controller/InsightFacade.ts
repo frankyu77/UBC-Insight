@@ -300,7 +300,7 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
-
+	///////////////////////////////////////////////QUERY////////////////////////////////////////////////
 	// EVERY QUERY MUST HAVE:
 	// - WHERE
 	// - OPTIONS with non-empty COLUMNS
@@ -331,7 +331,6 @@ export default class InsightFacade implements IInsightFacade {
 				return reject(error.message);
 			}
 
-			// console.log(result);
 
 			this.handleOptions(queryS.OPTIONS, result);
 
@@ -357,14 +356,6 @@ export default class InsightFacade implements IInsightFacade {
 		if (keys.length > 1) {
 			throw new InsightError("More than one key in WHERE");
 		}
-
-		// Create an array of InsightResult objects
-		let insightsArray: InsightResult[] = [
-			{
-				key1: "value1",
-				key2: 100
-			}
-		];
 
 		// Terminating calls are IS, EQ, GT, LT
 		// AND, OR, NOT have to be recursive
@@ -396,7 +387,6 @@ export default class InsightFacade implements IInsightFacade {
 		const keys = Object.keys(queryKey);
 		const vals: any = Object.values(queryKey);
 
-
 		// Strores idstring and m or s field into parsedArray
 		// Does this need to be number | string !!!!!!!!
 		let parsedArray: Array<number | string> = keys[0].split("_", 2);
@@ -427,9 +417,6 @@ export default class InsightFacade implements IInsightFacade {
 		// Validate whether you have too many keys in OR !!!!!!
 
 		let result1: InsightResult[] = this.handleWhere(queryS["NOT"], prevResult);
-
-
-		console.log(result1);
 
 
 	}
@@ -495,11 +482,17 @@ export default class InsightFacade implements IInsightFacade {
 		const toCompare: string = parsedQueryKey[2];
 		const key: string = idString + "_" + sField;
 
-		// Check if prev InsightResult is empty,
-		// if empty is grab all dataset and create InsightResult
-		// Assume below is the given prev InsightResult
 
-		let insightsArray : InsightResult[] = this.getSampleInsightResulT();
+		let insightsArray: InsightResult[] = prevResult;
+
+		if (insightsArray === undefined) {
+			// 1. Validate dataset ID
+			// 2. Bring in entire data as InsightResult[]
+
+			// Check if 2 datasets are being checked.
+			insightsArray = this.validateDataset(idString);
+		}
+
 		const updatedToCompare: RegExp = this.createNewRegex(String(toCompare));
 
 		let i = insightsArray.length;
@@ -511,37 +504,7 @@ export default class InsightFacade implements IInsightFacade {
 		return insightsArray;
 	}
 
-	private getSampleInsightResulT() : InsightResult[] {
-		let insightsArray: InsightResult[] =  [
-			{
-				sections_dept: "rhsc",
-				sections_instructor: "",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "epse",
-				sections_instructor: "",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "epse",
-				sections_instructor: "zumbo, bruno",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "econ",
-				sections_instructor: "",
-				sections_avg: 95
-			},
-			{
-				sections_dept: "econ",
-				sections_instructor: "gallipoli, giovanni",
-				sections_avg: 95
-			}
-		];
-		return insightsArray;
 
-	}
 	private createNewRegex(toCompare: string): RegExp {
 		const updatedToCompare: string = toCompare.replace("*", ".*");
 		try {
@@ -550,6 +513,42 @@ export default class InsightFacade implements IInsightFacade {
 			throw new InsightError("Special characters used incorrectly.");
 		}
 	}
+
+	//Checks if the given idString is a valid dataset name
+	//If it is, it returns an entire dataset in InsightResult form
+	private validateDataset(idString: string): InsightResult[] {
+
+		if (!this.idDatasetsAddedSoFar.includes(idString)) {
+			throw new InsightError("Dataset not found");
+		}
+		console.log("Dataset found");
+		let insightsArray: InsightResult[];
+		try {
+			 fs.readFile(this.getDatasetDirPath(idString), "utf8", (err, data) => {
+				if (err) {
+					throw new InsightError("Error when reading file");
+				}
+				;
+
+				const object = JSON.parse(data);
+				insightsArray = object.validSections;
+				const prefix: string = idString + "_";
+
+				insightsArray = insightsArray.map((obj) => {
+					const newObj: InsightResult = {};
+					Object.entries(obj).forEach(([key, value]) => {
+						newObj[`${prefix}${key}`] = value;
+					});
+					return newObj;
+				});
+			});
+		} catch (err) {
+			throw new InsightError("Read file error");
+		}
+		return insightsArray;
+	}
+
+
 
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
@@ -568,21 +567,10 @@ export default class InsightFacade implements IInsightFacade {
 			// 1. Validate dataset ID
 			// 2. Bring in entire data as InsightResult[]
 
-			if (this.idDatasetsAddedSoFar.includes(idString)) {
-				console.log("!");
-			}
+			// Check if 2 datasets are being checked.
+			insightsArray = this.validateDataset(idString);
 		}
 
-		// Check if prev InsightResult is empty,
-		// if empty is grab all dataset and create InsightResult
-		// Assume below is the given prev InsightResult
-		insightsArray =  [
-			{
-				sections_dept: "rhsc",
-				sections_instructor: "",
-				sections_avg: 100
-			}
-		];
 
 		// Apply condition and shorten InsightResult array
 		let i = insightsArray.length;
@@ -614,6 +602,36 @@ export default class InsightFacade implements IInsightFacade {
 		return  insightsArray;
 	}
 
+	private getSampleInsightResult() : InsightResult[] {
+		let insightsArray: InsightResult[] =  [
+			{
+				sections_dept: "rhsc",
+				sections_instructor: "",
+				sections_avg: 95
+			},
+			{
+				sections_dept: "epse",
+				sections_instructor: "",
+				sections_avg: 95
+			},
+			{
+				sections_dept: "epse",
+				sections_instructor: "zumbo, bruno",
+				sections_avg: 95
+			},
+			{
+				sections_dept: "econ",
+				sections_instructor: "",
+				sections_avg: 95
+			},
+			{
+				sections_dept: "econ",
+				sections_instructor: "gallipoli, giovanni",
+				sections_avg: 95
+			}
+		];
+		return insightsArray;
+	}
 
 	private handleOptions(queryS: any, result:  InsightResult[]): InsightResult[] {
 		// Create an array of InsightResult objects
