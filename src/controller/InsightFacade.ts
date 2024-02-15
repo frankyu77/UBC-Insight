@@ -508,16 +508,31 @@ export default class InsightFacade implements IInsightFacade {
 				insightsArray.splice(i, 1);
 			}
 		}
+		console.log(insightsArray);
 		return insightsArray;
 	}
 
 
 	private createNewRegex(toCompare: string): RegExp {
-		const updatedToCompare: string = toCompare.replace("*", ".*");
-		try {
-			return new RegExp(updatedToCompare, "gi");
-		} catch (error) {
-			throw new InsightError("Special characters used incorrectly.");
+		// Escape special characters except for the asterisk
+		let cleanString = toCompare.replace(/([.+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+
+		// Determine the pattern based on the presence and position of asterisks
+		if (toCompare.startsWith("*") && toCompare.endsWith("*")) {
+			// Contains inputstring
+			cleanString = cleanString.substring(1, cleanString.length - 1);
+			return new RegExp(cleanString, "i"); // Case-insensitive match
+		} else if (toCompare.startsWith("*")) {
+			// Ends with inputstring
+			cleanString = cleanString.substring(1);
+			return new RegExp(cleanString + "$", "i"); // Match end, case-insensitive
+		} else if (toCompare.endsWith("*")) {
+			// Starts with inputstring
+			cleanString = cleanString.substring(0, cleanString.length - 1);
+			return new RegExp("^" + cleanString, "i"); // Match start, case-insensitive
+		} else {
+			// Matches inputstring exactly
+			return new RegExp("^" + cleanString + "$", "i"); // Exact match, case-insensitive
 		}
 	}
 
@@ -660,13 +675,13 @@ export default class InsightFacade implements IInsightFacade {
 
 
 
-		if (keys.includes("SORT")) {
-			const toSortBy : string = queryS.SORT;
-
+		if (keys.includes("ORDER")) {
+			const toSortBy : string = queryS.ORDER;
+			//console.log(queryS);
 			if (!columns.includes(toSortBy)) {
 				throw new InsightError("Sort key is not present in columns.");
 			}
-
+			//console.log(toSortBy);
 			updatedArray.sort((a, b) => {
 				if (a[toSortBy] < b[toSortBy]) {
 					return -1;

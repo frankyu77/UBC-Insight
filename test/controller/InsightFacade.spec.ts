@@ -503,8 +503,8 @@ describe("InsightFacade", function() {
 				it(`${test.title}`, async function () {
 					return facade.performQuery(test.input).then((result) => {
 						if (!test.errorExpected) {
-							console.log(test.expected);
-							console.log(result);
+							// console.log(test.expected);
+							//console.log(result);
 							expect(result).to.be.deep.equal(test.expected);
 
 						} else {
@@ -518,26 +518,26 @@ describe("InsightFacade", function() {
 			});
 		});
 
-		// describe("invalid queries", () => {
-		// 	let invalidQueries: ITestQuery[];
-		// 	try {
-		// 		invalidQueries = readFileQueries("invalid");
-		// 	} catch (e: unknown) {
-		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
-		// 	}
-		//
-		// 	invalidQueries.forEach(function(test: any) {
-		// 		it(`${test.title}`, async function () {
-		// 			try {
-		// 				const result = facade.performQuery(test.input);
-		// 				await result;
-		// 				assert.fail("should have thrown an error");
-		// 			} catch (err: unknown) {
-		// 				expect(err).to.be.an.instanceof(Error);
-		// 			}
-		// 		});
-		// 	});
-		// });
+		describe("invalid queries", () => {
+			let invalidQueries: ITestQuery[];
+			try {
+				invalidQueries = readFileQueries("invalid");
+			} catch (e: unknown) {
+				expect.fail(`Failed to read one or more test queries. ${e}`);
+			}
+
+			invalidQueries.forEach(function(test: any) {
+				it(`${test.title}`, async function () {
+					try {
+						const result = facade.performQuery(test.input);
+						await result;
+						assert.fail("should have thrown an error");
+					} catch (err: unknown) {
+						expect(err).to.be.an.instanceof(Error);
+					}
+				});
+			});
+		});
 
 	});
 
