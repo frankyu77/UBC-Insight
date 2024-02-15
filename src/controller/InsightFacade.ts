@@ -332,7 +332,7 @@ export default class InsightFacade implements IInsightFacade {
 			}
 
 
-			this.handleOptions(queryS.OPTIONS, result);
+			result = this.handleOptions(queryS.OPTIONS, result);
 
 
 			return resolve(result);
@@ -526,7 +526,7 @@ export default class InsightFacade implements IInsightFacade {
 		console.log("Dataset found");
 		let insightsArray: InsightResult[];
 		const fsPromises = require('fs').promises;
-		const data = await fsPromises.readFile('/tmp/data.json').catch(() => {throw new InsightError("Error file read.")} )
+		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {throw new InsightError("Error file read.")} )
 
 		const object = JSON.parse(data);
 		insightsArray = object.validSections;
@@ -539,8 +539,6 @@ export default class InsightFacade implements IInsightFacade {
 			});
 			return newObj;
 		});
-
-
 		return insightsArray;
 	}
 
@@ -629,16 +627,9 @@ export default class InsightFacade implements IInsightFacade {
 		return insightsArray;
 	}
 
-	private handleOptions(queryS: any, result:  InsightResult[]): InsightResult[] {
-		// Create an array of InsightResult objects
-		let insightsArray: InsightResult[] = [
-			{
-				key1: "value1",
-				key2: 100
-			}
-		];
+	private handleOptions(queryS: any, prevResult:  InsightResult[]): InsightResult[] {
 
-		return insightsArray;
+		return prevResult;
 	}
 
 }
