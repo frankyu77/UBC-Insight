@@ -306,7 +306,7 @@ export default class InsightFacade implements IInsightFacade {
 	// - OPTIONS with non-empty COLUMNS
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
 
-		return new Promise<InsightResult[]>((resolve, reject) => {
+		return new Promise<InsightResult[]>(async (resolve, reject) => {
 
 			let queryS: any;
 			try {
@@ -326,7 +326,7 @@ export default class InsightFacade implements IInsightFacade {
 			let result: InsightResult[];
 
 			try {
-				result = this.handleWhere(queryS.WHERE, undefined);
+				result = await this.handleWhere(queryS.WHERE, undefined);
 			} catch (error: any) {
 				return reject(error.message);
 			}
@@ -335,7 +335,7 @@ export default class InsightFacade implements IInsightFacade {
 			this.handleOptions(queryS.OPTIONS, result);
 
 
-			return reject("result");
+			return resolve(result);
 		});
 
 	}
@@ -349,7 +349,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 
-	private  handleWhere(queryS: any, prevResult: any): InsightResult[] {
+	private async handleWhere(queryS: any, prevResult: any): Promise<InsightResult[]> {
 
 		const keys = Object.keys(queryS);
 
@@ -413,24 +413,25 @@ export default class InsightFacade implements IInsightFacade {
 
 
 	// All sections in the dataset outside of the given conditions
-	private handleNot(queryS: any, prevResult: any): any {
+	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
 		// Validate whether you have too many keys in OR !!!!!!
 
-		let result1: InsightResult[] = this.handleWhere(queryS["NOT"], prevResult);
+		let result1: InsightResult[] = await this.handleWhere(queryS["NOT"], prevResult);
 
+		return result1;
 
 	}
 
 	// Takes two insight result arrays and joins the two together
-	private handleOr(queryS: any, prevResult: any ): any {
+	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<InsightResult[]> {
 		// const keys = Object.keys(queryS["OR"]);
 
 
 		// Validate whether you have too many keys in OR !!!!!!
 
 		// Add to a set
-		let result1: InsightResult[] = this.handleWhere(queryS["OR"][0], prevResult);
-		let result2: InsightResult[] = this.handleWhere(queryS["OR"][1], prevResult);
+		let result1: InsightResult[] = await this.handleWhere(queryS["OR"][0], prevResult);
+		let result2: InsightResult[] = await this.handleWhere(queryS["OR"][1], prevResult);
 
 		let joinedArray: InsightResult[] = result1.concat(result2);
 		const uniqueArray = [...new Set(joinedArray)];
@@ -457,11 +458,11 @@ export default class InsightFacade implements IInsightFacade {
 
 
 	// Takes two insight result arrays and only joins the same sections together
-	private handleAnd(queryS: any, prevResult: any): any {
+	private async handleAnd(queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
 		// Validate whether you have too many keys in AND !!!!!!
 
-		let resultArray1: InsightResult[] = this.handleWhere(queryS["AND"][0], prevResult);
-		let resultArray2: InsightResult[] = this.handleWhere(queryS["AND"][1], prevResult);
+		let resultArray1: InsightResult[] = await this.handleWhere(queryS["AND"][0], prevResult);
+		let resultArray2: InsightResult[] = await this.handleWhere(queryS["AND"][1], prevResult);
 
 
 		const intersection = resultArray1.filter((insight1) =>
@@ -475,7 +476,8 @@ export default class InsightFacade implements IInsightFacade {
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
-	private handleSComparison( queryS: any, prevResult: any): any {
+	private async handleSComparison( queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
+
 		const parsedQueryKey: any = this.queryKeyParser(queryS["IS"]);
 		const idString: string = parsedQueryKey[0];
 		const sField: string = parsedQueryKey[1];
@@ -490,7 +492,7 @@ export default class InsightFacade implements IInsightFacade {
 			// 2. Bring in entire data as InsightResult[]
 
 			// Check if 2 datasets are being checked.
-			insightsArray = this.validateDataset(idString);
+			insightsArray = await this.validateDataset(idString);
 		}
 
 		const updatedToCompare: RegExp = this.createNewRegex(String(toCompare));
@@ -547,7 +549,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
-	private handleMComparison( queryS: any, prevResult: any, comparator: string): InsightResult[] {
+	private async handleMComparison( queryS: any, prevResult: InsightResult[], comparator: string): Promise<InsightResult[]> {
 
 		const parsedQueryKey: any = this.queryKeyParser(queryS[comparator]);
 		const idString: string = parsedQueryKey[0];
@@ -562,7 +564,7 @@ export default class InsightFacade implements IInsightFacade {
 			// 2. Bring in entire data as InsightResult[]
 
 			// Check if 2 datasets are being checked.
-			insightsArray = this.validateDataset(idString);
+			insightsArray = await this.validateDataset(idString);
 		}
 
 
