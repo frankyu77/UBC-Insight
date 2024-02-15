@@ -18,5 +18,5 @@
     }
   },
   "errorExpected": false,
-  "result":[{"sections_dept":"psyc","sections_avg":50,"sections_year":2009,"sections_id":"315","sections_instructor":"king, mary ann"},{"sections_dept":"chbe","sections_avg":50,"sections_year":2012,"sections_id":"474","sections_instructor":""},{"sections_dept":"busi","sections_avg":50,"sections_year":2013,"sections_id":"441","sections_instructor":""}]
+  "expected":[{"sections_dept":"psyc","sections_avg":50,"sections_year":2009,"sections_id":"315","sections_instructor":"king, mary ann"},{"sections_dept":"chbe","sections_avg":50,"sections_year":2012,"sections_id":"474","sections_instructor":""},{"sections_dept":"busi","sections_avg":50,"sections_year":2013,"sections_id":"441","sections_instructor":""}]
 }

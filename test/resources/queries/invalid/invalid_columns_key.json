@@ -23,5 +23,5 @@
 		}
 	},
 	"errorExpected": true,
-	"result": "InsightError"
+	"expected": "InsightError"
 }

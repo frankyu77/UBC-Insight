@@ -12,5 +12,5 @@
     }
   },
   "errorExpected": true,
-  "result": "ResultTooLargeError"
+  "expected": "ResultTooLargeError"
 }

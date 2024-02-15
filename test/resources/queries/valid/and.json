@@ -27,5 +27,5 @@
 		}
 	},
 	"errorExpected": false,
-	"result":[{"sections_dept":"adhe","sections_avg":96.11,"sections_id":"329","sections_year":2015,"sections_instructor":"bishundayal, deonarine"}]
+	"expected":[{"sections_dept":"adhe","sections_avg":96.11,"sections_id":"329","sections_year":2015,"sections_instructor":"bishundayal, deonarine"}]
 }
