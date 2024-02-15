@@ -516,35 +516,29 @@ export default class InsightFacade implements IInsightFacade {
 
 	//Checks if the given idString is a valid dataset name
 	//If it is, it returns an entire dataset in InsightResult form
-	private validateDataset(idString: string): InsightResult[] {
+	private async validateDataset(idString: string): Promise<InsightResult[]> {
 
 		if (!this.idDatasetsAddedSoFar.includes(idString)) {
 			throw new InsightError("Dataset not found");
 		}
 		console.log("Dataset found");
 		let insightsArray: InsightResult[];
-		try {
-			 fs.readFile(this.getDatasetDirPath(idString), "utf8", (err, data) => {
-				if (err) {
-					throw new InsightError("Error when reading file");
-				}
-				;
+		const fsPromises = require('fs').promises;
+		const data = await fsPromises.readFile('/tmp/data.json').catch(() => {throw new InsightError("Error file read.")} )
 
-				const object = JSON.parse(data);
-				insightsArray = object.validSections;
-				const prefix: string = idString + "_";
+		const object = JSON.parse(data);
+		insightsArray = object.validSections;
+		const prefix: string = idString + "_";
 
-				insightsArray = insightsArray.map((obj) => {
-					const newObj: InsightResult = {};
-					Object.entries(obj).forEach(([key, value]) => {
-						newObj[`${prefix}${key}`] = value;
-					});
-					return newObj;
-				});
+		insightsArray = insightsArray.map((obj) => {
+			const newObj: InsightResult = {};
+			Object.entries(obj).forEach(([key, value]) => {
+				newObj[`${prefix}${key}`] = value;
 			});
-		} catch (err) {
-			throw new InsightError("Read file error");
-		}
+			return newObj;
+		});
+
+
 		return insightsArray;
 	}
 
