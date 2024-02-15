@@ -2,5 +2,5 @@
   "title": "empty query, fail",
   "input": {},
   "errorExpected": true,
-  "result": "InsightError"
+  "expected": "InsightError"
 }
