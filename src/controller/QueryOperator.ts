@@ -111,20 +111,17 @@ export default class QueryOperator {
 	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
 		// Validate whether you have too many keys in OR !!!!!!
 		let toDelete: InsightResult[] = await this.handleWhere(queryS["NOT"], prevResult);
-		console.log(toDelete.length);
 
 
 		// Finds the complement of result 1 in the fullset datasetToQuery
 		let fullSet: InsightResult[] = JSON.parse(JSON.stringify(this.getDataset()));
-		console.log(fullSet.length)
-
-		let complement: InsightResult[] = fullSet.filter((fullSetItem) =>
-			!toDelete.some((toDeleteItem) => this.isInsightResultsEqual(toDeleteItem, fullSetItem)));
-
-		// const complement = fullSet.filter(element => !toDelete.includes(element));
 
 
-		console.log(complement.length);
+		//const complement = fullSet.filter(element => !toDelete.includes(element));
+		const complement = fullSet.filter((insight1) =>
+			!toDelete.some((insight2) => this.isInsightResultsEqual(insight1, insight2))
+		);
+
 		return complement;
 	}
 
@@ -148,11 +145,11 @@ export default class QueryOperator {
 	// Checks if 2 InsightResult objects are equal
 	private isInsightResultsEqual(insight1: InsightResult, insight2: InsightResult): boolean {
 
-		const keys1 = Object.keys(insight1);
-		const keys2 = Object.keys(insight2);
-		if (keys1.length !== keys2.length) {
-			return false;
-		}
+		// const keys1 = Object.keys(insight1);
+		// const keys2 = Object.keys(insight2);
+		// if (keys1.length !== keys2.length) {
+		// 	return false;
+		// }
 
 		return (insight1.uuid === insight2.uuid);
 	}
