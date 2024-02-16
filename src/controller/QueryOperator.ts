@@ -21,10 +21,19 @@ export default class QueryOperator {
 
 	public datasetToQueryId(): string {
 		return this._datasetToQueryId;
+
+	}
+	private setDataset(dataset : InsightResult[]){
+		this.datasetToQuery = dataset;
+	}
+
+	private getDataset() : InsightResult[] {
+		return this.datasetToQuery;
 	}
 	private getDatasetDirPath(id: string): string {
 		return path.join(this.dir, `${id}`);
 	}
+
 
 	public  handleBaseEbnf(queryS: any) {
 		const keysArray = Object.keys(queryS);
@@ -101,15 +110,17 @@ export default class QueryOperator {
 	// All sections in the dataset outside of the given conditions
 	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
 		// Validate whether you have too many keys in OR !!!!!!
+		let toDelete: InsightResult[] = await this.handleWhere(queryS["NOT"], prevResult);
+		console.log(toDelete.length);
 
-		let result1: InsightResult[] = await this.handleWhere(queryS["NOT"], prevResult);
 
 		// Finds the complement of result 1 in the fullset datasetToQuery
-		let fullSet: InsightResult[] = this.datasetToQuery;
+		let fullSet: InsightResult[] = this.getDataset();
+		console.log(fullSet.length)
+		// let complement: InsightResult[] = fullSet.filter((fullSetItem) =>
+		// 	!result1.some((result1Item) => this.isInsightResultsEqual(result1Item, fullSetItem)));
 
-		let complement: InsightResult[] = fullSet.filter((fullSetItem) =>
-			!result1.some((result1Item) => this.isInsightResultsEqual(result1Item, fullSetItem)));
-
+		const complement = fullSet.filter(element => toDelete.includes(element));
 		return complement;
 	}
 
@@ -133,18 +144,13 @@ export default class QueryOperator {
 	// Checks if 2 InsightResult objects are equal
 	private isInsightResultsEqual(insight1: InsightResult, insight2: InsightResult): boolean {
 
-
 		const keys1 = Object.keys(insight1);
 		const keys2 = Object.keys(insight2);
 		if (keys1.length !== keys2.length) {
 			return false;
 		}
-		for (const key of keys1) {
-			if (insight1[key] !== insight2[key]) {
-				return false;
-			}
-		}
-		return true;
+
+		return (insight1.uuid === insight2.uuid);
 	}
 
 
@@ -230,18 +236,16 @@ export default class QueryOperator {
 		if (!this.idDatasetsAddedSoFar.includes(idString)) {
 			throw new InsightError("Dataset not found");
 		}
-		let insightsArray: InsightResult[];
 		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {
 			throw new InsightError("Error file read.");
 		} );
 
 		const object = JSON.parse(data);
-		insightsArray = object.validSections;
+		this.setDataset(object.validSections);
 
-		this.datasetToQuery = insightsArray;
 		this._datasetToQueryId = object.idName;
 
-		return insightsArray;
+		return this.getDataset();
 	}
 
 
@@ -255,6 +259,7 @@ export default class QueryOperator {
 		const mField: string = parsedQueryKey[1];
 		const toCompare: number = parsedQueryKey[2];
 		const key: string = mField;
+
 
 		let insightsArray: InsightResult[] = prevResult;
 
