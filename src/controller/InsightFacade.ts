@@ -328,7 +328,7 @@ export default class InsightFacade implements IInsightFacade {
 
 			queryOperator.handleWhere(queryS.WHERE, undefined).then( (resultWhere) => {
 
-				result = this.convertBoolean(resultWhere, queryOperator.getDataset())
+				result = this.convertBoolean(resultWhere, queryOperator.getDataset());
 				if (result.length > 5000) {
 					throw new ResultTooLargeError("Result greater than 5000");
 				}
@@ -343,13 +343,13 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
-	private convertBoolean(boolArr : boolean[], dataset : InsightResult[]) : InsightResult[] {
+	private convertBoolean(boolArr: boolean[], dataset: InsightResult[]): InsightResult[] {
 
 
-		const converted : InsightResult[] = dataset.filter((value, index) => {
-				if (boolArr[index]) {
-					return true;
-				}
+		const converted: InsightResult[] = dataset.filter((value, index) => {
+			if (boolArr[index]) {
+				return true;
+			}
 		});
 		return converted;
 	}

@@ -124,8 +124,7 @@ export default class QueryOperator {
 		// );
 
 
-
-		return toDelete.map(x => !x);
+		return toDelete.map((x) => !x);
 	}
 
 	// Takes two insight result arrays and joins the two together
@@ -142,7 +141,7 @@ export default class QueryOperator {
 		// let joinedArray: InsightResult[] = result1.concat(result2);
 		// const uniqueArray = [...new Set(joinedArray)];
 
-		const intersection : boolean[] =  [];
+		const intersection: boolean[] =  [];
 		for (let i = 0; i < result1.length; i++) {
 			intersection.push(result1[i] || result2[i]);
 		}
@@ -177,7 +176,7 @@ export default class QueryOperator {
 		// );
 
 
-		const intersection : boolean[] =  [];
+		const intersection: boolean[] =  [];
 		for (let i = 0; i < resultArray1.length; i++) {
 			intersection.push(resultArray1[i] && resultArray2[i]);
 		}
@@ -224,7 +223,7 @@ export default class QueryOperator {
 			} else {
 				booleanArray.push(true);
 			}
-		})
+		});
 
 		return booleanArray;
 	}
@@ -293,7 +292,7 @@ export default class QueryOperator {
 
 
 			// if (this.datasetToQueryId() == "") {
-				insightsArray = await this.validateDataset(idString);
+			insightsArray = await this.validateDataset(idString);
 			// }
 
 		}
@@ -303,7 +302,7 @@ export default class QueryOperator {
 		// }
 
 		// Apply condition and shorten InsightResult array
-		//let i = insightsArray.length;
+		// let i = insightsArray.length;
 		switch (comparator) {
 			case "EQ" :
 
@@ -314,7 +313,7 @@ export default class QueryOperator {
 					} else {
 						booleanArray.push(true);
 					}
-				})
+				});
 
 				// while (i--) {
 				// 	if (Number(insightsArray[i][key]) !== toCompare) {
@@ -333,7 +332,7 @@ export default class QueryOperator {
 					} else {
 						booleanArray.push(true);
 					}
-				})
+				});
 
 				// while (i--) {
 				// 	if (Number(insightsArray[i][key]) >= toCompare) {
@@ -352,7 +351,7 @@ export default class QueryOperator {
 					} else {
 						booleanArray.push(true);
 					}
-				})
+				});
 
 				// while (i--) {
 				// 	if (Number(insightsArray[i][key]) <= toCompare) {
