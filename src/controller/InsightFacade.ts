@@ -331,6 +331,16 @@ export default class InsightFacade implements IInsightFacade {
 				}
 				result = queryOperator.handleOptions(queryS.OPTIONS, resultWhere);
 
+				let prefix: string = queryOperator.datasetToQueryId() + "_";
+
+				result = result.map((obj) => {
+					const newObj: InsightResult = {};
+					Object.entries(obj).forEach(([key, value]) => {
+						newObj[`${prefix}${key}`] = value;
+					});
+					return newObj;
+				});
+
 				return resolve(result);
 			}).catch((error) => {
 				return reject(new InsightError(error.message));
