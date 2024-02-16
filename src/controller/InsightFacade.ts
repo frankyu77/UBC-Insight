@@ -327,10 +327,11 @@ export default class InsightFacade implements IInsightFacade {
 			let result: InsightResult[];
 
 			queryOperator.handleWhere(queryS.WHERE, undefined).then( (resultWhere) => {
-				if (resultWhere.length > 5000) {
+
+				result = this.convertBoolean(resultWhere, queryOperator.getDataset())
+				if (result.length > 5000) {
 					throw new ResultTooLargeError("Result greater than 5000");
 				}
-				result = this.convertBoolean(resultWhere, queryOperator.getDataset())
 				result = queryOperator.handleOptions(queryS.OPTIONS, result);
 				result = this.compatibleFormat(queryOperator, result);
 
