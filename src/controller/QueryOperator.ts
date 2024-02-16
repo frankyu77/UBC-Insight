@@ -28,7 +28,7 @@ export default class QueryOperator {
 		this.datasetToQuery = dataset;
 	}
 
-	private getDataset(): InsightResult[] {
+	public getDataset(): InsightResult[] {
 		return this.datasetToQuery;
 	}
 
@@ -46,7 +46,7 @@ export default class QueryOperator {
 	}
 
 
-	public async handleWhere(queryS: any, prevResult: any): Promise<InsightResult[]> {
+	public async handleWhere(queryS: any, prevResult: any): Promise<boolean[]> {
 
 		const keys = Object.keys(queryS);
 
@@ -110,37 +110,44 @@ export default class QueryOperator {
 
 
 	// All sections in the dataset outside of the given conditions
-	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
+	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
 		// Validate whether you have too many keys in OR !!!!!!
-		let toDelete: InsightResult[] = await this.handleWhere(queryS["NOT"], prevResult);
+		let toDelete: boolean[] = await this.handleWhere(queryS["NOT"], prevResult);
 
 
-		// Finds the complement of result 1 in the fullset datasetToQuery
-		let fullSet: InsightResult[] = this.getDataset();
+		// // Finds the complement of result 1 in the fullset datasetToQuery
+		// let fullSet: InsightResult[] = this.getDataset();
 
-		// const complement = fullSet.filter(element => !toDelete.includes(element));
-		const complement = fullSet.filter((insight1) =>
-			!toDelete.some((insight2) => this.isInsightResultsEqual(insight1, insight2))
-		);
+		// // const complement = fullSet.filter(element => !toDelete.includes(element));
+		// const complement = fullSet.filter((insight1) =>
+		// 	!toDelete.some((insight2) => this.isInsightResultsEqual(insight1, insight2))
+		// );
 
-		return complement;
+
+
+		return toDelete.map(x => !x);
 	}
 
 	// Takes two insight result arrays and joins the two together
-	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<InsightResult[]> {
+	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<boolean[]> {
 		// const keys = Object.keys(queryS["OR"]);
 
 
 		// Validate whether you have too many keys in OR !!!!!!
 
 		// Add to a set
-		let result1: InsightResult[] = await this.handleWhere(queryS["OR"][0], prevResult);
-		let result2: InsightResult[] = await this.handleWhere(queryS["OR"][1], prevResult);
+		let result1: boolean[] = await this.handleWhere(queryS["OR"][0], prevResult);
+		let result2: boolean[] = await this.handleWhere(queryS["OR"][1], prevResult);
 
-		let joinedArray: InsightResult[] = result1.concat(result2);
-		const uniqueArray = [...new Set(joinedArray)];
+		// let joinedArray: InsightResult[] = result1.concat(result2);
+		// const uniqueArray = [...new Set(joinedArray)];
 
-		return uniqueArray;
+		const intersection : boolean[] =  [];
+		for (let i = 0; i < result1.length; i++) {
+			intersection.push(result1[i] || result2[i]);
+		}
+
+		return intersection;
 	}
 
 	// Checks if 2 InsightResult objects are equal
@@ -157,16 +164,23 @@ export default class QueryOperator {
 
 
 	// Takes two insight result arrays and only joins the same sections together
-	private async handleAnd(queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
+	private async handleAnd(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
 		// Validate whether you have too many keys in AND !!!!!!
 
-		let resultArray1: InsightResult[] = await this.handleWhere(queryS["AND"][0], prevResult);
-		let resultArray2: InsightResult[] = await this.handleWhere(queryS["AND"][1], prevResult);
+		let resultArray1: boolean[] = await this.handleWhere(queryS["AND"][0], prevResult);
+		let resultArray2: boolean[] = await this.handleWhere(queryS["AND"][1], prevResult);
 
 
-		const intersection = resultArray1.filter((insight1) =>
-			resultArray2.some((insight2) => this.isInsightResultsEqual(insight1, insight2))
-		);
+		// const intersection = resultArray1.filter((insight1) =>
+		// 	resultArray2.some((insight2) => (insight2 && insight1))
+		// 	//this.isInsightResultsEqual(insight1, insight2))
+		// );
+
+
+		const intersection : boolean[] =  [];
+		for (let i = 0; i < resultArray1.length; i++) {
+			intersection.push(resultArray1[i] && resultArray2[i]);
+		}
 
 		return intersection;
 
@@ -175,7 +189,7 @@ export default class QueryOperator {
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
-	private async handleSComparison( queryS: any, prevResult: InsightResult[]): Promise<InsightResult[]> {
+	private async handleSComparison( queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
 
 		const parsedQueryKey: any = this.queryKeyParser(queryS["IS"]);
 		const idString: string = parsedQueryKey[0];
@@ -183,7 +197,7 @@ export default class QueryOperator {
 		const toCompare: string = parsedQueryKey[2];
 		const key: string = sField;
 
-
+		let booleanArray: boolean[] = [];
 		let insightsArray: InsightResult[] = prevResult;
 
 		if (insightsArray === undefined) {
@@ -197,10 +211,13 @@ export default class QueryOperator {
 		let i = insightsArray.length;
 		while (i--) {
 			if (!this.matchesQueryPattern(String(insightsArray[i][key]), toCompare)) {
-				insightsArray.splice(i, 1);
+				booleanArray.push(false);
+				//insightsArray.splice(i, 1);
+			} else {
+				booleanArray.push(true);
 			}
 		}
-		return insightsArray;
+		return booleanArray;
 	}
 
 	private  matchesQueryPattern(input: string, queryPattern: string): boolean {
@@ -250,7 +267,7 @@ export default class QueryOperator {
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
 	private async handleMComparison
-	( queryS: any, prevResult: InsightResult[], comparator: string): Promise<InsightResult[]> {
+	( queryS: any, prevResult: InsightResult[], comparator: string): Promise<boolean[]> {
 
 		const parsedQueryKey: any = this.queryKeyParser(queryS[comparator]);
 		const idString: string = parsedQueryKey[0];
@@ -258,7 +275,7 @@ export default class QueryOperator {
 		const toCompare: number = parsedQueryKey[2];
 		const key: string = mField;
 
-
+		let booleanArray: boolean[] = [];
 		let insightsArray: InsightResult[] = prevResult;
 
 		if (insightsArray === undefined) {
@@ -282,28 +299,37 @@ export default class QueryOperator {
 			case "EQ" :
 				while (i--) {
 					if (Number(insightsArray[i][key]) !== toCompare) {
-						insightsArray.splice(i, 1);
+						booleanArray.push(false);
+						//insightsArray.splice(i, 1);
+					} else {
+						booleanArray.push(true);
 					}
 				}
 				break;
 			case "LT" :
 				while (i--) {
 					if (Number(insightsArray[i][key]) >= toCompare) {
-						insightsArray.splice(i, 1);
+						booleanArray.push(false);
+						//insightsArray.splice(i, 1);
+					} else {
+						booleanArray.push(true);
 					}
 				}
 				break;
 			case "GT" :
 				while (i--) {
 					if (Number(insightsArray[i][key]) <= toCompare) {
-						insightsArray.splice(i, 1);
+						booleanArray.push(false);
+						//insightsArray.splice(i, 1);
+					} else {
+						booleanArray.push(true);
 					}
 				}
 				break;
 		}
 
 		// Return InsightResult Array
-		return  insightsArray;
+		return  booleanArray;
 	}
 
 	public handleOptions(queryS: any, prevResult:  InsightResult[]): InsightResult[] {

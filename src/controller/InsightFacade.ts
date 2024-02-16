@@ -330,8 +330,8 @@ export default class InsightFacade implements IInsightFacade {
 				if (resultWhere.length > 5000) {
 					throw new ResultTooLargeError("Result greater than 5000");
 				}
-
-				result = queryOperator.handleOptions(queryS.OPTIONS, resultWhere);
+				result = this.convertBoolean(resultWhere, queryOperator.getDataset())
+				result = queryOperator.handleOptions(queryS.OPTIONS, result);
 				result = this.compatibleFormat(queryOperator, result);
 
 				return resolve(result);
@@ -342,6 +342,10 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
+	private convertBoolean(boolArr : boolean[], dataset : InsightResult[]) : InsightResult[] {
+		const converted : InsightResult[] = dataset.filter((value, index) => boolArr[index]);
+		return converted;
+	}
 
 	private compatibleFormat(queryOperator: any, result: InsightResult[]) {
 		let prefix: string = queryOperator.datasetToQueryId() + "_";
