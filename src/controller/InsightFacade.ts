@@ -344,7 +344,13 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	private convertBoolean(boolArr : boolean[], dataset : InsightResult[]) : InsightResult[] {
-		const converted : InsightResult[] = dataset.filter((value, index) => boolArr[index]);
+
+
+		const converted : InsightResult[] = dataset.filter((value, index) => {
+				if (boolArr[index]) {
+					return true;
+				}
+		});
 		return converted;
 	}
 

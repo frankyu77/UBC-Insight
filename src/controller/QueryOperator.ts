@@ -208,15 +208,24 @@ export default class QueryOperator {
 			insightsArray = await this.validateDataset(idString);
 		}
 
-		let i = insightsArray.length;
-		while (i--) {
-			if (!this.matchesQueryPattern(String(insightsArray[i][key]), toCompare)) {
+		// let i = insightsArray.length;
+		// while (i--) {
+		// 	if (!this.matchesQueryPattern(String(insightsArray[i][key]), toCompare)) {
+		// 		booleanArray.push(false);
+		// 		//insightsArray.splice(i, 1);
+		// 	} else {
+		// 		booleanArray.push(true);
+		// 	}
+		// }
+
+		insightsArray.forEach((_, index) => {
+			if (!this.matchesQueryPattern(String(insightsArray[index][key]), toCompare)) {
 				booleanArray.push(false);
-				//insightsArray.splice(i, 1);
 			} else {
 				booleanArray.push(true);
 			}
-		}
+		})
+
 		return booleanArray;
 	}
 
@@ -294,37 +303,65 @@ export default class QueryOperator {
 		// }
 
 		// Apply condition and shorten InsightResult array
-		let i = insightsArray.length;
+		//let i = insightsArray.length;
 		switch (comparator) {
 			case "EQ" :
-				while (i--) {
-					if (Number(insightsArray[i][key]) !== toCompare) {
+
+
+				insightsArray.forEach((_, index) => {
+					if (Number(insightsArray[index][key]) !== toCompare) {
 						booleanArray.push(false);
-						//insightsArray.splice(i, 1);
 					} else {
 						booleanArray.push(true);
 					}
-				}
+				})
+
+				// while (i--) {
+				// 	if (Number(insightsArray[i][key]) !== toCompare) {
+				// 		booleanArray.push(false);
+				// 		//insightsArray.splice(i, 1);
+				// 	} else {
+				// 		booleanArray.push(true);
+				// 	}
+				// }
 				break;
 			case "LT" :
-				while (i--) {
-					if (Number(insightsArray[i][key]) >= toCompare) {
+
+				insightsArray.forEach((_, index) => {
+					if (Number(insightsArray[index][key]) >= toCompare) {
 						booleanArray.push(false);
-						//insightsArray.splice(i, 1);
 					} else {
 						booleanArray.push(true);
 					}
-				}
+				})
+
+				// while (i--) {
+				// 	if (Number(insightsArray[i][key]) >= toCompare) {
+				// 		booleanArray.push(false);
+				// 		//insightsArray.splice(i, 1);
+				// 	} else {
+				// 		booleanArray.push(true);
+				// 	}
+				// }
 				break;
 			case "GT" :
-				while (i--) {
-					if (Number(insightsArray[i][key]) <= toCompare) {
+
+				insightsArray.forEach((_, index) => {
+					if (Number(insightsArray[index][key]) <= toCompare) {
 						booleanArray.push(false);
-						//insightsArray.splice(i, 1);
 					} else {
 						booleanArray.push(true);
 					}
-				}
+				})
+
+				// while (i--) {
+				// 	if (Number(insightsArray[i][key]) <= toCompare) {
+				// 		booleanArray.push(false);
+				// 		//insightsArray.splice(i, 1);
+				// 	} else {
+				// 		booleanArray.push(true);
+				// 	}
+				// }
 				break;
 		}
 

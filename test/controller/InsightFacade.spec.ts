@@ -504,7 +504,6 @@ describe("InsightFacade", function() {
 				it(`${test.title}`, async function () {
 					return facade.performQuery(test.input).then((result) => {
 						if (!test.errorExpected) {
-							console.log(result);
 							expect(result).to.have.deep.members(test.expected);
 
 						} else {
