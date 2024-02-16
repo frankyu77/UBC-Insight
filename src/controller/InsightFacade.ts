@@ -332,24 +332,26 @@ export default class InsightFacade implements IInsightFacade {
 					throw new ResultTooLargeError("Result greater than 5000");
 				}
 				result = queryOperator.handleOptions(queryS.OPTIONS, resultWhere);
-
-				let prefix: string = queryOperator.datasetToQueryId() + "_";
-
-				result = result.map((obj) => {
-					const newObj: InsightResult = {};
-					Object.entries(obj).forEach(([key, value]) => {
-						newObj[`${prefix}${key}`] = value;
-					});
-					return newObj;
-				});
+				result = this.compatibleFormat(queryOperator, result);
 
 				return resolve(result);
 			}).catch((error) => {
-				return reject(error);//new InsightError(error.message));
+				return reject(error);// new InsightError(error.message));
 			});
 
 		});
 	}
 
 
+	private compatibleFormat(queryOperator: any, result: InsightResult[]) {
+		let prefix: string = queryOperator.datasetToQueryId() + "_";
+
+		return result.map((obj) => {
+			const newObj: InsightResult = {};
+			Object.entries(obj).forEach(([key, value]) => {
+				newObj[`${prefix}${key}`] = value;
+			});
+			return newObj;
+		});
+	}
 }

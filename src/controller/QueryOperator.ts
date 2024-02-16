@@ -1,6 +1,6 @@
 import {
-InsightError,
-InsightResult,
+	InsightError,
+	InsightResult,
 } from "./IInsightFacade";
 import path from "node:path";
 
@@ -23,13 +23,15 @@ export default class QueryOperator {
 		return this._datasetToQueryId;
 
 	}
-	private setDataset(dataset : InsightResult[]){
+
+	private setDataset(dataset: InsightResult[]){
 		this.datasetToQuery = dataset;
 	}
 
-	private getDataset() : InsightResult[] {
+	private getDataset(): InsightResult[] {
 		return this.datasetToQuery;
 	}
+
 	private getDatasetDirPath(id: string): string {
 		return path.join(this.dir, `${id}`);
 	}
@@ -117,7 +119,7 @@ export default class QueryOperator {
 		let fullSet: InsightResult[] = JSON.parse(JSON.stringify(this.getDataset()));
 
 
-		//const complement = fullSet.filter(element => !toDelete.includes(element));
+		// const complement = fullSet.filter(element => !toDelete.includes(element));
 		const complement = fullSet.filter((insight1) =>
 			!toDelete.some((insight2) => this.isInsightResultsEqual(insight1, insight2))
 		);
@@ -193,7 +195,7 @@ export default class QueryOperator {
 			insightsArray = await this.validateDataset(idString);
 		}
 
-		//const updatedToCompare: RegExp = this.createNewRegex(String(toCompare));
+		// const updatedToCompare: RegExp = this.createNewRegex(String(toCompare));
 
 		let i = insightsArray.length;
 		while (i--) {
@@ -206,11 +208,11 @@ export default class QueryOperator {
 
 	private  matchesQueryPattern(input: string, queryPattern: string): boolean {
 		// Check if the pattern starts and/or ends with an asterisk
-		const startsWithAsterisk = queryPattern.startsWith('*');
-		const endsWithAsterisk = queryPattern.endsWith('*');
+		const startsWithAsterisk = queryPattern.startsWith("*");
+		const endsWithAsterisk = queryPattern.endsWith("*");
 
 		// Remove asterisks from the pattern for comparison
-		const cleanPattern = queryPattern.replace(/^\*|\*$/g, '');
+		const cleanPattern = queryPattern.replace(/^\*|\*$/g, "");
 
 		if (startsWithAsterisk && endsWithAsterisk) {
 			// Contains inputstring
@@ -226,8 +228,6 @@ export default class QueryOperator {
 			return input === cleanPattern;
 		}
 	}
-
-
 
 
 	// Checks if the given idString is a valid dataset name
@@ -309,7 +309,6 @@ export default class QueryOperator {
 		let keys = Object.keys(queryS);
 
 
-
 		if (!keys.includes("COLUMNS")) {
 			throw new InsightError("No columns");
 		}
@@ -325,8 +324,8 @@ export default class QueryOperator {
 		const updatedArray: InsightResult[] = prevResult.map((insight) => {
 			let newInsight: InsightResult = {};
 			columns.forEach((field) => {
-				//Object.prototype.hasOwnProperty.call(insight, field
-				if(insight.hasOwnProperty(field)) {
+				// Object.prototype.hasOwnProperty.call(insight, field
+				if(Object.prototype.hasOwnProperty.call(insight, field)) {
 					newInsight[field] = insight[field];
 				}
 			});
@@ -355,15 +354,16 @@ export default class QueryOperator {
 		return updatedArray;
 	}
 
-	private parseColumns(columns : string[]) {
-		let parsedColumns : string[] = columns.map(item => {
+	private parseColumns(columns: string[]) {
+		let parsedColumns: string[] = columns.map((item) => {
 			return this.parseField(item);
 		});
 		return parsedColumns;
 	}
-	private parseField(field : string) {
+
+	private parseField(field: string) {
 		const parts = field.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
-		return parts[1] || '';
+		return parts[1] || "";
 	}
 }
