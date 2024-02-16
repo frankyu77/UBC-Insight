@@ -5,7 +5,8 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError
+	NotFoundError,
+	ResultTooLargeError
 } from "./IInsightFacade";
 import * as fs from "fs";
 import path from "node:path";
@@ -320,14 +321,15 @@ export default class InsightFacade implements IInsightFacade {
 			try {
 				queryOperator.handleBaseEbnf(queryS);
 			} catch (error: any) {
-				return reject(error.message);
+				return reject(error);
 			}
 
 			let result: InsightResult[];
 
 			queryOperator.handleWhere(queryS.WHERE, undefined).then( (resultWhere) => {
+
 				if (resultWhere.length > 5000) {
-					throw new InsightError("Result greater than 5000");
+					throw new ResultTooLargeError("Result greater than 5000");
 				}
 				result = queryOperator.handleOptions(queryS.OPTIONS, resultWhere);
 
@@ -343,7 +345,7 @@ export default class InsightFacade implements IInsightFacade {
 
 				return resolve(result);
 			}).catch((error) => {
-				return reject(new InsightError(error.message));
+				return reject(error);//new InsightError(error.message));
 			});
 
 		});
