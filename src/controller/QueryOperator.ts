@@ -20,7 +20,6 @@ export default class QueryOperator {
 	private idDatasetsAddedSoFar: string[] = [];
 
 
-
 	constructor(test: string[]) {
 		this.idDatasetsAddedSoFar = test;
 	}
