@@ -19,7 +19,6 @@ export default class InsightFacade implements IInsightFacade {
 	private datasetsAddedSoFar: Dataset[] = [];
 	private idDatasetsAddedSoFar: string[] = [];
 	private dir = "./data";
-	private datasetToQuery: InsightResult[] = [];
 
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -331,10 +330,12 @@ export default class InsightFacade implements IInsightFacade {
 					throw new InsightError("Result greater than 5000");
 				}
 				result = queryOperator.handleOptions(queryS.OPTIONS, resultWhere);
+
 				return resolve(result);
 			}).catch((error) => {
 				return reject(new InsightError(error.message));
 			});
+
 		});
 	}
 

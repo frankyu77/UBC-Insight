@@ -1,21 +1,15 @@
-import JSZip from "jszip";
 import {
-	IInsightFacade,
-	InsightDataset,
-	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError
 } from "./IInsightFacade";
-import * as fs from "fs";
 import path from "node:path";
-import Section from "./Section";
-import Dataset from "./Dataset";
+
 
 const fsPromises = require("fs").promises;
 
 export default class QueryOperator {
 	private datasetToQuery: InsightResult[] = [];
+	private datasetToQueryId: string = "";
 	private dir = "./data";
 	private idDatasetsAddedSoFar: string[] = [];
 
@@ -109,7 +103,7 @@ export default class QueryOperator {
 
         // Finds the complement of result 1 in the fullset datasetToQuery
 		let fullSet: InsightResult[] = this.datasetToQuery;
-
+		console.log(fullSet);
 		let complement: InsightResult[] = fullSet.filter((fullSetItem) =>
 			!result1.some((result1Item) => this.isInsightResultsEqual(result1Item, fullSetItem)));
 
@@ -185,47 +179,72 @@ export default class QueryOperator {
             // 1. Validate dataset ID
             // 2. Bring in entire data as InsightResult[]
 
-            // Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!1
+            // Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
 			insightsArray = await this.validateDataset(idString);
 		}
 
-		const updatedToCompare: RegExp = this.createNewRegex(String(toCompare));
+		//const updatedToCompare: RegExp = this.createNewRegex(String(toCompare));
 
 		let i = insightsArray.length;
 		while (i--) {
-			if (String(insightsArray[i][key]).search(updatedToCompare) === -1) {
+			if (!this.matchesQueryPattern(String(insightsArray[i][key]), toCompare)) {
 				insightsArray.splice(i, 1);
 			}
 		}
 		return insightsArray;
 	}
 
+	private  matchesQueryPattern(input: string, queryPattern: string): boolean {
+		// Check if the pattern starts and/or ends with an asterisk
+		const startsWithAsterisk = queryPattern.startsWith('*');
+		const endsWithAsterisk = queryPattern.endsWith('*');
 
-	private createNewRegex(toCompare: string): RegExp {
-        // Escape special characters except for the asterisk
-		let cleanString = toCompare;// toCompare.replace(/([.+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+		// Remove asterisks from the pattern for comparison
+		const cleanPattern = queryPattern.replace(/^\*|\*$/g, '');
 
-		if (cleanString.length === 0 || cleanString === "*") {
-			return new RegExp(".*", "i");
-		}
-        // Determine the pattern based on the presence and position of asterisks
-		if (toCompare.startsWith("*") && toCompare.endsWith("*")) {
-            // Contains inputstring
-			cleanString = cleanString.substring(1, cleanString.length - 1);
-			return new RegExp(cleanString, "i"); // Case-insensitive match
-		} else if (toCompare.startsWith("*")) {
-            // Ends with inputstring
-			cleanString = cleanString.substring(1);
-			return new RegExp(cleanString + "$", "i"); // Match end, case-insensitive
-		} else if (toCompare.endsWith("*")) {
-            // Starts with inputstring
-			cleanString = cleanString.substring(0, cleanString.length - 1);
-			return new RegExp("^" + cleanString, "i"); // Match start, case-insensitive
+		if (startsWithAsterisk && endsWithAsterisk) {
+			// Contains inputstring
+			return input.includes(cleanPattern);
+		} else if (startsWithAsterisk) {
+			// Ends with inputstring
+			return input.endsWith(cleanPattern);
+		} else if (endsWithAsterisk) {
+			// Starts with inputstring
+			return input.startsWith(cleanPattern);
 		} else {
-            // Matches inputstring exactly
-			return new RegExp("^" + cleanString + "$", "i"); // Exact match, case-insensitive
+			// Matches inputstring exactly
+			return input === cleanPattern;
 		}
 	}
+
+
+
+	//
+	// private createNewRegex(toCompare: string): RegExp {
+    //     // Escape special characters except for the asterisk
+	// 	let cleanString = toCompare;// toCompare.replace(/([.+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+	//
+	// 	if (cleanString.length === 0 || cleanString === "*") {
+	// 		return new RegExp(".*", "i");
+	// 	}
+    //     // Determine the pattern based on the presence and position of asterisks
+	// 	if (toCompare.startsWith("*") && toCompare.endsWith("*")) {
+    //         // Contains inputstring
+	// 		cleanString = cleanString.substring(1, cleanString.length - 1);
+	// 		return new RegExp(".*" + cleanString + ".*", "i"); // Case-insensitive match
+	// 	} else if (toCompare.startsWith("*")) {
+    //         // Ends with inputstring
+	// 		cleanString = cleanString.substring(1);
+	// 		return new RegExp(".*" +cleanString + "$", "i"); // Match end, case-insensitive
+	// 	} else if (toCompare.endsWith("*")) {
+    //         // Starts with inputstring
+	// 		cleanString = cleanString.substring(0, cleanString.length - 1);
+	// 		return new RegExp("^" + cleanString + ".*", "i"); // Match start, case-insensitive
+	// 	} else {
+    //         // Matches inputstring exactly
+	// 		return new RegExp("^" + cleanString + "$", "i"); // Exact match, case-insensitive
+	// 	}
+	// }
 
     // Checks if the given idString is a valid dataset name
     // If it is, it returns an entire dataset in InsightResult form
@@ -243,14 +262,15 @@ export default class QueryOperator {
 		insightsArray = object.validSections;
 		const prefix: string = idString + "_";
 
-		insightsArray = insightsArray.map((obj) => {
-			const newObj: InsightResult = {};
-			Object.entries(obj).forEach(([key, value]) => {
-				newObj[`${prefix}${key}`] = value;
-			});
-			return newObj;
-		});
+		// insightsArray = insightsArray.map((obj) => {
+		// 	const newObj: InsightResult = {};
+		// 	Object.entries(obj).forEach(([key, value]) => {
+		// 		newObj[`${prefix}${key}`] = value;
+		// 	});
+		// 	return newObj;
+		// });
 		this.datasetToQuery = insightsArray;
+		this.datasetToQueryId = object.idName;
 
 		return insightsArray;
 

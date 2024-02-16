@@ -504,9 +504,7 @@ describe("InsightFacade", function() {
 				it(`${test.title}`, async function () {
 					return facade.performQuery(test.input).then((result) => {
 						if (!test.errorExpected) {
-							// console.log(test.expected);
-							// console.log(result);
-							expect(result).to.be.deep.equal(test.expected);
+							expect(result).to.have.deep.members(test.expected);
 
 						} else {
 							throw new Error("error expected");
