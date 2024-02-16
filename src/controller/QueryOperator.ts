@@ -114,52 +114,44 @@ export default class QueryOperator {
 		// Validate whether you have too many keys in OR !!!!!!
 		let toDelete: boolean[] = await this.handleWhere(queryS["NOT"], prevResult);
 
-
-		// // Finds the complement of result 1 in the fullset datasetToQuery
-		// let fullSet: InsightResult[] = this.getDataset();
-
-		// // const complement = fullSet.filter(element => !toDelete.includes(element));
-		// const complement = fullSet.filter((insight1) =>
-		// 	!toDelete.some((insight2) => this.isInsightResultsEqual(insight1, insight2))
-		// );
-
-
 		return toDelete.map((x) => !x);
 	}
 
 	// Takes two insight result arrays and joins the two together
 	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<boolean[]> {
-		// const keys = Object.keys(queryS["OR"]);
-
-
 		// Validate whether you have too many keys in OR !!!!!!
 
 		// Add to a set
 		let result1: boolean[] = await this.handleWhere(queryS["OR"][0], prevResult);
 		let result2: boolean[] = await this.handleWhere(queryS["OR"][1], prevResult);
 
-		// let joinedArray: InsightResult[] = result1.concat(result2);
-		// const uniqueArray = [...new Set(joinedArray)];
+		//
+		// const [result1, result2] = await Promise.all([
+		// 	this.handleWhere(queryS["OR"][0], prevResult),
+		// 	this.handleWhere(queryS["OR"][1], prevResult),
+		// ]);
 
-		const intersection: boolean[] =  [];
-		for (let i = 0; i < result1.length; i++) {
-			intersection.push(result1[i] || result2[i]);
-		}
 
-		return intersection;
-	}
-
-	// Checks if 2 InsightResult objects are equal
-	private isInsightResultsEqual(insight1: InsightResult, insight2: InsightResult): boolean {
-
-		// const keys1 = Object.keys(insight1);
-		// const keys2 = Object.keys(insight2);
-		// if (keys1.length !== keys2.length) {
-		// 	return false;
+		// const intersection: boolean[] =  [];
+		// for (let i = 0; i < result1.length; i++) {
+		// 	intersection.push(result1[i] || result2[i]);
 		// }
 
-		return (insight1.uuid === insight2.uuid);
+
+		// result1.forEach((value, index) => {
+		// 	result1[index] = value|| result2[index];
+		// })
+		// return result1.map((value, index) => value || result2[index]);
+		for (let i = 0; i < result1.length; i++) {
+			result1[i] = result1[i] || result2[i];
+		}
+		return result1;
 	}
+
+	// // Checks if 2 InsightResult objects are equal
+	// private isInsightResultsEqual(insight1: InsightResult, insight2: InsightResult): boolean {
+	// 	return (insight1.uuid === insight2.uuid);
+	// }
 
 
 	// Takes two insight result arrays and only joins the same sections together
@@ -170,18 +162,39 @@ export default class QueryOperator {
 		let resultArray2: boolean[] = await this.handleWhere(queryS["AND"][1], prevResult);
 
 
-		// const intersection = resultArray1.filter((insight1) =>
-		// 	resultArray2.some((insight2) => (insight2 && insight1))
-		// 	//this.isInsightResultsEqual(insight1, insight2))
-		// );
+		// const [resultArray1, resultArray2] = await Promise.all([
+		// 	this.handleWhere(queryS["AND"][0], prevResult),
+		// 	this.handleWhere(queryS["AND"][1], prevResult),
+		// ]);
 
+		// const intersection: boolean[] =  [];
+		// for (let i = 0; i < resultArray1.length; i++) {
+		// 	intersection.push(resultArray1[i] && resultArray2[i]);
+		// }
 
-		const intersection: boolean[] =  [];
+		// resultArray1.forEach((value, index) => {
+		// 	resultArray1[index] = value && resultArray2[index];
+		// })
+
+		// return resultArray1.map((value, index) : boolean => {
+		// 	if(value){
+		// 		return value && resultArray2[index];
+		// 	}
+		// 	return false;
+		// });
+
+		// for (let i = 0; i < result1.length; i++) {
+		// 	result1[i] = result1[i] || result2[i];
+		// }
+		// return result1;
+
 		for (let i = 0; i < resultArray1.length; i++) {
-			intersection.push(resultArray1[i] && resultArray2[i]);
-		}
+			if(resultArray1[i]){
+				resultArray1[i] = resultArray1[i]  && resultArray2[i];
+			}
 
-		return intersection;
+		}
+		return resultArray1;
 
 	}
 
@@ -204,18 +217,12 @@ export default class QueryOperator {
 			// 2. Bring in entire data as InsightResult[]
 
 			// Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
-			insightsArray = await this.validateDataset(idString);
+			insightsArray = this.getDataset();
+			if (insightsArray.length < 1) {
+				insightsArray = await this.validateDataset(idString);
+			}
 		}
 
-		// let i = insightsArray.length;
-		// while (i--) {
-		// 	if (!this.matchesQueryPattern(String(insightsArray[i][key]), toCompare)) {
-		// 		booleanArray.push(false);
-		// 		//insightsArray.splice(i, 1);
-		// 	} else {
-		// 		booleanArray.push(true);
-		// 	}
-		// }
 
 		insightsArray.forEach((_, index) => {
 			if (!this.matchesQueryPattern(String(insightsArray[index][key]), toCompare)) {
@@ -290,10 +297,10 @@ export default class QueryOperator {
 			// 1. Validate dataset ID
 			// 2. Bring in entire data as InsightResult[]
 
-
-			// if (this.datasetToQueryId() == "") {
-			insightsArray = await this.validateDataset(idString);
-			// }
+			insightsArray = this.getDataset();
+			if (insightsArray.length < 1) {
+				insightsArray = await this.validateDataset(idString);
+			}
 
 		}
 		// // Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
@@ -302,11 +309,8 @@ export default class QueryOperator {
 		// }
 
 		// Apply condition and shorten InsightResult array
-		// let i = insightsArray.length;
 		switch (comparator) {
 			case "EQ" :
-
-
 				insightsArray.forEach((_, index) => {
 					if (Number(insightsArray[index][key]) !== toCompare) {
 						booleanArray.push(false);
@@ -315,17 +319,8 @@ export default class QueryOperator {
 					}
 				});
 
-				// while (i--) {
-				// 	if (Number(insightsArray[i][key]) !== toCompare) {
-				// 		booleanArray.push(false);
-				// 		//insightsArray.splice(i, 1);
-				// 	} else {
-				// 		booleanArray.push(true);
-				// 	}
-				// }
 				break;
 			case "LT" :
-
 				insightsArray.forEach((_, index) => {
 					if (Number(insightsArray[index][key]) >= toCompare) {
 						booleanArray.push(false);
@@ -334,17 +329,8 @@ export default class QueryOperator {
 					}
 				});
 
-				// while (i--) {
-				// 	if (Number(insightsArray[i][key]) >= toCompare) {
-				// 		booleanArray.push(false);
-				// 		//insightsArray.splice(i, 1);
-				// 	} else {
-				// 		booleanArray.push(true);
-				// 	}
-				// }
 				break;
 			case "GT" :
-
 				insightsArray.forEach((_, index) => {
 					if (Number(insightsArray[index][key]) <= toCompare) {
 						booleanArray.push(false);
@@ -352,15 +338,6 @@ export default class QueryOperator {
 						booleanArray.push(true);
 					}
 				});
-
-				// while (i--) {
-				// 	if (Number(insightsArray[i][key]) <= toCompare) {
-				// 		booleanArray.push(false);
-				// 		//insightsArray.splice(i, 1);
-				// 	} else {
-				// 		booleanArray.push(true);
-				// 	}
-				// }
 				break;
 		}
 
