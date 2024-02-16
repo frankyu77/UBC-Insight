@@ -5,7 +5,8 @@ import {
 	InsightDatasetKind,
 	InsightError,
 	InsightResult,
-	NotFoundError
+	NotFoundError,
+	ResultTooLargeError
 } from "./IInsightFacade";
 import * as fs from "fs";
 import path from "node:path";
@@ -19,7 +20,6 @@ export default class InsightFacade implements IInsightFacade {
 	private datasetsAddedSoFar: Dataset[] = [];
 	private idDatasetsAddedSoFar: string[] = [];
 	private dir = "./data";
-	private datasetToQuery: InsightResult[] = [];
 
 
 	public addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -321,22 +321,37 @@ export default class InsightFacade implements IInsightFacade {
 			try {
 				queryOperator.handleBaseEbnf(queryS);
 			} catch (error: any) {
-				return reject(error.message);
+				return reject(error);
 			}
 
 			let result: InsightResult[];
 
 			queryOperator.handleWhere(queryS.WHERE, undefined).then( (resultWhere) => {
+
 				if (resultWhere.length > 5000) {
-					throw new InsightError("Result greater than 5000");
+					throw new ResultTooLargeError("Result greater than 5000");
 				}
 				result = queryOperator.handleOptions(queryS.OPTIONS, resultWhere);
+				result = this.compatibleFormat(queryOperator, result);
+
 				return resolve(result);
 			}).catch((error) => {
-				return reject(new InsightError(error.message));
+				return reject(error);// new InsightError(error.message));
 			});
+
 		});
 	}
 
 
+	private compatibleFormat(queryOperator: any, result: InsightResult[]) {
+		let prefix: string = queryOperator.datasetToQueryId() + "_";
+
+		return result.map((obj) => {
+			const newObj: InsightResult = {};
+			Object.entries(obj).forEach(([key, value]) => {
+				newObj[`${prefix}${key}`] = value;
+			});
+			return newObj;
+		});
+	}
 }
