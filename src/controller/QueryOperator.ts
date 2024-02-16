@@ -115,12 +115,16 @@ export default class QueryOperator {
 
 
 		// Finds the complement of result 1 in the fullset datasetToQuery
-		let fullSet: InsightResult[] = this.getDataset();
+		let fullSet: InsightResult[] = JSON.parse(JSON.stringify(this.getDataset()));
 		console.log(fullSet.length)
-		// let complement: InsightResult[] = fullSet.filter((fullSetItem) =>
-		// 	!result1.some((result1Item) => this.isInsightResultsEqual(result1Item, fullSetItem)));
 
-		const complement = fullSet.filter(element => toDelete.includes(element));
+		let complement: InsightResult[] = fullSet.filter((fullSetItem) =>
+			!toDelete.some((toDeleteItem) => this.isInsightResultsEqual(toDeleteItem, fullSetItem)));
+
+		// const complement = fullSet.filter(element => !toDelete.includes(element));
+
+
+		console.log(complement.length);
 		return complement;
 	}
 
@@ -241,11 +245,11 @@ export default class QueryOperator {
 		} );
 
 		const object = JSON.parse(data);
-		this.setDataset(object.validSections);
+		this.setDataset(JSON.parse(JSON.stringify(object.validSections)));
 
 		this._datasetToQueryId = object.idName;
 
-		return this.getDataset();
+		return object.validSections;
 	}
 
 
