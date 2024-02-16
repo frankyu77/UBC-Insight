@@ -125,6 +125,13 @@ export default class QueryOperator {
 		let result1: boolean[] = await this.handleWhere(queryS["OR"][0], prevResult);
 		let result2: boolean[] = await this.handleWhere(queryS["OR"][1], prevResult);
 
+		//
+		// const [result1, result2] = await Promise.all([
+		// 	this.handleWhere(queryS["OR"][0], prevResult),
+		// 	this.handleWhere(queryS["OR"][1], prevResult),
+		// ]);
+
+
 		// const intersection: boolean[] =  [];
 		// for (let i = 0; i < result1.length; i++) {
 		// 	intersection.push(result1[i] || result2[i]);
@@ -134,13 +141,17 @@ export default class QueryOperator {
 		// result1.forEach((value, index) => {
 		// 	result1[index] = value|| result2[index];
 		// })
-		return result1.map((value, index) => value || result2[index]);
+		// return result1.map((value, index) => value || result2[index]);
+		for (let i = 0; i < result1.length; i++) {
+			result1[i] = result1[i] || result2[i];
+		}
+		return result1;
 	}
 
-	// Checks if 2 InsightResult objects are equal
-	private isInsightResultsEqual(insight1: InsightResult, insight2: InsightResult): boolean {
-		return (insight1.uuid === insight2.uuid);
-	}
+	// // Checks if 2 InsightResult objects are equal
+	// private isInsightResultsEqual(insight1: InsightResult, insight2: InsightResult): boolean {
+	// 	return (insight1.uuid === insight2.uuid);
+	// }
 
 
 	// Takes two insight result arrays and only joins the same sections together
@@ -151,6 +162,11 @@ export default class QueryOperator {
 		let resultArray2: boolean[] = await this.handleWhere(queryS["AND"][1], prevResult);
 
 
+		// const [resultArray1, resultArray2] = await Promise.all([
+		// 	this.handleWhere(queryS["AND"][0], prevResult),
+		// 	this.handleWhere(queryS["AND"][1], prevResult),
+		// ]);
+
 		// const intersection: boolean[] =  [];
 		// for (let i = 0; i < resultArray1.length; i++) {
 		// 	intersection.push(resultArray1[i] && resultArray2[i]);
@@ -160,8 +176,25 @@ export default class QueryOperator {
 		// 	resultArray1[index] = value && resultArray2[index];
 		// })
 
-		return resultArray1.map((value, index) => value && resultArray2[index]);
+		// return resultArray1.map((value, index) : boolean => {
+		// 	if(value){
+		// 		return value && resultArray2[index];
+		// 	}
+		// 	return false;
+		// });
 
+		// for (let i = 0; i < result1.length; i++) {
+		// 	result1[i] = result1[i] || result2[i];
+		// }
+		// return result1;
+
+		for (let i = 0; i < resultArray1.length; i++) {
+			if(resultArray1[i]){
+				resultArray1[i] = resultArray1[i]  && resultArray2[i];
+			}
+
+		}
+		return resultArray1;
 
 	}
 
