@@ -116,8 +116,7 @@ export default class QueryOperator {
 
 
 		// Finds the complement of result 1 in the fullset datasetToQuery
-		let fullSet: InsightResult[] = JSON.parse(JSON.stringify(this.getDataset()));
-
+		let fullSet: InsightResult[] = this.getDataset();
 
 		// const complement = fullSet.filter(element => !toDelete.includes(element));
 		const complement = fullSet.filter((insight1) =>
@@ -195,8 +194,6 @@ export default class QueryOperator {
 			insightsArray = await this.validateDataset(idString);
 		}
 
-		// const updatedToCompare: RegExp = this.createNewRegex(String(toCompare));
-
 		let i = insightsArray.length;
 		while (i--) {
 			if (!this.matchesQueryPattern(String(insightsArray[i][key]), toCompare)) {
@@ -268,10 +265,16 @@ export default class QueryOperator {
 			// 1. Validate dataset ID
 			// 2. Bring in entire data as InsightResult[]
 
-			// Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
-			insightsArray = await this.validateDataset(idString);
-		}
 
+			// if (this.datasetToQueryId() == "") {
+				insightsArray = await this.validateDataset(idString);
+			// }
+
+		}
+		// // Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
+		// if (idString != this.datasetToQueryId()) {
+		// 	throw new InsightError("Querying 2 datasets");
+		// }
 
 		// Apply condition and shorten InsightResult array
 		let i = insightsArray.length;
