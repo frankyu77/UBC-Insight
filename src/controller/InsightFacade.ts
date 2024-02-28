@@ -13,6 +13,7 @@ import path from "node:path";
 import Section from "./Section";
 import Dataset from "./Dataset";
 import QueryOperator from "./QueryOperator";
+import ResultUtilities from "./ResultUtilities";
 
 const fsPromises = require("fs").promises;
 
@@ -309,18 +310,12 @@ export default class InsightFacade implements IInsightFacade {
 
 		return new Promise<InsightResult[]>( (resolve, reject) => {
 			let queryOperator = new QueryOperator(this.idDatasetsAddedSoFar);
+			let resultUtilities = new ResultUtilities();
 			let queryS: any;
 			try {
-				JSON.stringify(query);
-				queryS = query;
-			} catch (error) {
-				return reject("Not a valid JSON."); // Not a string, can't be JSON
-			}
-
-			// Check if where and options are present
-			try {
+				queryS = resultUtilities.checkIfValidJson(query);
 				queryOperator.handleBaseEbnf(queryS);
-			} catch (error: any) {
+			} catch (error) {
 				return reject(error);
 			}
 
@@ -328,41 +323,16 @@ export default class InsightFacade implements IInsightFacade {
 
 			queryOperator.handleWhere(queryS.WHERE, undefined).then( (resultWhere) => {
 
-				result = this.convertBoolean(resultWhere, queryOperator.getDataset());
-				if (result.length > 5000) {
-					throw new ResultTooLargeError("Result greater than 5000");
-				}
+				result = resultUtilities.convertBoolean(resultWhere, queryOperator.getDataset());
+				result = resultUtilities.checkResultLength(result);
 				result = queryOperator.handleOptions(queryS.OPTIONS, result);
-				result = this.compatibleFormat(queryOperator, result);
+				result = resultUtilities.compatibleFormat(queryOperator, result);
 
 				return resolve(result);
 			}).catch((error) => {
 				return reject(error);// new InsightError(error.message));
 			});
 
-		});
-	}
-
-	private convertBoolean(boolArr: boolean[], dataset: InsightResult[]): InsightResult[] {
-
-
-		const converted: InsightResult[] = dataset.filter((value, index) => {
-			if (boolArr[index]) {
-				return true;
-			}
-		});
-		return converted;
-	}
-
-	private compatibleFormat(queryOperator: any, result: InsightResult[]) {
-		let prefix: string = queryOperator.datasetToQueryId() + "_";
-
-		return result.map((obj) => {
-			const newObj: InsightResult = {};
-			Object.entries(obj).forEach(([key, value]) => {
-				newObj[`${prefix}${key}`] = value;
-			});
-			return newObj;
 		});
 	}
 }
