@@ -41,72 +41,9 @@ export default class InsightFacade implements IInsightFacade {
 
 			// check if the kind is Sections and not Rooms
 			if (kind === InsightDatasetKind.Sections) {
-				// checks if dataset already exists
-				this.handleDataset.isThereDatasetDir(id)
-					.then(async (exists) => {
-						if (exists || this.idDatasetsAddedSoFar.includes(id)) {
-							throw new InsightError("Dataset already added");
-						}
-
-						// if it does not exist then unzip the dataset and read it
-						return await JSZip.loadAsync(content, {base64: true});
-					})
-					.then(async (zip: JSZip) => {
-						let currentDataset = new Dataset();
-						currentDataset.setIDName(id);
-
-					// call to helper to handle reading the zip file
-						await this.handleDataset.handleSectionsZip(zip, reject, currentDataset);
-
-					// reject if there are no valid sections
-						if (!currentDataset.getValidity()) {
-							reject(new InsightError("No valid sections in dataset"));
-							return;
-						}
-
-						await this.handleDataset.addDatasetToDisk(currentDataset);
-						this.datasetsAddedSoFar.push(currentDataset);
-
-						this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
-						resolve(this.idDatasetsAddedSoFar);
-					})
-					.catch((error: any) => {
-						reject(new InsightError("Invalid Content"));
-					});
+				this.handleSectionsKind(id, content, reject, resolve);
 			} else if (kind === InsightDatasetKind.Rooms) {
-				// checks if dataset already exists
-				this.handleDataset.isThereDatasetDir(id)
-					.then(async (exists) => {
-						if (exists || this.idDatasetsAddedSoFar.includes(id)) {
-							throw new InsightError("Dataset already added");
-						}
-
-						// if it does not exist then unzip the dataset and read it
-						return await JSZip.loadAsync(content, {base64: true});
-					})
-					.then(async (zip: JSZip) => {
-						let currentDataset = new Dataset();
-						currentDataset.setIDName(id);
-
-						// call to helper to handle reading the zip file
-//* **************************************************CHANGE THIS LINE***************************************************
-						// await this.handleDataset.handleSectionsZip(zip, reject, currentDataset);
-
-						// reject if there are no valid sections
-						if (!currentDataset.getValidity()) {
-							reject(new InsightError("No valid sections in dataset"));
-							return;
-						}
-
-						await this.handleDataset.addDatasetToDisk(currentDataset);
-						this.datasetsAddedSoFar.push(currentDataset);
-
-						this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
-						resolve(this.idDatasetsAddedSoFar);
-					})
-					.catch((error: any) => {
-						reject(new InsightError("Invalid Content"));
-					});
+				this.handleRoomsKind(id, content, reject, resolve);
 			} else {
 				reject(new InsightError("Not a valid kind"));
 				return;
@@ -114,7 +51,86 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
-	// checks if id provided is valid
+	// CAN PROBABLY SOMEHOW MOVE THESE TWO METHODS TO THE HANDLEDATASET CLASS
+	private handleRoomsKind(id: string,
+		content: string,
+		reject: (reason?: any) => void,
+		resolve: (value: (PromiseLike<string[]> | string[])) => void) {
+
+		// checks if dataset already exists
+		this.handleDataset.isThereDatasetDir(id)
+			.then(async (exists) => {
+				if (exists || this.idDatasetsAddedSoFar.includes(id)) {
+					throw new InsightError("Dataset already added");
+				}
+
+				// if it does not exist then unzip the dataset and read it
+				return await JSZip.loadAsync(content, {base64: true});
+			})
+			.then(async (zip: JSZip) => {
+				let currentDataset = new Dataset();
+				currentDataset.setIDName(id);
+
+				// call to helper to handle reading the zip file
+//* **************************************************CHANGE THIS LINE**************************************************
+				await this.handleDataset.handleRoomsZip(zip, reject, currentDataset);
+
+				// reject if there are no valid sections
+				if (!currentDataset.getValidity()) {
+					reject(new InsightError("No valid sections in dataset"));
+					return;
+				}
+
+				await this.handleDataset.addDatasetToDisk(currentDataset);
+				this.datasetsAddedSoFar.push(currentDataset);
+
+				this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
+				resolve(this.idDatasetsAddedSoFar);
+			})
+			.catch((error: any) => {
+				reject(new InsightError("Invalid Content"));
+			});
+	}
+
+	private handleSectionsKind(id: string,
+		content: string,
+		reject: (reason?: any) => void,
+		resolve: (value: (PromiseLike<string[]> | string[])) => void) {
+
+		// checks if dataset already exists
+		this.handleDataset.isThereDatasetDir(id)
+			.then(async (exists) => {
+				if (exists || this.idDatasetsAddedSoFar.includes(id)) {
+					throw new InsightError("Dataset already added");
+				}
+
+				// if it does not exist then unzip the dataset and read it
+				return await JSZip.loadAsync(content, {base64: true});
+			})
+			.then(async (zip: JSZip) => {
+				let currentDataset = new Dataset();
+				currentDataset.setIDName(id);
+				// call to helper to handle reading the zip file
+				await this.handleDataset.handleSectionsZip(zip, reject, currentDataset);
+
+				// reject if there are no valid sections
+				if (!currentDataset.getValidity()) {
+					reject(new InsightError("No valid sections in dataset"));
+					return;
+				}
+
+				await this.handleDataset.addDatasetToDisk(currentDataset);
+				this.datasetsAddedSoFar.push(currentDataset);
+
+				this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
+				resolve(this.idDatasetsAddedSoFar);
+			})
+			.catch((error: any) => {
+				reject(new InsightError("Invalid Content"));
+			});
+	}
+
+// checks if id provided is valid
 	private isValidID(id: string): boolean {
 		return /^[^\s_]+$/.test(id);
 	}
