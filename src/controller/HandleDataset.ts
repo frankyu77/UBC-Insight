@@ -37,14 +37,14 @@ export default class HandleDataset {
 
     // checks if dataset already exists
 	public async isThereDatasetDir(id: string): Promise<boolean> {
-    	return new Promise<boolean>( (resolve, reject) => {
-    		const filePath = this.getDatasetDirPath(id);
-    		fsPromises.access(filePath).then(() => {
-    			resolve(true);
-    		}).catch(() => {
-    			resolve(false);
-    		});
-    	});
+		return new Promise<boolean>( (resolve, reject) => {
+			const filePath = this.getDatasetDirPath(id);
+			fsPromises.access(filePath).then(() => {
+				resolve(true);
+			}).catch(() => {
+				resolve(false);
+			});
+		});
 
 	}
 

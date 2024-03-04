@@ -37,7 +37,6 @@ export default class QueryOperator {
 	}
 
 
-
 	public async handleWhere(queryS: any, prevResult: any): Promise<boolean[]> {
 
 		const keys = Object.keys(queryS);
@@ -105,7 +104,7 @@ export default class QueryOperator {
 	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
 		const keys = Object.keys(queryS);
 
-		if (keys.length != 1) {
+		if (keys.length !== 1) {
 			throw new InsightError("Wrong number of keys");
 		}
 
@@ -122,10 +121,10 @@ export default class QueryOperator {
 			throw new InsightError("No keys found in OR");
 		}
 
-		let resultArray : boolean[] = [];
+		let resultArray: boolean[] = [];
 
-		for (let filterNumber = 0; filterNumber < filters.length; filterNumber ++) {
-			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber], prevResult);
+		for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
+			let newResult: boolean[] = 	await this.handleWhere(queryS[filterNumber], prevResult);
 			if (resultArray.length === 0 ) {
 				resultArray = newResult;
 			} else {
@@ -155,9 +154,9 @@ export default class QueryOperator {
 		}
 
 
-		let resultArray : boolean[] = [];
+		let resultArray: boolean[] = [];
 
-		for (let filterNumber = 0; filterNumber < filters.length; filterNumber ++) {
+		for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
 			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber], prevResult);
 			if (resultArray.length === 0 ) {
 				resultArray = newResult;
