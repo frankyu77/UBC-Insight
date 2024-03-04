@@ -381,7 +381,6 @@ export default class QueryOperator {
 		if (this.datasetToQueryId() !== String(parts[0])) {
 			throw new InsightError("Querying 2 Datasets.")
 		}
-
 		return parts[1] || "";
 	}
 }
