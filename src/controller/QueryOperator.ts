@@ -119,37 +119,27 @@ export default class QueryOperator {
 	// Takes two insight result arrays and joins the two together
 	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<boolean[]> {
 		// Validate whether you have too many keys in OR !!!!!! -> We have already checked there is only 1 key
-		const keys = Object.keys(queryS);
+		const filters = Object.keys(queryS);
 
-		if (keys.length != 2) {
-			throw new InsightError("Wrong number of keys");
+		if (filters.length === 0) {
+			throw new InsightError("No keys found in OR");
 		}
 
-		// Add to a set
-		let result1: boolean[] = await this.handleWhere(queryS[0], prevResult);
-		let result2: boolean[] = await this.handleWhere(queryS[1], prevResult);
+		let resultArray : boolean[] = [];
 
-		//
-		// const [result1, result2] = await Promise.all([
-		// 	this.handleWhere(queryS["OR"][0], prevResult),
-		// 	this.handleWhere(queryS["OR"][1], prevResult),
-		// ]);
+		for (let filterNumber = 0; filterNumber < filters.length; filterNumber ++) {
+			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber], prevResult);
+			if (resultArray.length === 0 ) {
+				resultArray = newResult;
+			} else {
+				for (let i = 0; i < resultArray.length; i++) {
+					resultArray[i] = resultArray[i]  || newResult[i];
+				}
+			}
 
-
-		// const intersection: boolean[] =  [];
-		// for (let i = 0; i < result1.length; i++) {
-		// 	intersection.push(result1[i] || result2[i]);
-		// }
-
-
-		// result1.forEach((value, index) => {
-		// 	result1[index] = value|| result2[index];
-		// })
-		// return result1.map((value, index) => value || result2[index]);
-		for (let i = 0; i < result1.length; i++) {
-			result1[i] = result1[i] || result2[i];
 		}
-		return result1;
+
+		return resultArray;
 	}
 
 	// // Checks if 2 InsightResult objects are equal
@@ -161,48 +151,31 @@ export default class QueryOperator {
 	// Takes two insight result arrays and only joins the same sections together
 	private async handleAnd(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
 		// Validate whether you have too many keys in AND !!!!!! -> We have already checked there is only 1 key
-		const keys = Object.keys(queryS);
+		const filters = Object.keys(queryS); //
 
-		if (keys.length != 2) {
-			throw new InsightError("Wrong number of keys");
+		if (filters.length === 0) {
+			throw new InsightError("No keys found in AND");
 		}
-		let resultArray1: boolean[] = await this.handleWhere(queryS[0], prevResult);
-		let resultArray2: boolean[] = await this.handleWhere(queryS[1], prevResult);
 
 
-		// const [resultArray1, resultArray2] = await Promise.all([
-		// 	this.handleWhere(queryS["AND"][0], prevResult),
-		// 	this.handleWhere(queryS["AND"][1], prevResult),
-		// ]);
+		let resultArray : boolean[] = [];
 
-		// const intersection: boolean[] =  [];
-		// for (let i = 0; i < resultArray1.length; i++) {
-		// 	intersection.push(resultArray1[i] && resultArray2[i]);
-		// }
+		for (let filterNumber = 0; filterNumber < filters.length; filterNumber ++) {
+			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber], prevResult);
+			if (resultArray.length === 0 ) {
+				resultArray = newResult;
+			} else {
+				for (let i = 0; i < resultArray.length; i++) {
+					if (resultArray[i]) {
+						resultArray[i] = resultArray[i]  && newResult[i];
+					}
 
-		// resultArray1.forEach((value, index) => {
-		// 	resultArray1[index] = value && resultArray2[index];
-		// })
-
-		// return resultArray1.map((value, index) : boolean => {
-		// 	if(value){
-		// 		return value && resultArray2[index];
-		// 	}
-		// 	return false;
-		// });
-
-		// for (let i = 0; i < result1.length; i++) {
-		// 	result1[i] = result1[i] || result2[i];
-		// }
-		// return result1;
-
-		for (let i = 0; i < resultArray1.length; i++) {
-			if(resultArray1[i]){
-				resultArray1[i] = resultArray1[i]  && resultArray2[i];
+				}
 			}
 
 		}
-		return resultArray1;
+
+		return resultArray;
 
 	}
 
