@@ -215,18 +215,15 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	// /////////////////////////////////////////////QUERY////////////////////////////////////////////////
-	// EVERY QUERY MUST HAVE:
-	// - WHERE
-	// - OPTIONS with non-empty COLUMNS
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
 
 		return new Promise<InsightResult[]>( (resolve, reject) => {
 			let queryOperator = new QueryOperator(this.idDatasetsAddedSoFar);
 			let resultUtilities = new ResultUtilities();
-			let queryS: any;
+			let queryS: any = query;
 			try {
-				queryS = resultUtilities.checkIfValidJson(query);
-				queryOperator.handleBaseEbnf(queryS);
+				resultUtilities.checkIfValidJson(queryS);
+				resultUtilities.checkBaseEbnf(queryS);
 			} catch (error) {
 				return reject(error);
 			}

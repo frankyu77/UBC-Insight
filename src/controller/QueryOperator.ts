@@ -37,14 +37,6 @@ export default class QueryOperator {
 	}
 
 
-	public  handleBaseEbnf(queryS: any) {
-		const keysArray = Object.keys(queryS);
-		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
-			return;
-		}
-		throw new InsightError("Invalid query! (No OPTIONS or WHERE)");
-	}
-
 
 	public async handleWhere(queryS: any, prevResult: any): Promise<boolean[]> {
 
@@ -59,19 +51,19 @@ export default class QueryOperator {
 		// TODO: query key parser;
 		switch (keys[0]) {
 			case "AND":
-				return this.handleAnd(queryS,prevResult);
+				return this.handleAnd(queryS["AND"],prevResult);
 			case "OR":
-				return this.handleOr(queryS, prevResult);
+				return this.handleOr(queryS["OR"], prevResult);
 			case "IS":
-				return this.handleSComparison(queryS, prevResult);
+				return this.handleSComparison(queryS["IS"], prevResult);
 			case "EQ":
-				return this.handleMComparison(queryS, prevResult, "EQ");
+				return this.handleMComparison(queryS["EQ"], prevResult, "EQ");
 			case "GT":
-				return this.handleMComparison(queryS, prevResult, "GT");
+				return this.handleMComparison(queryS["GT"], prevResult, "GT");
 			case "LT":
-				return this.handleMComparison(queryS, prevResult, "LT");
+				return this.handleMComparison(queryS["LT"], prevResult, "LT");
 			case "NOT":
-				return this.handleNot(queryS, prevResult);
+				return this.handleNot(queryS["NOT"], prevResult);
 			default:
 				throw new InsightError("Invalid filter key");
 		}
@@ -111,19 +103,31 @@ export default class QueryOperator {
 
 	// All sections in the dataset outside of the given conditions
 	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
-		// Validate whether you have too many keys in OR !!!!!!
-		let toDelete: boolean[] = await this.handleWhere(queryS["NOT"], prevResult);
+		// Validate whether you have too many keys in NOT !!!!!! -> We have already checked there is only 1 key
+
+		const keys = Object.keys(queryS);
+
+		if (keys.length != 1) {
+			throw new InsightError("Wrong number of keys");
+		}
+
+		let toDelete: boolean[] = await this.handleWhere(queryS, prevResult);
 
 		return toDelete.map((x) => !x);
 	}
 
 	// Takes two insight result arrays and joins the two together
 	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<boolean[]> {
-		// Validate whether you have too many keys in OR !!!!!!
+		// Validate whether you have too many keys in OR !!!!!! -> We have already checked there is only 1 key
+		const keys = Object.keys(queryS);
+
+		if (keys.length != 2) {
+			throw new InsightError("Wrong number of keys");
+		}
 
 		// Add to a set
-		let result1: boolean[] = await this.handleWhere(queryS["OR"][0], prevResult);
-		let result2: boolean[] = await this.handleWhere(queryS["OR"][1], prevResult);
+		let result1: boolean[] = await this.handleWhere(queryS[0], prevResult);
+		let result2: boolean[] = await this.handleWhere(queryS[1], prevResult);
 
 		//
 		// const [result1, result2] = await Promise.all([
@@ -156,10 +160,14 @@ export default class QueryOperator {
 
 	// Takes two insight result arrays and only joins the same sections together
 	private async handleAnd(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
-		// Validate whether you have too many keys in AND !!!!!!
+		// Validate whether you have too many keys in AND !!!!!! -> We have already checked there is only 1 key
+		const keys = Object.keys(queryS);
 
-		let resultArray1: boolean[] = await this.handleWhere(queryS["AND"][0], prevResult);
-		let resultArray2: boolean[] = await this.handleWhere(queryS["AND"][1], prevResult);
+		if (keys.length != 2) {
+			throw new InsightError("Wrong number of keys");
+		}
+		let resultArray1: boolean[] = await this.handleWhere(queryS[0], prevResult);
+		let resultArray2: boolean[] = await this.handleWhere(queryS[1], prevResult);
 
 
 		// const [resultArray1, resultArray2] = await Promise.all([
@@ -203,7 +211,7 @@ export default class QueryOperator {
 	// This insight result will have all the fields and sections of the requested dataset
 	private async handleSComparison( queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
 
-		const parsedQueryKey: any = this.queryKeyParser(queryS["IS"]);
+		const parsedQueryKey: any = this.queryKeyParser(queryS);
 		const idString: string = parsedQueryKey[0];
 		const sField: string = parsedQueryKey[1];
 		const toCompare: string = parsedQueryKey[2];
@@ -284,7 +292,7 @@ export default class QueryOperator {
 	private async handleMComparison
 	( queryS: any, prevResult: InsightResult[], comparator: string): Promise<boolean[]> {
 
-		const parsedQueryKey: any = this.queryKeyParser(queryS[comparator]);
+		const parsedQueryKey: any = this.queryKeyParser(queryS);
 		const idString: string = parsedQueryKey[0];
 		const mField: string = parsedQueryKey[1];
 		const toCompare: number = parsedQueryKey[2];
