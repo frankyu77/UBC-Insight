@@ -103,8 +103,6 @@ export default class QueryOperator {
 
 	// All sections in the dataset outside of the given conditions
 	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
-		// Validate whether you have too many keys in NOT !!!!!! -> We have already checked there is only 1 key
-
 		const keys = Object.keys(queryS);
 
 		if (keys.length != 1) {
@@ -118,7 +116,6 @@ export default class QueryOperator {
 
 	// Takes two insight result arrays and joins the two together
 	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<boolean[]> {
-		// Validate whether you have too many keys in OR !!!!!! -> We have already checked there is only 1 key
 		const filters = Object.keys(queryS);
 
 		if (filters.length === 0) {
