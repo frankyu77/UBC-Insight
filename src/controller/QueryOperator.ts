@@ -18,8 +18,8 @@ export default class QueryOperator {
 	private skey = ["dept", "id", "instructor", "title", "uuid"];
 	private optionsKey = ["COLUMNS", "ORDER"];
 
-	constructor(test: string[]) {
-		this.idDatasetsAddedSoFar = test;
+	constructor(idDatasets: string[]) {
+		this.idDatasetsAddedSoFar = idDatasets;
 	}
 
 	public datasetToQueryId(): string {
@@ -120,7 +120,6 @@ export default class QueryOperator {
 
 	}
 
-
 	// All sections in the dataset outside of the given conditions
 	private async handleNot(queryS: any): Promise<boolean[]> {
 		const keys = Object.keys(queryS);
@@ -142,54 +141,53 @@ export default class QueryOperator {
 			throw new InsightError("No keys found in OR");
 		}
 
-		let resultArray: boolean[] = [];
+		// Map each filter to a promise returned by handleWhere
+		const promises =  filters.map(async (filter) => await this.handleWhere(queryS[filter]));
 
-		for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
-			let newResult: boolean[] = 	await this.handleWhere(queryS[filterNumber]);
-			if (resultArray.length === 0 ) {
-				resultArray = newResult;
-			} else {
-				for (let i = 0; i < resultArray.length; i++) {
-					resultArray[i] = resultArray[i]  || newResult[i];
-				}
+		// Use Promise.all to wait for all promises to resolve
+		const results = await Promise.all(promises);
+
+		// Assuming all results are boolean arrays of the same length.
+		// Initialize resultArray with false for each element.
+		let resultArray = new Array(results[0].length).fill(false);
+
+		// Combine the results using logical OR
+		results.forEach((newResult) => {
+			for (let i = 0; i < resultArray.length; i++) {
+				resultArray[i] = resultArray[i] || newResult[i];
 			}
+		});
 
-		}
 		return resultArray;
 	}
 
-	// // Checks if 2 InsightResult objects are equal
-	// private isInsightResultsEqual(insight1: InsightResult, insight2: InsightResult): boolean {
-	// 	return (insight1.uuid === insight2.uuid);
-	// }
-
-
 	// Takes two insight result arrays and only joins the same sections together
 	private async handleAnd(queryS: any): Promise<boolean[]> {
-		// Validate whether you have too many keys in AND !!!!!! -> We have already checked there is only 1 key
-		const filters = Object.keys(queryS); //
+		const filters = Object.keys(queryS);
 
 		if (filters.length === 0) {
-			throw new InsightError("No keys found in AND");
+			throw new InsightError("No keys found in OR");
 		}
 
+		// Map each filter to a promise returned by handleWhere
+		const promises =  filters.map(async (filter) => await this.handleWhere(queryS[filter]));
 
-		let resultArray: boolean[] = [];
+		// Use Promise.all to wait for all promises to resolve
+		const results = await Promise.all(promises);
 
-		for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
-			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber]);
-			if (resultArray.length === 0 ) {
-				resultArray = newResult;
-			} else {
-				for (let i = 0; i < resultArray.length; i++) {
-					if (resultArray[i]) {
-						resultArray[i] = resultArray[i]  && newResult[i];
-					}
+		// Assuming all results are boolean arrays of the same length.
+		// Initialize resultArray with false for each element.
+		let resultArray = new Array(results[0].length).fill(true);
 
+		// Combine the results using logical OR
+		results.forEach((newResult) => {
+			for (let i = 0; i < resultArray.length; i++) {
+				if (resultArray[i]) {
+					resultArray[i] = resultArray[i]  && newResult[i];
 				}
 			}
+		});
 
-		}
 		return resultArray;
 	}
 
@@ -272,12 +270,6 @@ export default class QueryOperator {
 		let booleanArray: boolean[] = [];
 		let insightsArray: InsightResult[] = this.getDataset();
 
-
-		// }
-		// // Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
-		// if (idString != this.datasetToQueryId()) {
-		// 	throw new InsightError("Querying 2 datasets");
-		// }
 
 		// Apply condition and shorten InsightResult array
 		switch (comparator) {
