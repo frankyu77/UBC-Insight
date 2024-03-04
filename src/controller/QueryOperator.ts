@@ -24,6 +24,9 @@ export default class QueryOperator {
 		return this._datasetToQueryId;
 
 	}
+	private setDatasetToQueryId(id : string) : void {
+		this._datasetToQueryId = id;
+	}
 
 	private setDataset(dataset: InsightResult[]){
 		this.datasetToQuery = dataset;
@@ -38,7 +41,7 @@ export default class QueryOperator {
 	}
 
 
-	public async handleWhere(queryS: any, prevResult: any): Promise<boolean[]> {
+	public async handleWhere(queryS: any): Promise<boolean[]> {
 
 		const keys = Object.keys(queryS);
 
@@ -51,19 +54,19 @@ export default class QueryOperator {
 		// TODO: query key parser;
 		switch (keys[0]) {
 			case "AND":
-				return this.handleAnd(queryS["AND"],prevResult);
+				return this.handleAnd(queryS["AND"]);
 			case "OR":
-				return this.handleOr(queryS["OR"], prevResult);
+				return this.handleOr(queryS["OR"]);
 			case "IS":
-				return this.handleSComparison(queryS["IS"], prevResult);
+				return this.handleSComparison(queryS["IS"]);
 			case "EQ":
-				return this.handleMComparison(queryS["EQ"], prevResult, "EQ");
+				return this.handleMComparison(queryS["EQ"], "EQ");
 			case "GT":
-				return this.handleMComparison(queryS["GT"], prevResult, "GT");
+				return this.handleMComparison(queryS["GT"], "GT");
 			case "LT":
-				return this.handleMComparison(queryS["LT"], prevResult, "LT");
+				return this.handleMComparison(queryS["LT"], "LT");
 			case "NOT":
-				return this.handleNot(queryS["NOT"], prevResult);
+				return this.handleNot(queryS["NOT"]);
 			default:
 				throw new InsightError("Invalid filter key");
 		}
@@ -72,7 +75,7 @@ export default class QueryOperator {
 
 	// Takes a query key and returns a valid dataset id to search for and valid mfield and sfield.
 	// Throws Insight Error if not a valid query string.
-	private queryKeyParser(queryKey: any): any {
+	private async queryKeyParser(queryKey: any): Promise<any> {
 		const keys = Object.keys(queryKey);
 		const vals: any = Object.values(queryKey);
 
@@ -87,10 +90,26 @@ export default class QueryOperator {
 		// Add the val
 		parsedArray.push(vals[0]);
 
+		// Check
+		// 1. Validate dataset ID
+		// 2. Bring in entire data as InsightResult[]
+
+		if (this.datasetToQueryId()  === "") {
+			await this.validateDataset(String(parsedArray[0]));
+		} else if (this.datasetToQueryId() !== String(parsedArray[0])) {
+			throw new InsightError("Querying 2 Datasets.")
+		}
 
 		// Check if a valid m or sfield is passed and check if the types are numbrs are right
-		if (this.mkey.includes(String(parsedArray[1])) ||
-			this.skey.includes(String(parsedArray[1]))) {
+		if (this.mkey.includes(String(parsedArray[1]))) {
+			if (typeof parsedArray[2] !== "number") {
+				throw new InsightError("Invalid mfield type");
+			}
+			return parsedArray
+		} else if (this.skey.includes(String(parsedArray[1]))) {
+			if (typeof parsedArray[2] !== "string") {
+				throw new InsightError("Invalid sfield type");
+			}
 			return parsedArray;
 		} else {
 			throw new InsightError("Invalid skey or mkey")
@@ -100,20 +119,20 @@ export default class QueryOperator {
 
 
 	// All sections in the dataset outside of the given conditions
-	private async handleNot(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
+	private async handleNot(queryS: any): Promise<boolean[]> {
 		const keys = Object.keys(queryS);
 
 		if (keys.length !== 1) {
 			throw new InsightError("Wrong number of keys");
 		}
 
-		let toDelete: boolean[] = await this.handleWhere(queryS, prevResult);
+		let toDelete: boolean[] = await this.handleWhere(queryS);
 
 		return toDelete.map((x) => !x);
 	}
 
 	// Takes two insight result arrays and joins the two together
-	private async handleOr(queryS: any, prevResult: InsightResult[] ): Promise<boolean[]> {
+	private async handleOr(queryS: any): Promise<boolean[]> {
 		const filters = Object.keys(queryS);
 
 		if (filters.length === 0) {
@@ -123,7 +142,7 @@ export default class QueryOperator {
 		let resultArray: boolean[] = [];
 
 		for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
-			let newResult: boolean[] = 	await this.handleWhere(queryS[filterNumber], prevResult);
+			let newResult: boolean[] = 	await this.handleWhere(queryS[filterNumber]);
 			if (resultArray.length === 0 ) {
 				resultArray = newResult;
 			} else {
@@ -143,7 +162,7 @@ export default class QueryOperator {
 
 
 	// Takes two insight result arrays and only joins the same sections together
-	private async handleAnd(queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
+	private async handleAnd(queryS: any): Promise<boolean[]> {
 		// Validate whether you have too many keys in AND !!!!!! -> We have already checked there is only 1 key
 		const filters = Object.keys(queryS); //
 
@@ -155,7 +174,7 @@ export default class QueryOperator {
 		let resultArray: boolean[] = [];
 
 		for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
-			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber], prevResult);
+			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber]);
 			if (resultArray.length === 0 ) {
 				resultArray = newResult;
 			} else {
@@ -174,27 +193,14 @@ export default class QueryOperator {
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
-	private async handleSComparison( queryS: any, prevResult: InsightResult[]): Promise<boolean[]> {
+	private async handleSComparison(queryS: any): Promise<boolean[]> {
 
-		const parsedQueryKey: any = this.queryKeyParser(queryS);
-		const idString: string = parsedQueryKey[0];
+		const parsedQueryKey: any =  await this.queryKeyParser(queryS);
 		const sField: string = parsedQueryKey[1];
 		const toCompare: string = parsedQueryKey[2];
 
 		let booleanArray: boolean[] = [];
-		let insightsArray: InsightResult[] = prevResult;
-
-		if (insightsArray === undefined) {
-			// 1. Validate dataset ID
-			// 2. Bring in entire data as InsightResult[]
-
-			// Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
-			insightsArray = this.getDataset();
-			if (insightsArray.length < 1) {
-				insightsArray = await this.validateDataset(idString);
-			}
-		}
-
+		let insightsArray: InsightResult[] = this.getDataset();
 
 		insightsArray.forEach((_, index) => {
 			if (!this.matchesQueryPattern(String(insightsArray[index][sField]), toCompare)) {
@@ -233,7 +239,7 @@ export default class QueryOperator {
 
 	// Checks if the given idString is a valid dataset name
 	// If it is, it returns an entire dataset in InsightResult form
-	private async validateDataset(idString: string): Promise<InsightResult[]> {
+	private async validateDataset(idString: string): Promise<void> {
 
 		if (!this.idDatasetsAddedSoFar.includes(idString)) {
 			throw new InsightError("Dataset not found");
@@ -244,37 +250,29 @@ export default class QueryOperator {
 
 		const object = JSON.parse(data);
 		this.setDataset(JSON.parse(JSON.stringify(object.validSections)));
+		this.setDatasetToQueryId(object.idName);
 
-		this._datasetToQueryId = object.idName;
-
-		return object.validSections;
+		//return object.validSections;
 	}
 
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
 	private async handleMComparison
-	( queryS: any, prevResult: InsightResult[], comparator: string): Promise<boolean[]> {
+	( queryS: any, comparator: string): Promise<boolean[]> {
 
-		const parsedQueryKey: any = this.queryKeyParser(queryS);
-		const idString: string = parsedQueryKey[0];
+		const parsedQueryKey: any = await this.queryKeyParser(queryS);
 		const mField: string = parsedQueryKey[1];
 		const toCompare: number = parsedQueryKey[2];
 		const key: string = mField;
 
 		let booleanArray: boolean[] = [];
-		let insightsArray: InsightResult[] = prevResult;
+		let insightsArray: InsightResult[] = this.getDataset();
 
-		if (insightsArray === undefined) {
-			// 1. Validate dataset ID
-			// 2. Bring in entire data as InsightResult[]
 
-			insightsArray = this.getDataset();
-			if (insightsArray.length < 1) {
-				insightsArray = await this.validateDataset(idString);
-			}
 
-		}
+
+		//}
 		// // Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
 		// if (idString != this.datasetToQueryId()) {
 		// 	throw new InsightError("Querying 2 datasets");
@@ -317,7 +315,7 @@ export default class QueryOperator {
 		return  booleanArray;
 	}
 
-	public handleOptions(queryS: any, prevResult:  InsightResult[]): InsightResult[] {
+	public handleOptions(queryS: any, filtered:  InsightResult[]): InsightResult[] {
 
 		// If columns not present throw error
 		let keys = Object.keys(queryS);
@@ -335,7 +333,7 @@ export default class QueryOperator {
 		}
 
 		// Filters for the needed columns
-		const updatedArray: InsightResult[] = prevResult.map((insight) => {
+		const updatedArray: InsightResult[] = filtered.map((insight) => {
 			let newInsight: InsightResult = {};
 			columns.forEach((field) => {
 				// Object.prototype.hasOwnProperty.call(insight, field
@@ -376,8 +374,14 @@ export default class QueryOperator {
 	}
 
 	private parseField(field: string) {
+		////	CHECK IF THIS IS THE CORRECT DATASET ID
 		const parts = field.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
+
+		if (this.datasetToQueryId() !== String(parts[0])) {
+			throw new InsightError("Querying 2 Datasets.")
+		}
+
 		return parts[1] || "";
 	}
 }

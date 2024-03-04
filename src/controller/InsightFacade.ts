@@ -230,7 +230,7 @@ export default class InsightFacade implements IInsightFacade {
 
 			let result: InsightResult[];
 
-			queryOperator.handleWhere(queryS.WHERE, undefined).then( (resultWhere) => {
+			queryOperator.handleWhere(queryS.WHERE).then( (resultWhere) => {
 
 				result = resultUtilities.convertBoolean(resultWhere, queryOperator.getDataset());
 				result = resultUtilities.checkResultLength(result);
