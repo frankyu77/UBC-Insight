@@ -14,8 +14,10 @@ export default class QueryOperator {
 	private dir = "./data";
 	private idDatasetsAddedSoFar: string[] = [];
 
-	public mkey = ["avg", "pass", "fail", "audit", "year"];
-	public skey = ["dept", "id", "instructor", "title", "uuid"];
+	private mkey = ["avg", "pass", "fail", "audit", "year"];
+	private skey = ["dept", "id", "instructor", "title", "uuid"];
+	private optionsKey = ["COLUMNS", "ORDER"];
+
 	constructor(test: string[]) {
 		this.idDatasetsAddedSoFar = test;
 	}
@@ -24,7 +26,8 @@ export default class QueryOperator {
 		return this._datasetToQueryId;
 
 	}
-	private setDatasetToQueryId(id : string) : void {
+
+	private setDatasetToQueryId(id: string): void {
 		this._datasetToQueryId = id;
 	}
 
@@ -97,7 +100,7 @@ export default class QueryOperator {
 		if (this.datasetToQueryId()  === "") {
 			await this.validateDataset(String(parsedArray[0]));
 		} else if (this.datasetToQueryId() !== String(parsedArray[0])) {
-			throw new InsightError("Querying 2 Datasets.")
+			throw new InsightError("Querying 2 Datasets.");
 		}
 
 		// Check if a valid m or sfield is passed and check if the types are numbrs are right
@@ -105,14 +108,14 @@ export default class QueryOperator {
 			if (typeof parsedArray[2] !== "number") {
 				throw new InsightError("Invalid mfield type");
 			}
-			return parsedArray
+			return parsedArray;
 		} else if (this.skey.includes(String(parsedArray[1]))) {
 			if (typeof parsedArray[2] !== "string") {
 				throw new InsightError("Invalid sfield type");
 			}
 			return parsedArray;
 		} else {
-			throw new InsightError("Invalid skey or mkey")
+			throw new InsightError("Invalid skey or mkey");
 		}
 
 	}
@@ -252,7 +255,7 @@ export default class QueryOperator {
 		this.setDataset(JSON.parse(JSON.stringify(object.validSections)));
 		this.setDatasetToQueryId(object.idName);
 
-		//return object.validSections;
+		// return object.validSections;
 	}
 
 
@@ -270,9 +273,7 @@ export default class QueryOperator {
 		let insightsArray: InsightResult[] = this.getDataset();
 
 
-
-
-		//}
+		// }
 		// // Check if 2 datasets are being checked !!!!!!!!!!!!!!!!!!!!!
 		// if (idString != this.datasetToQueryId()) {
 		// 	throw new InsightError("Querying 2 datasets");
@@ -321,6 +322,12 @@ export default class QueryOperator {
 		let keys = Object.keys(queryS);
 
 
+		// Check if there is a key that does not match the valid options keys
+		const invalidKey = keys.some((key) => !this.optionsKey.includes(key));
+		if (invalidKey) {
+			throw new InsightError("Invalid key in OPTIONS");
+		}
+
 		if (!keys.includes("COLUMNS")) {
 			throw new InsightError("No columns");
 		}
@@ -360,9 +367,6 @@ export default class QueryOperator {
 			});
 		}
 
-		// If sort present, id must be in columns
-
-
 		return updatedArray;
 	}
 
@@ -374,12 +378,20 @@ export default class QueryOperator {
 	}
 
 	private parseField(field: string) {
-		////	CHECK IF THIS IS THE CORRECT DATASET ID
+		// //	CHECK IF THIS IS THE CORRECT DATASET ID
+		if (typeof field !== "string") {
+			throw new InsightError("Invalid type in OPTIONS");
+		}
+
 		const parts = field.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
 
 		if (this.datasetToQueryId() !== String(parts[0])) {
-			throw new InsightError("Querying 2 Datasets.")
+			throw new InsightError("Querying 2 Datasets.");
+		}
+
+		if (!(this.mkey.includes(parts[1]) || this.skey.includes(parts[1]))) {
+			throw new InsightError("Invalid mkey or skey in columns.");
 		}
 		return parts[1] || "";
 	}
