@@ -14,7 +14,8 @@ export default class QueryOperator {
 	private dir = "./data";
 	private idDatasetsAddedSoFar: string[] = [];
 
-
+	public mkey = ["avg", "pass", "fail", "audit", "year"];
+	public skey = ["dept", "id", "instructor", "title", "uuid"];
 	constructor(test: string[]) {
 		this.idDatasetsAddedSoFar = test;
 	}
@@ -75,28 +76,26 @@ export default class QueryOperator {
 		const keys = Object.keys(queryKey);
 		const vals: any = Object.values(queryKey);
 
+		// Check if there are more than 1 key in
+		if (keys.length !== 1) {
+			throw new InsightError("Wrong number of keys");
+		}
+
 		// Strores idstring and m or s field into parsedArray
-		// Does this need to be number | string !!!!!!!!
 		let parsedArray: Array<number | string> = keys[0].split("_", 2);
 
 		// Add the val
 		parsedArray.push(vals[0]);
 
 
-		// Validate parsedArray
-		// Check if there are more than 1 key in
-		if (keys.length > 1 || keys.length === 0) {
-			throw new InsightError("Wrong number of keys");
-		}
-
 		// Check if a valid m or sfield is passed and check if the types are numbrs are right
-		switch (parsedArray[1]) {
-			case "dept" :
-				break;
-
+		if (this.mkey.includes(String(parsedArray[1])) ||
+			this.skey.includes(String(parsedArray[1]))) {
+			return parsedArray;
+		} else {
+			throw new InsightError("Invalid skey or mkey")
 		}
 
-		return parsedArray;
 	}
 
 
@@ -134,7 +133,6 @@ export default class QueryOperator {
 			}
 
 		}
-
 		return resultArray;
 	}
 
@@ -170,9 +168,7 @@ export default class QueryOperator {
 			}
 
 		}
-
 		return resultArray;
-
 	}
 
 
@@ -184,7 +180,6 @@ export default class QueryOperator {
 		const idString: string = parsedQueryKey[0];
 		const sField: string = parsedQueryKey[1];
 		const toCompare: string = parsedQueryKey[2];
-		const key: string = sField;
 
 		let booleanArray: boolean[] = [];
 		let insightsArray: InsightResult[] = prevResult;
@@ -202,7 +197,7 @@ export default class QueryOperator {
 
 
 		insightsArray.forEach((_, index) => {
-			if (!this.matchesQueryPattern(String(insightsArray[index][key]), toCompare)) {
+			if (!this.matchesQueryPattern(String(insightsArray[index][sField]), toCompare)) {
 				booleanArray.push(false);
 			} else {
 				booleanArray.push(true);
