@@ -134,6 +134,64 @@ export default class QueryOperator {
 	}
 
 	// Takes two insight result arrays and joins the two together
+	// private async handleOr(queryS: any): Promise<boolean[]> {
+	// 	const filters = Object.keys(queryS);
+	//
+	// 	if (filters.length === 0) {
+	// 		throw new InsightError("No keys found in OR");
+	// 	}
+	//
+	// 	// Map each filter to a promise returned by handleWhere
+	// 	const promises =  filters.map(async (filter) => await this.handleWhere(queryS[filter]));
+	//
+	// 	// Use Promise.all to wait for all promises to resolve
+	// 	const results = await Promise.all(promises);
+	//
+	// 	// Assuming all results are boolean arrays of the same length.
+	// 	// Initialize resultArray with false for each element.
+	// 	let resultArray = new Array(results[0].length).fill(false);
+	//
+	// 	// Combine the results using logical OR
+	// 	results.forEach((newResult) => {
+	// 		for (let i = 0; i < resultArray.length; i++) {
+	// 			resultArray[i] = resultArray[i] || newResult[i];
+	// 		}
+	// 	});
+	//
+	// 	return resultArray;
+	// }
+
+
+	// Takes two insight result arrays and only joins the same sections together
+	// private async handleAnd(queryS: any): Promise<boolean[]> {
+	// 	const filters = Object.keys(queryS);
+	//
+	// 	if (filters.length === 0) {
+	// 		throw new InsightError("No keys found in OR");
+	// 	}
+	//
+	// 	// Map each filter to a promise returned by handleWhere
+	// 	const promises =  filters.map(async (filter) => await this.handleWhere(queryS[filter]));
+	//
+	// 	// Use Promise.all to wait for all promises to resolve
+	// 	const results = await Promise.all(promises);
+	//
+	// 	// Assuming all results are boolean arrays of the same length.
+	// 	// Initialize resultArray with false for each element.
+	// 	let resultArray = new Array(results[0].length).fill(true);
+	//
+	// 	// Combine the results using logical OR
+	// 	results.forEach((newResult) => {
+	// 		for (let i = 0; i < resultArray.length; i++) {
+	// 			if (resultArray[i]) {
+	// 				resultArray[i] = resultArray[i]  && newResult[i];
+	// 			}
+	// 		}
+	// 	});
+	//
+	// 	return resultArray;
+	// }
+
 	private async handleOr(queryS: any): Promise<boolean[]> {
 		const filters = Object.keys(queryS);
 
@@ -141,55 +199,61 @@ export default class QueryOperator {
 			throw new InsightError("No keys found in OR");
 		}
 
-		// Map each filter to a promise returned by handleWhere
-		const promises =  filters.map(async (filter) => await this.handleWhere(queryS[filter]));
+		// Assuming the structure and length of result arrays are consistent,
+		// initialize resultArray with false for each element based on the first filter's result length.
+		// We temporarily handle the first filter to determine the length.
+		const initialResult = await this.handleWhere(queryS[filters[0]]);
+		let resultArray = new Array(initialResult.length).fill(false);
 
-		// Use Promise.all to wait for all promises to resolve
-		const results = await Promise.all(promises);
+		// Directly combine the initial result with the resultArray
+		for (let i = 0; i < resultArray.length; i++) {
+			resultArray[i] = resultArray[i] || initialResult[i];
+		}
 
-		// Assuming all results are boolean arrays of the same length.
-		// Initialize resultArray with false for each element.
-		let resultArray = new Array(results[0].length).fill(false);
+		// Process each remaining filter one by one
+		for (let i = 1; i < filters.length; i++) {
+			const newResult = await this.handleWhere(queryS[filters[i]]);
 
-		// Combine the results using logical OR
-		results.forEach((newResult) => {
-			for (let i = 0; i < resultArray.length; i++) {
-				resultArray[i] = resultArray[i] || newResult[i];
+			// Combine the new result with the cumulative resultArray using logical OR
+			for (let j = 0; j < resultArray.length; j++) {
+				resultArray[j] = resultArray[j] || newResult[j];
 			}
-		});
+		}
 
 		return resultArray;
 	}
+
 
 	// Takes two insight result arrays and only joins the same sections together
 	private async handleAnd(queryS: any): Promise<boolean[]> {
-		const filters = Object.keys(queryS);
+		// Validate whether you have too many keys in AND !!!!!! -> We have already checked there is only 1 key
+		const filters = Object.keys(queryS); //
 
 		if (filters.length === 0) {
-			throw new InsightError("No keys found in OR");
+			throw new InsightError("No keys found in AND");
 		}
 
-		// Map each filter to a promise returned by handleWhere
-		const promises =  filters.map(async (filter) => await this.handleWhere(queryS[filter]));
 
-		// Use Promise.all to wait for all promises to resolve
-		const results = await Promise.all(promises);
+		let resultArray: boolean[] = [];
 
-		// Assuming all results are boolean arrays of the same length.
-		// Initialize resultArray with false for each element.
-		let resultArray = new Array(results[0].length).fill(true);
+		for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
+			let newResult: boolean[] = await this.handleWhere(queryS[filterNumber]);
+			if (resultArray.length === 0 ) {
+				resultArray = newResult;
+			} else {
+				for (let i = 0; i < resultArray.length; i++) {
+					if (resultArray[i]) {
+						resultArray[i] = resultArray[i]  && newResult[i];
+					}
 
-		// Combine the results using logical OR
-		results.forEach((newResult) => {
-			for (let i = 0; i < resultArray.length; i++) {
-				if (resultArray[i]) {
-					resultArray[i] = resultArray[i]  && newResult[i];
 				}
 			}
-		});
 
+		}
 		return resultArray;
 	}
+
+
 
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
@@ -385,6 +449,7 @@ export default class QueryOperator {
 		if (!(this.mkey.includes(parts[1]) || this.skey.includes(parts[1]))) {
 			throw new InsightError("Invalid mkey or skey in columns.");
 		}
+
 		return parts[1] || "";
 	}
 }
