@@ -189,11 +189,11 @@ export default class HandleDataset {
 
 	// handle validating the building files
 	public validateBuilding(buildingPath: string) {
-
+		return;
 	}
 
 	// handle validating the index.htm file
 	public validateIndexHTM(indexPath: string) {
-
+		return;
 	}
 }
