@@ -23,7 +23,7 @@ export default class QueryOperator {
 		this.idDatasetsAddedSoFar = idDatasets;
 	}
 
-	public datasetToQueryId(): string {
+	public getQueryingDatasetId(): string {
 		return this._datasetToQueryId;
 
 	}
@@ -94,24 +94,23 @@ export default class QueryOperator {
 		// Add the val
 		parsedArray.push(vals[0]);
 
-		// Check
-		// 1. Validate dataset ID
-		// 2. Bring in entire data as InsightResult[]
+		const datasetToQueryId : string = String(parsedArray[0]);
+		const key : string = String(parsedArray[1]);
+		const value : string | number = parsedArray[2];
 
-		if (this.datasetToQueryId()  === "") {
-			await this.validateDataset(String(parsedArray[0]));
-		} else if (this.datasetToQueryId() !== String(parsedArray[0])) {
+		if (this.getQueryingDatasetId()  === "") {
+			await this.validateAndSetDataset(datasetToQueryId);
+		} else if (this.getQueryingDatasetId() !== datasetToQueryId) {
 			throw new InsightError("Querying 2 Datasets.");
 		}
 
-		// Check if a valid m or sfield is passed and check if the types are numbrs are right
-		if (this.mkey.includes(String(parsedArray[1]))) {
-			if (typeof parsedArray[2] !== "number") {
+		if (this.mkey.includes(key)) {
+			if (typeof value !== "number") {
 				throw new InsightError("Invalid mfield type");
 			}
 			return parsedArray;
-		} else if (this.skey.includes(String(parsedArray[1]))) {
-			if (typeof parsedArray[2] !== "string") {
+		} else if (this.skey.includes(key)) {
+			if (typeof value !== "string") {
 				throw new InsightError("Invalid sfield type");
 			}
 			return parsedArray;
@@ -120,6 +119,7 @@ export default class QueryOperator {
 		}
 
 	}
+
 
 	// All sections in the dataset outside of the given conditions
 	private async handleNot(queryS: any): Promise<boolean[]> {
@@ -193,60 +193,6 @@ export default class QueryOperator {
 		return resultArray;
 	}
 
-	// // Takes two insight result arrays and joins the two together
-	// private async handleOr(queryS: any): Promise<boolean[]> {
-	// 	const filters = Object.keys(queryS);
-	//
-	// 	if (filters.length === 0) {
-	// 		throw new InsightError("No keys found in OR");
-	// 	}
-	//
-	// 	let resultArray: boolean[] = [];
-	//
-	// 	for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
-	// 		let newResult: boolean[] = 	await this.handleWhere(queryS[filterNumber]);
-	// 		if (resultArray.length === 0 ) {
-	// 			resultArray = newResult;
-	// 		} else {
-	// 			for (let i = 0; i < resultArray.length; i++) {
-	// 				resultArray[i] = resultArray[i]  || newResult[i];
-	// 			}
-	// 		}
-	//
-	// 	}
-	// 	return resultArray;
-	// }
-
-
-	//
-	// // Takes two insight result arrays and only joins the same sections together
-	// private async handleAnd(queryS: any): Promise<boolean[]> {
-	// 	// Validate whether you have too many keys in AND !!!!!! -> We have already checked there is only 1 key
-	// 	const filters = Object.keys(queryS); //
-	//
-	// 	if (filters.length === 0) {
-	// 		throw new InsightError("No keys found in AND");
-	// 	}
-	//
-	//
-	// 	let resultArray: boolean[] = [];
-	//
-	// 	for (let filterNumber = 0; filterNumber < filters.length; filterNumber++) {
-	// 		let newResult: boolean[] = await this.handleWhere(queryS[filterNumber]);
-	// 		if (resultArray.length === 0 ) {
-	// 			resultArray = newResult;
-	// 		} else {
-	// 			for (let i = 0; i < resultArray.length; i++) {
-	// 				if (resultArray[i]) {
-	// 					resultArray[i] = resultArray[i]  && newResult[i];
-	// 				}
-	//
-	// 			}
-	// 		}
-	//
-	// 	}
-	// 	return resultArray;
-	// }
 
 	// If there is no InsightResult passed in, create an insight result based on the queryKey
 	// This insight result will have all the fields and sections of the requested dataset
@@ -296,7 +242,7 @@ export default class QueryOperator {
 
 	// Checks if the given idString is a valid dataset name
 	// If it is, it returns an entire dataset in InsightResult form
-	private async validateDataset(idString: string): Promise<void> {
+	private async validateAndSetDataset(idString: string): Promise<void> {
 
 		if (!this.idDatasetsAddedSoFar.includes(idString)) {
 			throw new InsightError("Dataset not found");
@@ -434,7 +380,7 @@ export default class QueryOperator {
 		const parts = field.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
 
-		if (this.datasetToQueryId() !== String(parts[0])) {
+		if (this.getQueryingDatasetId() !== String(parts[0])) {
 			throw new InsightError("Querying 2 Datasets.");
 		}
 
