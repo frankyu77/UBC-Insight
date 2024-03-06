@@ -23,10 +23,12 @@ describe("InsightFacade", function() {
     // ####################################################################################################   addDataset
 	describe("addDataset", function() {
 		let sections: string;
+		let rooms: string;
 		let facade: InsightFacade;
 
 		before(async function() {
 			sections = await getContentFromArchives("shorterCourses.zip");
+			rooms = await getContentFromArchives("campus.zip");
 			chai.use(chaiAsPromised);
 		});
 
@@ -35,8 +37,52 @@ describe("InsightFacade", function() {
 			facade = new InsightFacade();
 		});
 
-        //* *********************************************REJECTIONS******************************************************
-        // empty id -----------------------------------------------------------------------------------------------------
+		//* *********************************************  ROOMS  ******************************************************
+		//* ************************************************************************************************* REJECTIONS
+		it ("should fail with campus not root folder", async () => {
+			let test = await getContentFromArchives("campusNotRootFolder.zip");
+			try {
+				const asdf = await facade.addDataset("testingRooms", test, InsightDatasetKind.Rooms);
+				assert.fail();
+			} catch (err) {
+				expect(err).to.be.an.instanceOf(Error);
+			}
+		});
+
+		it ("should fail with no index.htm", async () => {
+			let test = await getContentFromArchives("noIndexHTM.zip");
+			try {
+				const asdf = await facade.addDataset("testingRooms", test, InsightDatasetKind.Rooms);
+				assert.fail();
+			} catch (err) {
+				console.log(err);
+				expect(err).to.be.an.instanceOf(Error);
+			}
+		});
+
+		it ("should fail with different index.htm name", async () => {
+			let test = await getContentFromArchives("diffIndexHTM.zip");
+			try {
+				const asdf = await facade.addDataset("testingRooms", test, InsightDatasetKind.Rooms);
+				assert.fail();
+			} catch (err) {
+				console.log(err);
+				expect(err).to.be.an.instanceOf(Error);
+			}
+		});
+
+		//* **************************************************************************************************** SUCCESS
+		it ("should add valid rooms dataset", async () => {
+			const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+			expect(asdf).to.deep.equal(["testingRooms"]);
+
+		});
+
+
+		//* *********************************************  -----  ******************************************************
+
+         //* *********************************************REJECTIONS******************************************************
+         // empty id ----------------------------------------------------------------------------------------------------
 		it ("should reject with an empty dataset id when adding", function() { // test taken from CPSC310 site
 			const result = facade.addDataset("", sections, InsightDatasetKind.Sections);
 
@@ -473,12 +519,12 @@ describe("InsightFacade", function() {
 				numRows: 39
 			}]);
 		});
-
+	//
 	});
-
-
+	//
+	//
     // #####################################################################################################performQuery
-
+	//
 	describe("performQuery", () => {
 		let sections: string;
 		let facade: InsightFacade;
