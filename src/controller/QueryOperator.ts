@@ -14,8 +14,9 @@ export default class QueryOperator {
 	private dir = "./data";
 	private idDatasetsAddedSoFar: string[] = [];
 
-	private mkey = ["avg", "pass", "fail", "audit", "year"];
-	private skey = ["dept", "id", "instructor", "title", "uuid"];
+	private mkey = ["avg", "pass", "fail", "audit", "year", "lat", 'lon', 'seats'];
+	private skey = ["dept", "id", "instructor", "title", "uuid",
+		'fullname' , 'shortname' , 'number' , 'name' , 'address' , 'type' , 'furniture' , 'href'];
 	private optionsKey = ["COLUMNS", "ORDER"];
 
 	constructor(idDatasets: string[]) {
