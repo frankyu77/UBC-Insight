@@ -6,13 +6,20 @@ import {
 
 export default class ResultUtilities {
 
-	public checkIfValidJson(query: any): any {
+	public checkIfValidJson(query: any): void {
 		try {
 			JSON.stringify(query);
 		} catch (error) {
 			throw new InsightError("Not a valid JSON.");  // Not a string, can't be JSON
 		}
-		return query;
+	}
+
+	public  checkBaseEbnf(queryS: any) {
+		const keysArray = Object.keys(queryS);
+		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
+			return;
+		}
+		throw new InsightError("Invalid query! (No OPTIONS or WHERE)");
 	}
 
 	public convertBoolean(boolArr: boolean[], dataset: InsightResult[]): InsightResult[] {
