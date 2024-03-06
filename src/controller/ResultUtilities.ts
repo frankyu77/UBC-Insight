@@ -1,12 +1,12 @@
 import {
 	InsightError,
 	InsightResult,
-    ResultTooLargeError,
+	ResultTooLargeError,
 } from "./IInsightFacade";
 
 export default class ResultUtilities {
 
-	public checkIfValidJson(query : any) : any {
+	public checkIfValidJson(query: any): any {
 		try {
 			JSON.stringify(query);
 		} catch (error) {
@@ -38,7 +38,7 @@ export default class ResultUtilities {
 		});
 	}
 
-	public checkResultLength(result: InsightResult[]) : InsightResult[] {
+	public checkResultLength(result: InsightResult[]): InsightResult[] {
 		if (result.length > 5000) {
 			throw new ResultTooLargeError("Result greater than 5000");
 		}

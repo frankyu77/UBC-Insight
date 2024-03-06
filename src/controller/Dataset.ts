@@ -1,9 +1,11 @@
 import Section from "./Section";
 import {InsightDatasetKind} from "./IInsightFacade";
+import Room from "./Room";
 
 export default class Dataset {
 	private idName: string = "";
 	private validSections: Section[] = [];
+	private validRooms: Room[] = [];
 	private kind: InsightDatasetKind = InsightDatasetKind.Sections;
 	private isValidDataset: boolean = false;
 
@@ -13,6 +15,10 @@ export default class Dataset {
 
 	public addValidSection(section: Section) {
 		this.validSections.push(section);
+	}
+
+	public addValidRoom(room: Room) {
+		this.validRooms.push(room);
 	}
 
 	public setKind(datasetKind: InsightDatasetKind) {
@@ -29,6 +35,10 @@ export default class Dataset {
 
 	public getValidSections() {
 		return this.validSections;
+	}
+
+	public getValidRooms() {
+		return this.validRooms;
 	}
 
 	public getKind() {

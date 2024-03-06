@@ -37,14 +37,14 @@ export default class HandleDataset {
 
     // checks if dataset already exists
 	public async isThereDatasetDir(id: string): Promise<boolean> {
-    	return new Promise<boolean>( (resolve, reject) => {
-    		const filePath = this.getDatasetDirPath(id);
-    		fsPromises.access(filePath).then(() => {
-    			resolve(true);
-    		}).catch(() => {
-    			resolve(false);
-    		});
-    	});
+		return new Promise<boolean>( (resolve, reject) => {
+			const filePath = this.getDatasetDirPath(id);
+			fsPromises.access(filePath).then(() => {
+				resolve(true);
+			}).catch(() => {
+				resolve(false);
+			});
+		});
 
 	}
 
@@ -98,11 +98,13 @@ export default class HandleDataset {
     // iterates through all courses and sections and adds only valid sections to the dataset
 	public async handleSectionsZip(zip: JSZip, reject: (reason?: any) => void, dataset: Dataset) {
 		const promises: unknown[] = [];
+		let coursesFolderExists = false;
         // iterate through the zip folder
 		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
 			if (relativePath.startsWith("courses")
                 && !relativePath.includes("courses/.")
                 && !relativePath.endsWith("/")) {
+				coursesFolderExists = true;
 
                 // read the content in the file
 				promises.push(
@@ -130,6 +132,68 @@ export default class HandleDataset {
 				);
 			}
 		});
+
 		await Promise.all(promises);
+
+		if (coursesFolderExists === false) {
+			throw new InsightError("Courses folder not found");
+		}
+
+	}
+
+	public async handleRoomsZip(zip: JSZip, reject: (reason?: any) => void, dataset: Dataset) {
+		console.log("---------------------rooms zip reached---------------------");
+
+		const promises: unknown[] = [];
+		let relevantFoldersExist = false;
+		let indexExist = false;
+		// iterate through the zip folder
+		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
+			// console.log(relativePath);
+
+			// check if the folders exist
+			if (relativePath === "campus/" ||
+				relativePath === "campus/discover/" ||
+				relativePath === "campus/discover/buildings-and-classrooms/") {
+
+				relevantFoldersExist = relevantFoldersExist && true;
+										// so that if one of the folders don't exist it will be false
+
+				console.log("Correct folders exists");
+			}
+
+			// handles the index.htm file
+			if (relativePath === "index.htm") {
+				console.log("index.htm exists");
+				indexExist = true;
+
+				// handle validating the index.htm file
+				this.validateIndexHTM(relativePath);
+			}
+
+			if (relativePath.startsWith("campus/discover/buildings-and-classrooms/") && relativePath.endsWith(".htm")) {
+				console.log(relativePath);
+
+				// handle validating all the building files
+				this.validateBuilding(relativePath);
+			}
+
+		});
+
+		await Promise.all(promises);
+
+		if (relevantFoldersExist === false || indexExist === false) {
+			reject(new InsightError("Relevant folders/files not found"));
+		}
+	}
+
+	// handle validating the building files
+	public validateBuilding(buildingPath: string) {
+
+	}
+
+	// handle validating the index.htm file
+	public validateIndexHTM(indexPath: string) {
+
 	}
 }
