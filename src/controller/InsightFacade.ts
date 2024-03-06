@@ -51,7 +51,7 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
-	// CAN PROBABLY SOMEHOW MOVE THESE TWO METHODS TO THE HANDLEDATASET CLASS
+	// CAN PROBABLY SOMEHOW MOVE THESE TWO METHODS TO THE HANDLEDATASET CLASS #########################################
 	private handleRoomsKind(id: string,
 		content: string,
 		reject: (reason?: any) => void,
@@ -70,6 +70,7 @@ export default class InsightFacade implements IInsightFacade {
 			.then(async (zip: JSZip) => {
 				let currentDataset = new Dataset();
 				currentDataset.setIDName(id);
+				currentDataset.setKind(InsightDatasetKind.Rooms);
 
 				// call to helper to handle reading the zip file
 //* **************************************************CHANGE THIS LINE**************************************************
@@ -110,6 +111,7 @@ export default class InsightFacade implements IInsightFacade {
 			.then(async (zip: JSZip) => {
 				let currentDataset = new Dataset();
 				currentDataset.setIDName(id);
+				currentDataset.setKind(InsightDatasetKind.Sections);
 				// call to helper to handle reading the zip file
 				await this.handleDataset.handleSectionsZip(zip, reject, currentDataset);
 
