@@ -396,6 +396,8 @@ export default class QueryOperator {
 		let grouped : Map<string, InsightResult[]>  = this.handleGroup(query, result);
 
 		let applyRuleArray: string[] = query.APPLY;
+
+		// Take each group
 		console.log(applyRuleArray)
 
 		return result;
