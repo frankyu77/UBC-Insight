@@ -15,6 +15,7 @@ export default class ResultUtilities {
 	}
 
 	public  checkBaseEbnf(queryS: any) {
+		return;
 		const keysArray = Object.keys(queryS);
 		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
 			return;
