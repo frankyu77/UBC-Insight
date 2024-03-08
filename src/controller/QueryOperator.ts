@@ -372,7 +372,6 @@ export default class QueryOperator {
 	}
 
 	private parseField(field: string) {
-		// //	CHECK IF THIS IS THE CORRECT DATASET ID
 		if (typeof field !== "string") {
 			throw new InsightError("Invalid type in OPTIONS");
 		}
@@ -390,4 +389,35 @@ export default class QueryOperator {
 
 		return parts[1] || "";
 	}
+
+	public handleTransformations(query : any, result : InsightResult[]) : Map<string, InsightResult[]> {
+		// Check keys length and its names
+		this.validateTransformationKeys(query);
+
+		let groupsArray : string[] = query.GROUP;
+		let map : Map<string, InsightResult[]> = new Map<string, InsightResult[]>()
+
+		//Iterate sections in result
+		result.forEach((section, index) => {
+
+			//Create a groupKey for the section to match in maps.
+			let groupKey : string = groupsArray.map(key => section[key]).join('|');
+			console.log(groupKey)
+			if (!map.has(groupKey)) {
+				map.set(groupKey, []);
+			}
+
+			map.get(groupKey)?.push(section);
+
+		});
+
+		return map;
+	}
+
+	private validateTransformationKeys(query: any) : void {
+		return;
+	}
 }
+
+
+

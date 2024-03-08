@@ -34,7 +34,7 @@ export default class ResultUtilities {
 	}
 
 	public compatibleFormat(queryOperator: any, result: InsightResult[]) {
-		let prefix: string = queryOperator.datasetToQueryId() + "_";
+		let prefix: string = queryOperator.getQueryingDatasetId() + "_";
 
 		return result.map((obj) => {
 			const newObj: InsightResult = {};

@@ -247,13 +247,15 @@ export default class InsightFacade implements IInsightFacade {
 			}
 
 			let result: InsightResult[];
+			let groups : Map<string, InsightResult[]>;
 
 			queryOperator.handleWhere(queryS.WHERE).then( (resultWhere) => {
 
 				result = resultUtilities.convertBoolean(resultWhere, queryOperator.getDataset());
 				result = resultUtilities.checkResultLength(result);
+				groups = queryOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
 				result = queryOperator.handleOptions(queryS.OPTIONS, result);
-				result = resultUtilities.compatibleFormat(queryOperator, result);
+				result = resultUtilities.compatibleFormat(queryOperator, result); // Passing queryoperator here !!!!!!!!
 
 				return resolve(result);
 			}).catch((error) => {
