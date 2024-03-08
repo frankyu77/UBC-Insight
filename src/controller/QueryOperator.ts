@@ -390,23 +390,33 @@ export default class QueryOperator {
 		return parts[1] || "";
 	}
 
-	public handleTransformations(query : any, result : InsightResult[]) : Map<string, InsightResult[]> {
+	public handleTransformations(query : any, result : InsightResult[]) : InsightResult[] {
 		// Check keys length and its names
 		this.validateTransformationKeys(query);
+		let grouped : Map<string, InsightResult[]>  = this.handleGroup(query, result);
 
-		let groupsArray : string[] = query.GROUP;
-		let map : Map<string, InsightResult[]> = new Map<string, InsightResult[]>()
+		let applyRuleArray: string[] = query.APPLY;
+		console.log(applyRuleArray)
+
+		return result;
+	}
+
+
+	private handleGroup(query: any, result: InsightResult[]) {
+		let groupsArray: string[] = query.GROUP;
+		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>()
 
 		//Iterate sections in result
 		result.forEach((section, index) => {
 
 			//Create a groupKey for the section to match in maps.
-			let groupKey : string = "";//groupsArray.map(key => section[key]).join('|');
+			let groupKey: string = "";
 
 			groupsArray.forEach((mOrSkey) => {
-				groupKey = groupKey + "| " + section[mOrSkey];
-			});
 
+				groupKey += section[this.parseField(mOrSkey)] + " |";
+			});
+			groupKey += " group";
 			if (!map.has(groupKey)) {
 				map.set(groupKey, []);
 			}
@@ -414,7 +424,6 @@ export default class QueryOperator {
 			map.get(groupKey)?.push(section);
 
 		});
-
 		return map;
 	}
 
