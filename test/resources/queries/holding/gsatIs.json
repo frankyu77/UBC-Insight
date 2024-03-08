@@ -1,0 +1,132 @@
+{
+	"title": "gsat is",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "gsat"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_avg"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 84.9
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 84.9
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 85.4
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 85.4
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 85.7
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 85.7
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 86.63
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 86.63
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 86.76
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 86.76
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 87.15
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 87.15
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88.13
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88.13
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88.73
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88.73
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88.78
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 88.78
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 89.36
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 89.36
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 89.82
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 89.82
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 89.86
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 89.86
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 90.29
+		},
+		{
+			"sections_dept": "gsat",
+			"sections_avg": 90.29
+		}
+	]
+}

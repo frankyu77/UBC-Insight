@@ -402,7 +402,6 @@ export default class QueryOperator {
 
 			//Create a groupKey for the section to match in maps.
 			let groupKey : string = groupsArray.map(key => section[key]).join('|');
-			console.log(groupKey)
 			if (!map.has(groupKey)) {
 				map.set(groupKey, []);
 			}
