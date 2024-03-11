@@ -71,11 +71,31 @@ describe("InsightFacade", function() {
 			}
 		});
 
-		//* **************************************************************************************************** SUCCESS
-		it ("should add valid rooms dataset", async () => {
-			const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
-			expect(asdf).to.deep.equal(["testingRooms"]);
+		it ("should fail with no valid rooms", async () => {
+			let test = await getContentFromArchives("noValidRooms.zip");
+			try {
+				const asdf = await facade.addDataset("testingRooms", test, InsightDatasetKind.Rooms);
+				assert.fail("should have failed");
+			} catch (err) {
+				console.log(err);
+				expect(err).to.be.an.instanceOf(Error);
+			}
+		});
 
+		//* **************************************************************************************************** SUCCESS
+		// it ("should add valid rooms dataset", async () => {
+		// 	const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+		// 	expect(asdf).to.deep.equal(["testingRooms"]);
+		//
+		// });
+
+		describe("testing", () => {
+			for (let i = 0; i < 100; i++) {
+				it ("" + i, async () => {
+					const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+					expect(asdf).to.deep.equal(["testingRooms"]);
+				});
+			}
 		});
 
 

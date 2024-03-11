@@ -5,8 +5,7 @@ import Section from "./Section";
 import JSZip from "jszip";
 // import {ChildNode} from "parse5/dist/tree-adapters/default";
 import {parse, defaultTreeAdapter} from "parse5";
-import * as parse5 from 'parse5';
-
+import * as parse5 from "parse5";
 
 
 import * as fs from "fs";
@@ -20,7 +19,7 @@ export default class HandleDataset {
 	private dir = "./data";
 	private count = 0;
 	private validBuildingLinks: string[] = [];
-	private buildingDictionary:  { [code: string]: BuildingInfo } = {};
+	private buildingDictionary:  {[code: string]: BuildingInfo} = {};
 
 
     // converts dataset object to JSON string then add to disk
@@ -230,7 +229,7 @@ export default class HandleDataset {
 			if (relativePath === "index.htm") {
 				// console.log("index.htm exists");
 				indexExist = true;
-				console.log("===============================================================================================INDEX");
+				// console.log("===============================================================================================INDEX");
 				this.parseIndexHTML(promises, zipEntry, reject);
 
 
@@ -252,7 +251,7 @@ export default class HandleDataset {
 
 
 			if (relativePath.startsWith("campus/discover/buildings-and-classrooms/") && relativePath.endsWith(".htm")) {
-				console.log("===============================================================================================BUIDLING");
+				// console.log("===============================================================================================BUIDLING");
 				this.parseBuildingFile(promises, zipEntry, relativePath, reject, dataset);
 			}
 
@@ -260,7 +259,7 @@ export default class HandleDataset {
 		console.log ("done buidling");
 		await Promise.all(promises);
 
-		//console.log(this.count);
+		// console.log(this.count);
 		// if (relevantFoldersExist === false || indexExist === false) {
 		// 	reject(new InsightError("Relevant folders/files not found"));
 		// }
@@ -286,10 +285,15 @@ export default class HandleDataset {
 		);
 	}
 
-	private parseBuildingFile(promises: unknown[], zipEntry: JSZip.JSZipObject, relativePath: string, reject: (reason?: any) => void, dataset: Dataset) {
+	private parseBuildingFile(promises: unknown[],
+		zipEntry: JSZip.JSZipObject,
+		relativePath: string,
+		reject: (reason?: any) => void,
+		dataset: Dataset) {
+
 		promises.push(
 			zipEntry.async("string").then(async (contentInFile) => {
-				console.log(relativePath);
+				// console.log(relativePath);
 				// parses the file into a list of JSON objects
 				try {
 					let traverseTableBuildings = new TraverseTable();
