@@ -256,11 +256,13 @@ export default class QueryOperator {
 		} );
 
 		const object = JSON.parse(data);
-		// CHECK IF ROOMS OR SECTIONS !!!!!!!!!!!!!!!!!!!!!!!!!!
-		this.setDataset(JSON.parse(JSON.stringify(object.validSections)));
-		this.setDatasetToQueryId(object.idName);
 
-		// return object.validSections;
+		if (object.kind == "sections") {
+			this.setDataset(JSON.parse(JSON.stringify(object.validSections)));
+		} else {
+			this.setDataset(JSON.parse(JSON.stringify(object.validRooms)));
+		}
+		this.setDatasetToQueryId(object.idName);
 	}
 
 
