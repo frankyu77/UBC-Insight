@@ -1,0 +1,77 @@
+{
+	"title": "transform_2Apply2",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"overallAvg",
+				"passMark"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_dept"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "sections_avg"
+					}
+				},
+				{
+					"passMark": {
+						"MIN": "sections_pass"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "cnps",
+			"overallAvg": 98.04,
+			"passMark": 15
+		},
+		{
+			"sections_dept": "crwr",
+			"overallAvg": 98,
+			"passMark": 1
+		},
+		{
+			"sections_dept": "educ",
+			"overallAvg": 97.5,
+			"passMark": 14
+		},
+		{
+			"sections_dept": "eece",
+			"overallAvg": 98.75,
+			"passMark": 12
+		},
+		{
+			"sections_dept": "epse",
+			"overallAvg": 98.01,
+			"passMark": 9
+		},
+		{
+			"sections_dept": "math",
+			"overallAvg": 97.9,
+			"passMark": 4
+		},
+		{
+			"sections_dept": "nurs",
+			"overallAvg": 98.14,
+			"passMark": 12
+		},
+		{
+			"sections_dept": "spph",
+			"overallAvg": 98.98,
+			"passMark": 82
+		}
+	]
+}

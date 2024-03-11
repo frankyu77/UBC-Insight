@@ -415,6 +415,13 @@ export default class QueryOperator {
 				groupArray[0][applyName] = calculatedApplyRule;
 			});
 		});
+
+		//only take the first of each array in every value of the map
+		result = [];
+		grouped.forEach( (value, key, map) => {
+			result.push(value[0]);
+		});
+
 		return result;
 	}
 	private calculateApplyRule(applyRuleObject : string, groupArray : InsightResult[]) : number {
@@ -453,11 +460,16 @@ export default class QueryOperator {
 				}
 				return largest;
 			case "COUNT" :
-				let count : number = 0;
+
+				const occurrences = new Map<Number | String, number>();
+
 				for (let i = 1; i < groupArray.length; i ++) {
-					count ++;
+					const currentCount = occurrences.get(groupArray[i][parsedField]) || 0;
+					occurrences.set(groupArray[i][parsedField], currentCount + 1);
 				}
-				return count;
+				return occurrences.size; // This is the sum of all occurrences.
+
+
 		}
 
 
