@@ -3,11 +3,23 @@ import {InsightError} from "./IInsightFacade";
 import path from "node:path";
 import Section from "./Section";
 import JSZip from "jszip";
+// import {ChildNode} from "parse5/dist/tree-adapters/default";
+import {parse, defaultTreeAdapter} from "parse5";
+import * as parse5 from "parse5";
+
+
+import * as fs from "fs";
+import TraverseTable from "./TraverseTable";
+import Queue from "./Queue";
 
 const fsPromises = require("fs").promises;
+// var parse5 = require("parse5").default;
 
 export default class HandleDataset {
 	private dir = "./data";
+	private count = 0;
+	private validBuildingLinks: string[] = [];
+	private buildingDictionary:  {[code: string]: BuildingInfo} = {};
 
 
     // converts dataset object to JSON string then add to disk
@@ -141,59 +153,171 @@ export default class HandleDataset {
 
 	}
 
+	// HANDLE ROOMS ZIP ################################################################################################
+	// public async handleRoomsZip(zip: JSZip, reject: (reason?: any) => void, dataset: Dataset) {
+	// 	console.log("---------------------rooms zip reached---------------------");
+	//
+	// 	const promises: Promise<void>[] = [];
+	// 	let relevantFoldersExist = false;
+	// 	let indexExist = false;
+	//
+	// 	for (const [relativePath, zipEntry] of Object.entries(zip.files)) {
+	// 		if (relativePath === "campus/" ||
+	// 			relativePath === "campus/discover/" ||
+	// 			relativePath === "campus/discover/buildings-and-classrooms/") {
+	// 			relevantFoldersExist = true;
+	// 		}
+	//
+	// 		if (relativePath === "index.htm") {
+	// 			indexExist = true;
+	//
+	// 			// try {
+	// 			// 	console.log("Reading index.htm");
+	// 			// 	const fileContent = await zipEntry.async("string");
+	// 			// 	const document = parse5.parse(fileContent);
+	// 			// 	console.log("File content:", fileContent);
+	// 			//
+	// 			// 	this.iterate(document);
+	// 			// 	// Handle the file content here
+	// 			// } catch (error) {
+	// 			// 	console.log("Error reading index.htm:", error);
+	// 			// }
+	//
+	// 			promises.push(
+	// 				zipEntry.async("string").then((contentInFile) => {
+	// 					// parses the file into a list of JSON objects
+	// 					try {
+	// 						console.log(contentInFile);
+	// 						let parsedIndex = parse5.parse(contentInFile);
+	// 						console.log("File content:");
+	// 						this.iterate(parsedIndex);
+	// 					} catch(error) {
+	// 						console.log(error);
+	// 						reject(new InsightError("Error while parsing file"));
+	// 					}
+	// 				}).catch((error) => {
+	// 					reject(new InsightError("Error while adding dataset"));
+	// 				})
+	// 			);
+	// 		}
+	//
+	// 		if (relativePath.startsWith("campus/discover/buildings-and-classrooms/") && relativePath.endsWith(".htm")) {
+	// 			// Handle building files
+	// 		}
+	// 	}
+	//
+	// 	if (relevantFoldersExist === false || indexExist === false) {
+	// 		reject(new InsightError("Relevant folders/files not found"));
+	// 		return;
+	// 	}
+	//
+	// 	await Promise.all(promises);
+	// }
+
 	public async handleRoomsZip(zip: JSZip, reject: (reason?: any) => void, dataset: Dataset) {
 		console.log("---------------------rooms zip reached---------------------");
 
 		const promises: unknown[] = [];
 		let relevantFoldersExist = false;
 		let indexExist = false;
+
 		// iterate through the zip folder
-		zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
+		zip.forEach(async (relativePath: string, zipEntry: JSZip.JSZipObject) => {
 			// console.log(relativePath);
 
+			// handles the index.htm file
+			if (relativePath === "index.htm") {
+				// console.log("index.htm exists");
+				indexExist = true;
+				// console.log("===============================================================================================INDEX");
+				this.parseIndexHTML(promises, zipEntry, reject);
+
+
+			}
+
+		});
+		console.log ("done index");
+		await Promise.all(promises);
+
+		zip.forEach(async (relativePath: string, zipEntry: JSZip.JSZipObject) => {
 			// check if the folders exist
 			if (relativePath === "campus/" ||
 				relativePath === "campus/discover/" ||
 				relativePath === "campus/discover/buildings-and-classrooms/") {
 
 				relevantFoldersExist = relevantFoldersExist && true;
-										// so that if one of the folders don't exist it will be false
-
-				console.log("Correct folders exists");
+				// so that if one of the folders don't exist it will be false
 			}
 
-			// handles the index.htm file
-			if (relativePath === "index.htm") {
-				console.log("index.htm exists");
-				indexExist = true;
-
-				// handle validating the index.htm file
-				this.validateIndexHTM(relativePath);
-			}
 
 			if (relativePath.startsWith("campus/discover/buildings-and-classrooms/") && relativePath.endsWith(".htm")) {
-				console.log(relativePath);
-
-				// handle validating all the building files
-				this.validateBuilding(relativePath);
+				// console.log("===============================================================================================BUIDLING");
+				this.parseBuildingFile(promises, zipEntry, relativePath, reject, dataset);
 			}
 
 		});
-
+		console.log ("done buidling");
 		await Promise.all(promises);
 
-		if (relevantFoldersExist === false || indexExist === false) {
-			reject(new InsightError("Relevant folders/files not found"));
-		}
+		// console.log(this.count);
+		// if (relevantFoldersExist === false || indexExist === false) {
+		// 	reject(new InsightError("Relevant folders/files not found"));
+		// }
 	}
 
-	// handle validating the building files
-	public validateBuilding(buildingPath: string) {
-		return;
+
+	private parseIndexHTML(promises: unknown[], zipEntry: JSZip.JSZipObject, reject: (reason?: any) => void) {
+		promises.push(
+			zipEntry.async("string").then(async (contentInFile) => {
+				// parses the file into a list of JSON objects
+				try {
+					let traverseTable = new TraverseTable();
+					const document = parse(contentInFile, {treeAdapter: defaultTreeAdapter});
+					// this.validBuildingLinks = traverseTable.handleIndexHTML(document, this.buildingDictionary);
+					traverseTable.handleIndexHTML(document, this.buildingDictionary);
+				} catch (error) {
+					console.log(error);
+					reject(new InsightError("Error while parsing file"));
+				}
+			}).catch((error) => {
+				reject(new InsightError("Error while adding dataset"));
+			})
+		);
 	}
 
-	// handle validating the index.htm file
-	public validateIndexHTM(indexPath: string) {
+	private parseBuildingFile(promises: unknown[],
+		zipEntry: JSZip.JSZipObject,
+		relativePath: string,
+		reject: (reason?: any) => void,
+		dataset: Dataset) {
+
+		promises.push(
+			zipEntry.async("string").then(async (contentInFile) => {
+				// console.log(relativePath);
+				// parses the file into a list of JSON objects
+				try {
+					let traverseTableBuildings = new TraverseTable();
+					const document = parse(contentInFile, {treeAdapter: defaultTreeAdapter});
+					this.count = await traverseTableBuildings.handleBuildingFile(document, this.count, dataset);
+					// console.log(this.count);
+				} catch (error) {
+					console.log(error);
+					reject(new InsightError("Error while parsing file"));
+				}
+			}).catch((error) => {
+				reject(new InsightError("Error while adding dataset"));
+			})
+		);
+	}
+
+// handle validating the building files
+	private validateBuilding(buildingPath: string) {
 		return;
 	}
+}
+
+export interface BuildingInfo {
+	name: string;
+	address: string;
+	link: string;
 }

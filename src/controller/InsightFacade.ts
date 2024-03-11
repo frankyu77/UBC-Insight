@@ -71,16 +71,19 @@ export default class InsightFacade implements IInsightFacade {
 				let currentDataset = new Dataset();
 				currentDataset.setIDName(id);
 				currentDataset.setKind(InsightDatasetKind.Rooms);
+				// currentDataset.setValidity(true);
 
 				// call to helper to handle reading the zip file
 //* **************************************************CHANGE THIS LINE**************************************************
 				await this.handleDataset.handleRoomsZip(zip, reject, currentDataset);
 
+				console.log("length of dataset = " + currentDataset.getValidRooms().length);
 				// reject if there are no valid sections
 				if (!currentDataset.getValidity()) {
 					reject(new InsightError("No valid sections in dataset"));
 					return;
 				}
+				console.log("length of dataset = " + currentDataset.getValidRooms().length);
 
 				await this.handleDataset.addDatasetToDisk(currentDataset);
 				this.datasetsAddedSoFar.push(currentDataset);
