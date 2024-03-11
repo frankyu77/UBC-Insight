@@ -13,6 +13,7 @@ export default class QueryOperator {
 	private _datasetToQueryId: string = "";
 	private dir = "./data";
 	private idDatasetsAddedSoFar: string[] = [];
+	private applyNames : string[] = [];
 
 	private mkey = ["avg", "pass", "fail", "audit", "year", "lat", 'lon', 'seats'];
 	private skey = ["dept", "id", "instructor", "title", "uuid",
@@ -27,7 +28,10 @@ export default class QueryOperator {
 		return this._datasetToQueryId;
 
 	}
+	public getApplyNames(): string[] {
+		return this.applyNames;
 
+	}
 	private setDatasetToQueryId(id: string): void {
 		this._datasetToQueryId = id;
 	}
@@ -377,6 +381,10 @@ export default class QueryOperator {
 			throw new InsightError("Invalid type in OPTIONS");
 		}
 
+		if (this.applyNames.includes(field)) {
+			return field;
+		}
+
 		const parts = field.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
 
@@ -413,6 +421,7 @@ export default class QueryOperator {
 
 				//Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
+				this.applyNames.push(applyName);
 			});
 		});
 

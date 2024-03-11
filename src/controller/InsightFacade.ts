@@ -254,10 +254,9 @@ export default class InsightFacade implements IInsightFacade {
 				result = resultUtilities.convertBoolean(resultWhere, queryOperator.getDataset());
 				result = resultUtilities.checkResultLength(result);
 				transformed = queryOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
-				result = queryOperator.handleOptions(queryS.OPTIONS, result);
+				result = queryOperator.handleOptions(queryS.OPTIONS, transformed);
 				result = resultUtilities.compatibleFormat(queryOperator, result);
-
-				// Passing queryoperator here !!!!!!!!
+ 				// Passing queryoperator here !!!!!!!!
 
 				return resolve(result);
 			}).catch((error) => {

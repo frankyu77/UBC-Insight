@@ -15,9 +15,11 @@ export default class ResultUtilities {
 	}
 
 	public  checkBaseEbnf(queryS: any) {
-		return;
 		const keysArray = Object.keys(queryS);
 		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
+			return;
+		} else if (keysArray.length === 3 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS") &&
+		keysArray.includes("TRANSFORMATIONS")) {
 			return;
 		}
 		throw new InsightError("Invalid query! (No OPTIONS or WHERE)");
@@ -35,12 +37,17 @@ export default class ResultUtilities {
 	}
 
 	public compatibleFormat(queryOperator: any, result: InsightResult[]) {
-		let prefix: string = queryOperator.getQueryingDatasetId() + "_";
+		const prefix: string = queryOperator.getQueryingDatasetId() + "_";
+		const applyNames: string[] = queryOperator.getApplyNames();
 
 		return result.map((obj) => {
 			const newObj: InsightResult = {};
 			Object.entries(obj).forEach(([key, value]) => {
-				newObj[`${prefix}${key}`] = value;
+				if (applyNames.includes(key)) {
+					newObj[key] = value;
+				} else {
+					newObj[`${prefix}${key}`] = value;
+				}
 			});
 			return newObj;
 		});
