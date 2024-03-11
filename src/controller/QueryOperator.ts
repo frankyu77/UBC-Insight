@@ -413,10 +413,8 @@ export default class QueryOperator {
 
 				//Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
-				console.log(groupArray);
 			});
 		});
-
 		return result;
 	}
 	private calculateApplyRule(applyRuleObject : string, groupArray : InsightResult[]) : number {
@@ -434,12 +432,32 @@ export default class QueryOperator {
 				}
 				return smallest;
 			case "AVG" :
-				let total : number = 0;
+				let totalAvg : number = 0;
 				for (let i = 1; i < groupArray.length; i ++) {
-					total += Number(groupArray[i][parsedField]);
+					totalAvg += Number(groupArray[i][parsedField]);
 				}
-				const calculated : number = (total/(groupArray.length - 1));
+				const calculated : number = (totalAvg/(groupArray.length - 1));
 				return calculated;
+			case "SUM":
+				let totalSum : number = 0;
+				for (let i = 1; i < groupArray.length; i ++) {
+					totalSum += Number(groupArray[i][parsedField]);
+				}
+				return totalSum;
+			case "MAX" :
+				let largest : number = Number.MIN_VALUE;
+				for (let i = 1; i < groupArray.length; i ++) {
+					if (Number(groupArray[i][parsedField]) > largest) {
+						largest = Number(groupArray[i][parsedField]);
+					}
+				}
+				return largest;
+			case "COUNT" :
+				let count : number = 0;
+				for (let i = 1; i < groupArray.length; i ++) {
+					count ++;
+				}
+				return count;
 		}
 
 
