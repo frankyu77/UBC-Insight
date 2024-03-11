@@ -252,6 +252,7 @@ export default class QueryOperator {
 		} );
 
 		const object = JSON.parse(data);
+		// CHECK IF ROOMS OR SECTIONS !!!!!!!!!!!!!!!!!!!!!!!!!!
 		this.setDataset(JSON.parse(JSON.stringify(object.validSections)));
 		this.setDatasetToQueryId(object.idName);
 
@@ -397,16 +398,58 @@ export default class QueryOperator {
 
 		let applyRuleArray: string[] = query.APPLY;
 
+
 		// Take each group
-		console.log(applyRuleArray)
+		grouped.forEach((groupArray : InsightResult[]) => {
+			applyRuleArray.forEach((value, index, array) =>  {
+				const applyKeyArray : string[] =  Object.keys(value);
+				const applyName = applyKeyArray[0];
+				const applyRuleArray : string[] = Object.values(value);
+				const applyRule : string = applyRuleArray[0];
+
+
+				// Calculate apply rule
+				const calculatedApplyRule : number = this.calculateApplyRule(applyRule, groupArray);
+
+				//Add to the current groupArray with the right applyName
+				groupArray[0][applyName] = calculatedApplyRule;
+				console.log(groupArray);
+			});
+		});
 
 		return result;
 	}
+	private calculateApplyRule(applyRuleObject : string, groupArray : InsightResult[]) : number {
 
+		const applyKeyArray : string[] =  Object.keys(applyRuleObject);
+		const applyValueArray : string[] = Object.values(applyRuleObject);
+		const parsedField : string = this.parseField(applyValueArray[0]);
+		switch (applyKeyArray[0]) {
+			case "MIN" :
+				let smallest : number = Number.MAX_VALUE;
+				for (let i = 1; i < groupArray.length; i ++) {
+					if (Number(groupArray[i][parsedField]) < smallest) {
+						smallest = Number(groupArray[i][parsedField]);
+					}
+				}
+				return smallest;
+			case "AVG" :
+				let total : number = 0;
+				for (let i = 1; i < groupArray.length; i ++) {
+					total += Number(groupArray[i][parsedField]);
+				}
+				const calculated : number = (total/(groupArray.length - 1));
+				return calculated;
+		}
+
+
+		return 0;
+	}
 
 	private handleGroup(query: any, result: InsightResult[]) {
 		let groupsArray: string[] = query.GROUP;
-		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>()
+		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
+		let tempResult: InsightResult = {};
 
 		//Iterate sections in result
 		result.forEach((section, index) => {
@@ -415,15 +458,19 @@ export default class QueryOperator {
 			let groupKey: string = "";
 
 			groupsArray.forEach((mOrSkey) => {
-
-				groupKey += section[this.parseField(mOrSkey)] + " |";
+				const parsedField : string = this.parseField(mOrSkey);
+				groupKey += section[parsedField] + " |";
+				tempResult[parsedField] = section[parsedField];
 			});
+
 			groupKey += " group";
+
 			if (!map.has(groupKey)) {
-				map.set(groupKey, []);
+				map.set(groupKey, [tempResult]);
 			}
 
 			map.get(groupKey)?.push(section);
+			tempResult = {};
 
 		});
 		return map;
