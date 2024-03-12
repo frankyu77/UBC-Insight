@@ -71,11 +71,42 @@ describe("InsightFacade", function() {
 	// 		}
 	// 	});
 	//
-	// 	//* **************************************************************************************************** SUCCESS
-	// 	it ("should add valid rooms dataset", async () => {
-	// 		const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
-	// 		expect(asdf).to.deep.equal(["testingRooms"]);
+	// 	it ("should fail with no valid rooms", async () => {
+	// 		let test = await getContentFromArchives("noValidRooms.zip");
+	// 		try {
+	// 			const asdf = await facade.addDataset("testingRooms", test, InsightDatasetKind.Rooms);
+	// 			assert.fail("should have failed");
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 			expect(err).to.be.an.instanceOf(Error);
+	// 		}
+	// 	});
 	//
+	// 	it ("should fail with invalid table in index", async () => {
+	// 		let test = await getContentFromArchives("noTableInIndexHTM.zip");
+	// 		try {
+	// 			const asdf = await facade.addDataset("testingRooms", test, InsightDatasetKind.Rooms);
+	// 			assert.fail("should have failed");
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 			expect(err).to.be.an.instanceOf(Error);
+	// 		}
+	// 	});
+	//
+	// 	//* **************************************************************************************************** SUCCESS
+	// 	// it ("should add valid rooms dataset", async () => {
+	// 	// 	const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+	// 	// 	expect(asdf).to.deep.equal(["testingRooms"]);
+	// 	//
+	// 	// });
+	//
+	// 	describe("testing", () => {
+	// 		for (let i = 0; i < 25; i++) {
+	// 			it ("" + i, async () => {
+	// 				const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+	// 				expect(asdf).to.deep.equal(["testingRooms"]);
+	// 			});
+	// 		}
 	// 	});
 	//
 	//
@@ -218,20 +249,20 @@ describe("InsightFacade", function() {
 	// 			});
 	// 		}
 	// 	});
-	// 	// it ("should reject if adding same dataset to a new instance of facade", async () => {
-	// 	// 	await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
-	// 	// 	try {
-	// 	// 		const facade2 = new InsightFacade();
-	// 	// 		const result2 = await facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
-	// 	// 		// await result2;
-	// 	// 		return expect.fail("should not have added");
-	// 	// 	} catch (error) {
-	// 	// 		console.log(error);
-	// 	// 		return expect(error).to.be.an.instanceof(InsightError);
-	// 	// 	}
-	// 	// });
+	// 	it ("should reject if adding same dataset to a new instance of facade", async () => {
+	// 		await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
+	// 		try {
+	// 			const facade2 = new InsightFacade();
+	// 			const result2 = await facade2.addDataset("ubc", sections, InsightDatasetKind.Sections);
+	// 			// await result2;
+	// 			return expect.fail("should not have added");
+	// 		} catch (error) {
+	// 			console.log(error);
+	// 			return expect(error).to.be.an.instanceof(InsightError);
+	// 		}
+	// 	});
 	//
-    //     //* **********************************************SUCCESSES******************************************************
+    //     // * **********************************************SUCCESSES****************************************************
 	// 	it ("should successfully add one dataset", async function() {
 	// 		try {
 	// 			const result = await facade.addDataset("CPSC110", sections, InsightDatasetKind.Sections);
@@ -456,10 +487,12 @@ describe("InsightFacade", function() {
 	// describe("listDataset", () => {
 	//
 	// 	let sections: string;
+	// 	let rooms: string;
 	// 	let facade: InsightFacade;
 	//
 	// 	before(async function() {
 	// 		sections = await getContentFromArchives("oneValidSection.zip");
+	// 		rooms = await getContentFromArchives("campus.zip");
 	// 		chai.use(chaiAsPromised);
 	// 	});
 	//
@@ -490,7 +523,19 @@ describe("InsightFacade", function() {
 	// 		}]);
 	// 	});
 	//
-	// 	it ("should list multiple datasets", async () => {
+	// 	it ("should list one rooms dataset", async () => {
+	// 		await facade.addDataset("ubc", rooms, InsightDatasetKind.Rooms);
+	//
+	// 		const datasets = await facade.listDatasets();
+	//
+	// 		expect(datasets).to.deep.equal([{
+	// 			id: "ubc",
+	// 			kind: InsightDatasetKind.Rooms,
+	// 			numRows: 364
+	// 		}]);
+	// 	});
+	//
+	// 	it ("should list multiple sections datasets", async () => {
 	// 		await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 	// 		await facade.addDataset("sfu", sections, InsightDatasetKind.Sections);
 	// 		await facade.addDataset("uofc", sections, InsightDatasetKind.Sections);
@@ -504,7 +549,19 @@ describe("InsightFacade", function() {
 	// 		]);
 	// 	});
 	//
-	// 	it ("should list multiple datasets after a sequence of add and remove", async () => {
+	// 	it ("should list multiple rooms datasets", async () => {
+	// 		await facade.addDataset("ubc", rooms, InsightDatasetKind.Rooms);
+	// 		await facade.addDataset("sfu", rooms, InsightDatasetKind.Rooms);
+	//
+	// 		const datasets = await facade.listDatasets();
+	//
+	// 		expect(datasets).to.have.deep.members([
+	// 			{id: "sfu", kind: InsightDatasetKind.Rooms, numRows: 364},
+	// 			{id: "ubc", kind: InsightDatasetKind.Rooms, numRows: 364},
+	// 		]);
+	// 	});
+	//
+	// 	it ("should list multiple sections datasets after a sequence of add and remove", async () => {
 	// 		await facade.addDataset("ubc", sections, InsightDatasetKind.Sections);
 	// 		await facade.addDataset("sfu", sections, InsightDatasetKind.Sections);
 	// 		await facade.removeDataset("sfu");
@@ -519,12 +576,28 @@ describe("InsightFacade", function() {
 	// 			numRows: 39
 	// 		}]);
 	// 	});
-	// //
+	//
+	// 	it ("should list multiple rooms datasets after a sequence of add and remove", async () => {
+	// 		await facade.addDataset("ubc", rooms, InsightDatasetKind.Rooms);
+	// 		await facade.addDataset("sfu", rooms, InsightDatasetKind.Rooms);
+	// 		await facade.removeDataset("sfu");
+	// 		await facade.addDataset("uofc", rooms, InsightDatasetKind.Rooms);
+	// 		await facade.removeDataset("ubc");
+	//
+	// 		const datasets = await facade.listDatasets();
+	//
+	// 		expect(datasets).to.deep.equal([{
+	// 			id: "uofc",
+	// 			kind: InsightDatasetKind.Rooms,
+	// 			numRows: 364
+	// 		}]);
+	// 	});
+	// // //
 	// });
-	//
-	//
-    // #####################################################################################################performQuery
-	//
+	// // //
+	//  // //
+    // // // #####################################################################################################performQuery
+	// // //
 	describe("performQuery", () => {
 		let sections: string;
 		let rooms: string;
@@ -532,13 +605,13 @@ describe("InsightFacade", function() {
 
 		before(async function() {
 			sections = await getContentFromArchives("pair.zip");
-			// rooms = await getContentFromArchives("campus.zip")
+			rooms = await getContentFromArchives("campus.zip")
 			facade = new InsightFacade();
 
 			chai.use(chaiAsPromised);
 			await clearDisk();
 			await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
-			// await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms)
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms)
 		});
 
 		describe("valid sections queries", function() {
@@ -566,72 +639,72 @@ describe("InsightFacade", function() {
 			});
 		});
 
-		// describe("invalid sections queries", () => {
-		// 	let invalidQueries: ITestQuery[];
-		// 	try {
-		// 		invalidQueries = readFileQueries("sections_invalid");
-		// 	} catch (e: unknown) {
-		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
-		// 	}
-		//
-		// 	invalidQueries.forEach(function(test: any) {
-		// 		it(`${test.title}`, async function () {
-		// 			try {
-		// 				const result = facade.performQuery(test.input);
-		// 				await result;
-		// 				assert.fail("should have thrown an error");
-		// 			} catch (err: unknown) {
-		// 				expect(err).to.be.an.instanceof(Error);
-		// 			}
-		// 		});
-		// 	});
-		// });
+		describe("invalid sections queries", () => {
+			let invalidQueries: ITestQuery[];
+			try {
+				invalidQueries = readFileQueries("sections_invalid");
+			} catch (e: unknown) {
+				expect.fail(`Failed to read one or more test queries. ${e}`);
+			}
 
-		// describe("valid rooms queries", function() {
-		// 	let validQueries: ITestQuery[];
-		// 	try {
-		// 		validQueries = readFileQueries("rooms_valid");
-		// 	} catch (e: unknown) {
-		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
-		// 	}
-		//
-		// 	validQueries.forEach(function(test: any) {
-		// 		it(`${test.title}`, async function () {
-		// 			return facade.performQuery(test.input).then((result) => {
-		// 				if (!test.errorExpected) {
-		// 					expect(result).to.have.deep.members(test.expected);
-		//
-		// 				} else {
-		// 					throw new Error("error expected");
-		// 				}
-		//
-		// 			}).catch((err: string) => {
-		// 				assert.fail(`performQuery threw unexpected error: ${err}`);
-		// 			});
-		// 		});
-		// 	});
-		// });
-		//
-		// describe("invalid rooms queries", () => {
-		// 	let invalidQueries: ITestQuery[];
-		// 	try {
-		// 		invalidQueries = readFileQueries("rooms_invalid");
-		// 	} catch (e: unknown) {
-		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
-		// 	}
-		//
-		// 	invalidQueries.forEach(function(test: any) {
-		// 		it(`${test.title}`, async function () {
-		// 			try {
-		// 				const result = facade.performQuery(test.input);
-		// 				await result;
-		// 				assert.fail("should have thrown an error");
-		// 			} catch (err: unknown) {
-		// 				expect(err).to.be.an.instanceof(Error);
-		// 			}
-		// 		});
-		// 	});
-		// });
+			invalidQueries.forEach(function(test: any) {
+				it(`${test.title}`, async function () {
+					try {
+						const result = facade.performQuery(test.input);
+						await result;
+						assert.fail("should have thrown an error");
+					} catch (err: unknown) {
+						expect(err).to.be.an.instanceof(Error);
+					}
+				});
+			});
+		});
+
+		describe("valid rooms queries", function() {
+			let validQueries: ITestQuery[];
+			try {
+				validQueries = readFileQueries("rooms_valid");
+			} catch (e: unknown) {
+				expect.fail(`Failed to read one or more test queries. ${e}`);
+			}
+
+			validQueries.forEach(function(test: any) {
+				it(`${test.title}`, async function () {
+					return facade.performQuery(test.input).then((result) => {
+						if (!test.errorExpected) {
+							expect(result).to.have.deep.members(test.expected);
+
+						} else {
+							throw new Error("error expected");
+						}
+
+					}).catch((err: string) => {
+						assert.fail(`performQuery threw unexpected error: ${err}`);
+					});
+				});
+			});
+		});
+
+		describe("invalid rooms queries", () => {
+			let invalidQueries: ITestQuery[];
+			try {
+				invalidQueries = readFileQueries("rooms_invalid");
+			} catch (e: unknown) {
+				expect.fail(`Failed to read one or more test queries. ${e}`);
+			}
+
+			invalidQueries.forEach(function(test: any) {
+				it(`${test.title}`, async function () {
+					try {
+						const result = facade.performQuery(test.input);
+						await result;
+						assert.fail("should have thrown an error");
+					} catch (err: unknown) {
+						expect(err).to.be.an.instanceof(Error);
+					}
+				});
+			});
+		});
 
 	});
 

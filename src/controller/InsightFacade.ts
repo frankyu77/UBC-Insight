@@ -46,9 +46,6 @@ export default class InsightFacade implements IInsightFacade {
 				this.handleSectionsKind(id, content, reject, resolve);
 			} else if (kind === InsightDatasetKind.Rooms) {
 				this.handleRoomsKind(id, content, reject, resolve);
-			} else {
-				reject(new InsightError("Not a valid kind"));
-				return;
 			}
 		});
 	}
@@ -73,16 +70,19 @@ export default class InsightFacade implements IInsightFacade {
 				let currentDataset = new Dataset();
 				currentDataset.setIDName(id);
 				currentDataset.setKind(InsightDatasetKind.Rooms);
+				// currentDataset.setValidity(true);
 
 				// call to helper to handle reading the zip file
 //* **************************************************CHANGE THIS LINE**************************************************
 				await this.handleDataset.handleRoomsZip(zip, reject, currentDataset);
 
+				console.log("length of dataset = " + currentDataset.getValidRooms().length);
 				// reject if there are no valid sections
 				if (!currentDataset.getValidity()) {
-					reject(new InsightError("No valid sections in dataset"));
+					reject(new InsightError("No valid rooms in dataset"));
 					return;
 				}
+				console.log("length of dataset = " + currentDataset.getValidRooms().length);
 
 				await this.handleDataset.addDatasetToDisk(currentDataset);
 				this.datasetsAddedSoFar.push(currentDataset);
@@ -211,18 +211,29 @@ export default class InsightFacade implements IInsightFacade {
 
 				// this sections just makes the InsightDataset object for each dataset
 				const object = JSON.parse(data);
-				const currentInsightDataset: InsightDataset = {
-					id: object.idName,
-					kind: InsightDatasetKind.Sections,
-					numRows: object.validSections.length
-				};
+				// const currentInsightDataset: InsightDataset = {
+				// 	id: object.idName,
+				// 	kind: InsightDatasetKind.Sections,
+				// 	numRows: object.validSections.length
+				// };
+				// let currentInsightDataset: any;
 
 				if (object.kind === "sections") {
-					currentInsightDataset.kind = InsightDatasetKind.Sections;
+					const currentInsightDataset: InsightDataset = {
+						id: object.idName,
+						kind: InsightDatasetKind.Sections,
+						numRows: object.validSections.length
+					};
+					result.push(currentInsightDataset);
 				} else {
-					currentInsightDataset.kind = InsightDatasetKind.Rooms;
+					const currentInsightDataset: InsightDataset = {
+						id: object.idName,
+						kind: InsightDatasetKind.Rooms,
+						numRows: object.validRooms.length
+					};
+					result.push(currentInsightDataset);
 				}
-				result.push(currentInsightDataset);
+
 
 				// to keep track of asynchronous code
 				pendingFiles--;
