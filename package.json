@@ -21,7 +21,6 @@
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "parse5": "^7.1.2",
-    "parse5-htmlparser2-tree-adapter": "^7.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
@@ -29,7 +28,7 @@
     "build": "tsc",
     "test-all": "mocha --require ts-node/register --timeout 10000 test/**/*.spec.ts",
     "clear": "tsc --build --clean",
-    "coverage": "nyc npm run test",
+    "coverage": "nyc npm run test-all",
     "lint_src": "eslint ./src --ext .ts",
     "lint_test": "eslint ./test --ext .ts"
   },

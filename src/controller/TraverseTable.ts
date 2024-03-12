@@ -25,20 +25,21 @@ export default class TraverseTable {
 	private roomsTableExist: boolean = false;
 	private count = 0;
 	private getLink = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team103/";
-	// private buildingLinkedFromIndex: string[] = [];
+	private buildingLinkedFromIndex: string[] = [];
 	private actualCount = 0;
 
 	// ================================================ index.htm ======================================================
-	public handleIndexHTML(document: any, buildingDictionary: {[code: string]: BuildingInfo}) {
+	public handleIndexHTML(document: any) {
 		let table = this.handleTable(document, "table");
+		console.log(this.indexTableExist);
 		if (this.indexTableExist) {
 			let tbody = this.handleTBody(table, "tbody");
-			buildingDictionary = this.handleTr(tbody, "tr", buildingDictionary);
+			this.handleTr(tbody, "tr");
 		} else {
+			console.log("asdfasldfasldfa");
 			throw new InsightError("No valid table inside index.htm");
 		}
-		// return this.buildingLinkedFromIndex;
-		return buildingDictionary;
+		return this.buildingLinkedFromIndex;
 	}
 
 	private handleTable (node: any, tag: string): any {
@@ -77,18 +78,18 @@ export default class TraverseTable {
 		return null;
 	}
 
-	private handleTr (node: any, tag: string, buildingDictionary: {[code: string]: BuildingInfo}): any {
+	private handleTr (node: any, tag: string): any {
 		if (!node) {
 			return;
 		}
 		if (!node.childNodes) {
 			return;
 		}
-
 		for (const tr of node.childNodes) {
 			// let child = node.childNodes[i];
 			if (tr.nodeName === tag) {
 				let hasAllElement = true;
+				let currentBuildingLink;
 				// console.log("------------------------" + child.nodeName + "------------------------------")
 				for (const td of tr.childNodes) {
 					// let td = tr.childNodes[j];
@@ -102,6 +103,11 @@ export default class TraverseTable {
 						// }
 
 						hasAllElement = hasAllElement && true;
+
+						if (td.attrs[0].value === "views-field views-field-nothing") {
+							// console.log(td.childNodes[1].attrs[0].value.substring(2));
+							this.buildingLinkedFromIndex.push(td.childNodes[1].attrs[0].value.substring(2));
+						}
 					} else if (td.nodeName === "td" && !this.indexColumnNames.includes(td.attrs[0].value)) {
 						// throw new InsightError("Invalid td in index.htm table");
 						hasAllElement = hasAllElement && false;
@@ -129,28 +135,24 @@ export default class TraverseTable {
 				//
 				// }
 			}
-			this.handleTr(tr, tag, buildingDictionary);
+			this.handleTr(tr, tag);
 		}
-		return buildingDictionary;
+		return;
 	}
 	// ================================================ index.htm ======================================================
 
 
 	// ================================================ buildings ======================================================
-	public async handleBuildingFile(document: any, c: number, dataset: Dataset) {
+	public async handleBuildingFile(document: any, dataset: Dataset) {
 		// console.log("handle building reached");
-
-		this.count = c;
 		let table = this.handleBuildingTable(document, "table");
 		if (this.roomsTableExist) {
 			let buildingInfo: BuildingInfo;
 			buildingInfo = this.getBuildingInfo(document, "building-info");
 			let tbody = this.handleBuildingTBody(table, "tbody");
 			await this.handleBuildingTr(tbody, "tr", buildingInfo, dataset);
-		} else {
-			return this.count;
 		}
-		return this.count;
+		return;
 	}
 
 	private getBuildingInfo(node: any, value: string): any {
