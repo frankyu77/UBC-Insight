@@ -600,6 +600,7 @@ describe("InsightFacade", function() {
 	// //
 	describe("performQuery", () => {
 		let sections: string;
+		let rooms: string;
 		let facade: InsightFacade;
 
 		before(async function() {
