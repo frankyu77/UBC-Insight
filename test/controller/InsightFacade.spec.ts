@@ -600,7 +600,6 @@ describe("InsightFacade", function() {
 	// //
 	describe("performQuery", () => {
 		let sections: string;
-		let rooms: string;
 		let facade: InsightFacade;
 
 		before(async function() {
@@ -614,10 +613,10 @@ describe("InsightFacade", function() {
 			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		});
 
-		describe("valid sections queries", function() {
+		describe("valid queries", function() {
 			let validQueries: ITestQuery[];
 			try {
-				validQueries = readFileQueries("sections_valid");
+				validQueries = readFileQueries("valid");
 			} catch (e: unknown) {
 				expect.fail(`Failed to read one or more test queries. ${e}`);
 			}
@@ -709,4 +708,3 @@ describe("InsightFacade", function() {
 	});
 
 });
-
