@@ -14,7 +14,9 @@ import Section from "./Section";
 import Dataset from "./Dataset";
 import QueryOperator from "./QueryOperator";
 import HandleDataset from "./HandleDataset";
-import ResultUtilities from "./ResultUtilities";
+import WhereOperator from "./WhereOperator";
+import OptionsOperator from "./OptionsOperator";
+import TransformOperator from "./TransformOperator";
 
 const fsPromises = require("fs").promises;
 
@@ -248,23 +250,25 @@ export default class InsightFacade implements IInsightFacade {
 
 		return new Promise<InsightResult[]>( (resolve, reject) => {
 			let queryOperator = new QueryOperator(this.idDatasetsAddedSoFar);
-			let resultUtilities = new ResultUtilities();
+			let whereOperator = new WhereOperator(queryOperator);
+			let optionsOperator: OptionsOperator = new OptionsOperator(queryOperator);
+			let transformOperator: TransformOperator = new TransformOperator(queryOperator);
 			let queryS: any = query;
 			try {
-				resultUtilities.checkIfValidJson(queryS);
-				resultUtilities.checkBaseEbnf(queryS);
+				queryOperator.checkIfValidJson(queryS);
+				queryOperator.checkBaseEbnf(queryS);
 			} catch (error) {
 				return reject(error);
 			}
 
 			let result: InsightResult[];
 
-			queryOperator.handleWhere(queryS.WHERE).then( (resultWhere) => {
-
-				result = resultUtilities.convertBoolean(resultWhere, queryOperator.getDataset());
-				result = resultUtilities.checkResultLength(result);
-				result = queryOperator.handleOptions(queryS.OPTIONS, result);
-				result = resultUtilities.compatibleFormat(queryOperator, result);
+			whereOperator.handleWhere(queryS.WHERE).then( (resultWhere) => {
+				result = queryOperator.convertBoolean(resultWhere);
+				result = queryOperator.checkResultLength(result);
+				result = transformOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
+				result = optionsOperator.handleOptions(queryS.OPTIONS, result);
+				result = queryOperator.compatibleFormat(result);
 
 				return resolve(result);
 			}).catch((error) => {
