@@ -17,7 +17,6 @@ export default class QueryOperator {
 	public skey = ["dept", "id", "instructor", "title", "uuid",
 		"fullname" , "shortname" , "number" , "name" , "address" , "type" , "furniture" , "href"];
 
-	public optionsKey = ["COLUMNS", "ORDER"];
 
 
 	constructor(idDatasets: string[]) {

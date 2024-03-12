@@ -2,6 +2,8 @@ import {InsightError, InsightResult} from "./IInsightFacade";
 import QueryOperator from "./QueryOperator";
 export default class OptionsOperator {
 	private queryOperator: QueryOperator;
+	private optionsKey = ["COLUMNS", "ORDER"];
+
 	constructor(queryOperator: QueryOperator) {
 		this.queryOperator = queryOperator;
 	}
@@ -13,7 +15,7 @@ export default class OptionsOperator {
 
 
         // Check if there is a key that does not match the valid options keys
-		const invalidKey = keys.some((key) => !this.queryOperator.optionsKey.includes(key));
+		const invalidKey = keys.some((key) => !this.optionsKey.includes(key));
 		if (invalidKey) {
 			throw new InsightError("Invalid key in OPTIONS");
 		}
@@ -33,9 +35,10 @@ export default class OptionsOperator {
 		const updatedArray: InsightResult[] = filtered.map((insight) => {
 			let newInsight: InsightResult = {};
 			columns.forEach((field) => {
-                // Object.prototype.hasOwnProperty.call(insight, field
-				if(Object.prototype.hasOwnProperty.call(insight, field)) {
+				if (Object.prototype.hasOwnProperty.call(insight, field)) {
 					newInsight[field] = insight[field];
+				} else {
+					throw new InsightError("Keys in COLUMNS must be in GROUP or APPLY when TRANSFORMATIONS")
 				}
 			});
 			return newInsight;
