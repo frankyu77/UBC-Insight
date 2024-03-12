@@ -38,7 +38,7 @@ export default class OptionsOperator {
 				if (Object.prototype.hasOwnProperty.call(insight, field)) {
 					newInsight[field] = insight[field];
 				} else {
-					throw new InsightError("Keys in COLUMNS must be in GROUP or APPLY when TRANSFORMATIONS")
+					throw new InsightError("Keys in COLUMNS must be in GROUP or APPLY");
 				}
 			});
 			return newInsight;
