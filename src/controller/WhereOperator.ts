@@ -5,8 +5,8 @@ const fsPromises = require("fs").promises;
 
 export default class WhereOperator {
 
-	private queryOperator : QueryOperator;
-	constructor(queryOperator : QueryOperator) {
+	private queryOperator: QueryOperator;
+	constructor(queryOperator: QueryOperator) {
 		this.queryOperator = queryOperator;
 	}
 

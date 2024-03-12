@@ -1,7 +1,7 @@
 import {
 	InsightError,
 	InsightResult,
-    ResultTooLargeError,
+	ResultTooLargeError,
 } from "./IInsightFacade";
 import path from "node:path";
 
@@ -46,9 +46,10 @@ export default class QueryOperator {
 		return this.datasetToQuery;
 	}
 
-	public getDatasetIds() : string[] {
+	public getDatasetIds(): string[] {
 		return this.idDatasetsAddedSoFar;
 	}
+
 	public getDatasetDirPath(id: string): string {
 		return path.join(this.dir, `${id}`);
 	}
@@ -75,6 +76,7 @@ export default class QueryOperator {
 
 		return parts[1] || "";
 	}
+
 	public checkIfValidJson(query: any): void {
 		try {
 			JSON.stringify(query);

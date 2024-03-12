@@ -532,13 +532,13 @@ describe("InsightFacade", function() {
 
 		before(async function() {
 			sections = await getContentFromArchives("pair.zip");
-			//rooms = await getContentFromArchives("campus.zip")
+			// rooms = await getContentFromArchives("campus.zip")
 			facade = new InsightFacade();
 
 			chai.use(chaiAsPromised);
 			await clearDisk();
 			await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
-			//await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms)
+			// await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms)
 		});
 
 		describe("valid sections queries", function() {

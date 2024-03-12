@@ -14,7 +14,6 @@ import Section from "./Section";
 import Dataset from "./Dataset";
 import QueryOperator from "./QueryOperator";
 import HandleDataset from "./HandleDataset";
-import ResultUtilities from "./ResultUtilities";
 import WhereOperator from "./WhereOperator";
 import OptionsOperator from "./OptionsOperator";
 import TransformOperator from "./TransformOperator";
@@ -241,8 +240,8 @@ export default class InsightFacade implements IInsightFacade {
 		return new Promise<InsightResult[]>( (resolve, reject) => {
 			let queryOperator = new QueryOperator(this.idDatasetsAddedSoFar);
 			let whereOperator = new WhereOperator(queryOperator);
-			let optionsOperator : OptionsOperator = new OptionsOperator(queryOperator);
-			let transformOperator : TransformOperator = new TransformOperator(queryOperator);
+			let optionsOperator: OptionsOperator = new OptionsOperator(queryOperator);
+			let transformOperator: TransformOperator = new TransformOperator(queryOperator);
 			let queryS: any = query;
 			try {
 				queryOperator.checkIfValidJson(queryS);
