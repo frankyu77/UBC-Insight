@@ -595,7 +595,7 @@ describe("InsightFacade", function() {
 	// //
 	});
 	// // //
-	// // //
+	//  // //
     // // // #####################################################################################################performQuery
 	// // //
 	describe("performQuery", () => {
@@ -660,4 +660,3 @@ describe("InsightFacade", function() {
 	});
 
 });
-
