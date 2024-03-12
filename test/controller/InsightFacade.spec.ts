@@ -594,21 +594,24 @@ describe("InsightFacade", function() {
 		});
 	// //
 	});
-	// // //
-	//  // //
-    // // // #####################################################################################################performQuery
-	// // //
+	// //
+	// //
+    // // #####################################################################################################performQuery
+	// //
 	describe("performQuery", () => {
 		let sections: string;
+		let rooms: string;
 		let facade: InsightFacade;
 
 		before(async function() {
 			sections = await getContentFromArchives("pair.zip");
+			rooms = await getContentFromArchives("campus.zip");
 			facade = new InsightFacade();
 
 			chai.use(chaiAsPromised);
 			await clearDisk();
 			await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		});
 
 		describe("valid queries", function() {
@@ -636,10 +639,56 @@ describe("InsightFacade", function() {
 			});
 		});
 
-		describe("invalid queries", () => {
+		describe("invalid sections queries", () => {
 			let invalidQueries: ITestQuery[];
 			try {
-				invalidQueries = readFileQueries("invalid");
+				invalidQueries = readFileQueries("sections_invalid");
+			} catch (e: unknown) {
+				expect.fail(`Failed to read one or more test queries. ${e}`);
+			}
+
+			invalidQueries.forEach(function(test: any) {
+				it(`${test.title}`, async function () {
+					try {
+						const result = facade.performQuery(test.input);
+						await result;
+						assert.fail("should have thrown an error");
+					} catch (err: unknown) {
+						expect(err).to.be.an.instanceof(Error);
+					}
+				});
+			});
+		});
+
+		describe("valid rooms queries", function() {
+			let validQueries: ITestQuery[];
+			try {
+				validQueries = readFileQueries("rooms_valid");
+			} catch (e: unknown) {
+				expect.fail(`Failed to read one or more test queries. ${e}`);
+			}
+
+			validQueries.forEach(function(test: any) {
+				it(`${test.title}`, async function () {
+					return facade.performQuery(test.input).then((result) => {
+						if (!test.errorExpected) {
+							expect(result).to.have.deep.members(test.expected);
+
+						} else {
+							throw new Error("error expected");
+						}
+
+					}).catch((err: string) => {
+						assert.fail(`performQuery threw unexpected error: ${err}`);
+					});
+				});
+			});
+		});
+
+		describe("invalid rooms queries", () => {
+			let invalidQueries: ITestQuery[];
+			try {
+				invalidQueries = readFileQueries("rooms_invalid");
 			} catch (e: unknown) {
 				expect.fail(`Failed to read one or more test queries. ${e}`);
 			}

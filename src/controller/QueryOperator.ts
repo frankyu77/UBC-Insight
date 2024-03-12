@@ -102,6 +102,7 @@ export default class QueryOperator {
 				return true;
 			}
 		});
+		// Yes
 		return converted;
 	}
 
