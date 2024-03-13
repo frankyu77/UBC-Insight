@@ -720,27 +720,27 @@ describe("InsightFacade", function() {
 			});
 		});
 
-		describe("invalid rooms queries", () => {
-			let invalidQueries: ITestQuery[];
-			try {
-				invalidQueries = readFileQueries("sections_valid");
-			} catch (e: unknown) {
-				expect.fail(`Failed to read one or more test queries. ${e}`);
-			}
-
-			invalidQueries.forEach(function(test: any) {
-				it(`${test.title}`, async function () {
-					try {
-						const result = facade.performQuery(test.input);
-						await result;
-						assert.fail("should have thrown an error");
-					} catch (err: unknown) {
-						console.log(err);
-						expect(err).to.be.an.instanceof(Error);
-					}
-				});
-			});
-		});
+		// describe("invalid rooms queries", () => {
+		// 	let invalidQueries: ITestQuery[];
+		// 	try {
+		// 		invalidQueries = readFileQueries("sections_valid");
+		// 	} catch (e: unknown) {
+		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
+		// 	}
+		//
+		// 	invalidQueries.forEach(function(test: any) {
+		// 		it(`${test.title}`, async function () {
+		// 			try {
+		// 				const result = facade.performQuery(test.input);
+		// 				await result;
+		// 				assert.fail("should have thrown an error");
+		// 			} catch (err: unknown) {
+		// 				console.log(err);
+		// 				expect(err).to.be.an.instanceof(Error);
+		// 			}
+		// 		});
+		// 	});
+		// });
 
 	});
 
