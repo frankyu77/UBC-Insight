@@ -9,8 +9,6 @@ import {
 	ResultTooLargeError
 } from "./IInsightFacade";
 import * as fs from "fs";
-import path from "node:path";
-import Section from "./Section";
 import Dataset from "./Dataset";
 import QueryOperator from "./QueryOperator";
 import HandleDataset from "./HandleDataset";
@@ -18,8 +16,6 @@ import WhereOperator from "./WhereOperator";
 import OptionsOperator from "./OptionsOperator";
 import TransformOperator from "./TransformOperator";
 import TraverseTable from "./TraverseTable";
-
-const fsPromises = require("fs").promises;
 
 export default class InsightFacade implements IInsightFacade {
 	private datasetsAddedSoFar: Dataset[] = [];
@@ -42,18 +38,13 @@ export default class InsightFacade implements IInsightFacade {
 				return;
 			}
 
-			// check if the kind is Sections and not Rooms
-			if (kind === InsightDatasetKind.Sections) {
-				this.handleSectionsKind(id, content, reject, resolve);
-			} else if (kind === InsightDatasetKind.Rooms) {
-				this.handleRoomsKind(id, content, reject, resolve);
-			}
+			this.handleDatasetKind(id, content, kind, reject, resolve);
 		});
 	}
 
-	// CAN PROBABLY SOMEHOW MOVE THESE TWO METHODS TO THE HANDLEDATASET CLASS #########################################
-	private handleRoomsKind(id: string,
+	private handleDatasetKind(id: string,
 		content: string,
+		kind: InsightDatasetKind,
 		reject: (reason?: any) => void,
 		resolve: (value: (PromiseLike<string[]> | string[])) => void) {
 
@@ -70,22 +61,23 @@ export default class InsightFacade implements IInsightFacade {
 			.then(async (zip: JSZip) => {
 				let currentDataset = new Dataset();
 				currentDataset.setIDName(id);
-				currentDataset.setKind(InsightDatasetKind.Rooms);
-				// currentDataset.setValidity(true);
-				console.log("length before = " + currentDataset.getValidRooms().length);
-				// call to helper to handle reading the zip file
-//* **************************************************CHANGE THIS LINE**************************************************
-				this.handleDataset.buildingLinkedFromIndex = [];
-				this.handleDataset.traverseTable = new TraverseTable();
-				await this.handleDataset.handleRoomsZip(zip, reject, currentDataset);
 
-				console.log("length of dataset = " + currentDataset.getValidRooms().length);
+				if (kind === InsightDatasetKind.Sections) {
+					currentDataset.setKind(InsightDatasetKind.Sections);
+					await this.handleDataset.handleSectionsZip(zip, reject, currentDataset);
+				} else if (kind === InsightDatasetKind.Rooms) {
+					currentDataset.setKind(InsightDatasetKind.Rooms);
+					this.handleDataset.buildingLinkedFromIndex = [];
+					this.handleDataset.traverseTable = new TraverseTable();
+					await this.handleDataset.handleRoomsZip(zip, reject, currentDataset);
+				}
+
+
 				// reject if there are no valid sections
 				if (!currentDataset.getValidity()) {
 					reject(new InsightError("No valid rooms in dataset"));
 					return;
 				}
-				console.log("length of dataset = " + currentDataset.getValidRooms().length);
 
 				await this.handleDataset.addDatasetToDisk(currentDataset);
 				this.datasetsAddedSoFar.push(currentDataset);
@@ -94,47 +86,7 @@ export default class InsightFacade implements IInsightFacade {
 				resolve(this.idDatasetsAddedSoFar);
 			})
 			.catch((error: any) => {
-				console.log(error);
 				reject(new InsightError("Invalid Content"));
-			});
-	}
-
-	private handleSectionsKind(id: string,
-		content: string,
-		reject: (reason?: any) => void,
-		resolve: (value: (PromiseLike<string[]> | string[])) => void) {
-
-		// checks if dataset already exists
-		this.handleDataset.isThereDatasetDir(id)
-			.then(async (exists) => {
-				if (exists || this.idDatasetsAddedSoFar.includes(id)) {
-					throw new InsightError("Dataset already added");
-				}
-
-				// if it does not exist then unzip the dataset and read it
-				return await JSZip.loadAsync(content, {base64: true});
-			})
-			.then(async (zip: JSZip) => {
-				let currentDataset = new Dataset();
-				currentDataset.setIDName(id);
-				currentDataset.setKind(InsightDatasetKind.Sections);
-				// call to helper to handle reading the zip file
-				await this.handleDataset.handleSectionsZip(zip, reject, currentDataset);
-
-				// reject if there are no valid sections
-				if (!currentDataset.getValidity()) {
-					reject(new InsightError("No valid sections in dataset"));
-					return;
-				}
-
-				await this.handleDataset.addDatasetToDisk(currentDataset);
-				this.datasetsAddedSoFar.push(currentDataset);
-
-				this.idDatasetsAddedSoFar.push(currentDataset.getIDName());
-				resolve(this.idDatasetsAddedSoFar);
-			})
-			.catch((error: any) => {
-				reject(new InsightError(error.message));
 			});
 	}
 
@@ -215,12 +167,6 @@ export default class InsightFacade implements IInsightFacade {
 
 				// this sections just makes the InsightDataset object for each dataset
 				const object = JSON.parse(data);
-				// const currentInsightDataset: InsightDataset = {
-				// 	id: object.idName,
-				// 	kind: InsightDatasetKind.Sections,
-				// 	numRows: object.validSections.length
-				// };
-				// let currentInsightDataset: any;
 
 				if (object.kind === "sections") {
 					const currentInsightDataset: InsightDataset = {
