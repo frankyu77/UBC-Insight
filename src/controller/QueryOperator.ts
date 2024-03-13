@@ -13,9 +13,8 @@ export default class QueryOperator {
 	protected idDatasetsAddedSoFar: string[] = [];
 	public applyNames: string[] = [];
 
-	public mkey : string[] = [];
+	public mkey: string[] = [];
 	public skey: string[] = [];
-
 
 
 	constructor(idDatasets: string[]) {
@@ -86,7 +85,7 @@ export default class QueryOperator {
 	public  checkBaseEbnf(queryS: any) {
 		const keysArray = Object.keys(queryS);
 		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
-			 return false;
+			return false;
 		} else if (keysArray.length === 3 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS") &&
 			keysArray.includes("TRANSFORMATIONS")) {
 			return true;

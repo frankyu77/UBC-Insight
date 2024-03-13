@@ -1,5 +1,5 @@
 {
-	"title": "transform_keyNotInColumns",
+	"title": "transform_duplicateApplyName",
 	"input": {
 		"WHERE": {
 			"GT": {
@@ -9,32 +9,28 @@
 		"OPTIONS": {
 			"COLUMNS": [
 				"sections_title",
+				"overallAvg",
 				"overallAvg"
 			]
 		},
 		"TRANSFORMATIONS": {
 			"GROUP": [
-				"sections_title",
-				"sections_audit"
+				"sections_title"
 			],
 			"APPLY": [
 				{
 					"overallAvg": {
 						"AVG": "sections_avg"
 					}
+				},
+				{
+					"overallAvg": {
+						"MIN": "sections_pass"
+					}
 				}
 			]
 		}
 	},
-	"errorExpected": false,
-	"expected": [
-		{
-			"sections_title": "career planning",
-			"overallAvg": 99.19
-		},
-		{
-			"sections_title": "algb topology i",
-			"overallAvg": 99.78
-		}
-	]
+	"errorExpected": true,
+	"expected": "InsightError"
 }

@@ -45,8 +45,8 @@ export default class OptionsOperator {
 		});
 
 		if (keys.includes("ORDER")) {
-			if (typeof queryS.ORDER === 'string') {
-				const order : string = queryS.ORDER;
+			if (typeof queryS.ORDER === "string") {
+				const order: string = queryS.ORDER;
 
 				// Handle the case where "ORDER" is a string
 				const toSortBy: string = this.queryOperator.parseField(order);
@@ -56,11 +56,11 @@ export default class OptionsOperator {
 
 				this.staticSort(updatedArray, toSortBy);
 
-			} else if (typeof queryS.ORDER === 'object' && queryS.ORDER !== null) {
-				const orderObjectKeys : string[] = Object.keys(queryS.ORDER);
+			} else if (typeof queryS.ORDER === "object" && queryS.ORDER !== null) {
+				const orderObjectKeys: string[] = Object.keys(queryS.ORDER);
 				const orderObjectVals  = Object.values(queryS.ORDER);
-				const orderDir : string = queryS.ORDER.dir;
-				const orderKeyList : string[] = queryS.ORDER.keys
+				const orderDir: string = queryS.ORDER.dir;
+				const orderKeyList: string[] = queryS.ORDER.keys;
 				// Check if order object has correct keys
 
 				this.dynamicSort(updatedArray, orderKeyList, orderDir);
@@ -74,8 +74,8 @@ export default class OptionsOperator {
 		return updatedArray;
 	}
 
-	private staticSort(array : InsightResult[], key : string) : InsightResult[] {
-		 return array.sort((a, b) => {
+	private staticSort(array: InsightResult[], key: string): InsightResult[] {
+		return array.sort((a, b) => {
 			if (a[key] < b[key]) {
 				return -1;
 			}
@@ -85,9 +85,10 @@ export default class OptionsOperator {
 			return 0;
 		});
 	}
-	private dynamicSort(array : InsightResult[], keys : string[], direction : string) : InsightResult[] {
+
+	private dynamicSort(array: InsightResult[], keys: string[], direction: string): InsightResult[] {
 		return array.sort((a, b) => {
-			let sort : number;
+			let sort: number;
 			for (let key of keys) {
 				if (a[key] !== b[key]) {
 					// Assuming we are sorting strings or numbers only
@@ -110,6 +111,7 @@ export default class OptionsOperator {
 			}
 		});
 	}
+
 	private parseColumns(columns: string[]) {
 		let parsedColumns: string[] = columns.map((item) => {
 			return this.queryOperator.parseField(item);

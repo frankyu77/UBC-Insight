@@ -1,5 +1,5 @@
 {
-	"title": "transform_keyNotInColumns2",
+	"title": "transform_invalidApplyToken",
 	"input": {
 		"WHERE": {
 			"GT": {
@@ -9,7 +9,8 @@
 		"OPTIONS": {
 			"COLUMNS": [
 				"sections_title",
-				"overallAvg"
+				"overallAvg",
+				"pop"
 			]
 		},
 		"TRANSFORMATIONS": {
@@ -23,22 +24,13 @@
 					}
 				},
 				{
-					"sumAudit": {
-						"SUM": "sections_audit"
+					"pop": {
+						"POP": "sections_pass"
 					}
 				}
 			]
 		}
 	},
-	"errorExpected": false,
-	"expected": [
-		{
-			"sections_title": "career planning",
-			"overallAvg": 99.19
-		},
-		{
-			"sections_title": "algb topology i",
-			"overallAvg": 99.78
-		}
-	]
+	"errorExpected": true,
+	"expected": "InsightError"
 }

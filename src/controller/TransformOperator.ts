@@ -54,54 +54,68 @@ export default class TransformOperator {
 		const parsedField: string = this.queryOperator.parseField(applyValueArray[0]);
 		switch (applyKeyArray[0]) {
 			case "MIN" : {
-				let smallest: number = Number.MAX_VALUE;
-				for (let i = 1; i < groupArray.length; i++) {
-					if (Number(groupArray[i][parsedField]) < smallest) {
-						smallest = Number(groupArray[i][parsedField]);
-					}
-				}
-				return smallest;
+				return this.min(groupArray, parsedField);
 			}
 			case "AVG" : {
-				let totalAvg : Decimal = new Decimal(0);
-				for (let i = 1; i < groupArray.length; i++) {
-					let decimal = new Decimal(groupArray[i][parsedField]);
-					totalAvg = totalAvg.add(decimal); // Update totalAvg with the new value
-				}
-				let avg = totalAvg.toNumber() / (groupArray.length - 1);
+				let avg = this.sum(groupArray, parsedField).toNumber() / (groupArray.length - 1);
 				return Number(avg.toFixed(2));
 			}
 
 			case "SUM": {
-				let totalSum : Decimal = new Decimal(0);
-				for (let i = 1; i < groupArray.length; i++) {
-					let decimal = new Decimal(groupArray[i][parsedField]);
-					totalSum = totalSum.add(decimal);
-				}
+				let totalSum = this.sum(groupArray, parsedField);
 				return Number(totalSum.toFixed(2));
 			}
 			case "MAX" : {
-				let largest: number = Number.MIN_VALUE;
-				for (let i = 1; i < groupArray.length; i++) {
-					if (Number(groupArray[i][parsedField]) > largest) {
-						largest = Number(groupArray[i][parsedField]);
-					}
-				}
-				return largest;
+				return this.max(groupArray, parsedField);
 			}
 			case "COUNT" : {
-				const occurrences = new Map<number | string, number>();
-
-				for (let i = 1; i < groupArray.length; i++) {
-					const currentCount = occurrences.get(groupArray[i][parsedField]) || 0;
-					occurrences.set(groupArray[i][parsedField], currentCount + 1);
-				}
-				return occurrences.size; // This is the sum of all occurrences.
+				const occurrences = this.getOccurences(groupArray, parsedField);
+				return occurrences.size;
 			}
 			default : {
-				throw new InsightError("Invalid apply token.")
+				throw new InsightError("Invalid apply token.");
 			}
 		}
+	}
+
+
+	private getOccurences(groupArray: InsightResult[], parsedField: string) {
+		const occurrences = new Map<number | string, number>();
+
+		for (let i = 1; i < groupArray.length; i++) {
+			const currentCount = occurrences.get(groupArray[i][parsedField]) || 0;
+			occurrences.set(groupArray[i][parsedField], currentCount + 1);
+		}
+		return occurrences;
+	}
+
+	private max(groupArray: InsightResult[], parsedField: string) {
+		let largest: number = Number.MIN_VALUE;
+		for (let i = 1; i < groupArray.length; i++) {
+			if (Number(groupArray[i][parsedField]) > largest) {
+				largest = Number(groupArray[i][parsedField]);
+			}
+		}
+		return largest;
+	}
+
+	private min(groupArray: InsightResult[], parsedField: string) {
+		let smallest: number = Number.MAX_VALUE;
+		for (let i = 1; i < groupArray.length; i++) {
+			if (Number(groupArray[i][parsedField]) < smallest) {
+				smallest = Number(groupArray[i][parsedField]);
+			}
+		}
+		return smallest;
+	}
+
+	private sum(groupArray: InsightResult[], parsedField: string) {
+		let totalSum: Decimal = new Decimal(0);
+		for (let i = 1; i < groupArray.length; i++) {
+			let decimal = new Decimal(groupArray[i][parsedField]);
+			totalSum = totalSum.add(decimal);
+		}
+		return totalSum;
 	}
 
 	private handleGroup(query: any, result: InsightResult[]) {
@@ -135,10 +149,11 @@ export default class TransformOperator {
 	}
 
 	private validateTransformationKeys(query: any): void {
-		const transformationKeys : string[] = Object.keys(query);
-		if (transformationKeys.length === 2 && transformationKeys.includes("GROUP") && transformationKeys.includes("APPLY")) {
-			return
+		const transformationKeys: string[] = Object.keys(query);
+		if (transformationKeys.length === 2 && transformationKeys.includes("GROUP") &&
+			transformationKeys.includes("APPLY")) {
+			return;
 		}
-		throw new InsightError("Invalid transformation keys.")
+		throw new InsightError("Invalid transformation keys.");
 	}
 }
