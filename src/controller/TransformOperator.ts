@@ -81,7 +81,6 @@ export default class TransformOperator {
 
 	private getOccurences(groupArray: InsightResult[], parsedField: string) {
 		const occurrences = new Map<number | string, number>();
-
 		for (let i = 1; i < groupArray.length; i++) {
 			const currentCount = occurrences.get(groupArray[i][parsedField]) || 0;
 			occurrences.set(groupArray[i][parsedField], currentCount + 1);
