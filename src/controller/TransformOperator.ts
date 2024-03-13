@@ -1,3 +1,4 @@
+import Decimal from "decimal.js";
 import {InsightError, InsightResult} from "./IInsightFacade";
 import QueryOperator from "./QueryOperator";
 export default class TransformOperator {
@@ -22,6 +23,9 @@ export default class TransformOperator {
 				const applyRuleArray: string[] = Object.values(value);
 				const applyRule: string = applyRuleArray[0];
 
+				// if (this.queryOperator.applyNames.includes(applyName)) {
+				// 	throw new InsightError("Duplicate apply names identified");
+				// }
 
                 // Calculate apply rule
 				const calculatedApplyRule: number = this.calculateApplyRule(applyRule, groupArray);
@@ -57,20 +61,22 @@ export default class TransformOperator {
 				return smallest;
 			}
 			case "AVG" : {
-				let totalAvg: number = 0;
+				let totalAvg : Decimal = new Decimal(0);
 				for (let i = 1; i < groupArray.length; i++) {
-					totalAvg += Number(groupArray[i][parsedField]);
+					let decimal = new Decimal(groupArray[i][parsedField]);
+					totalAvg = totalAvg.add(decimal); // Update totalAvg with the new value
 				}
-				const calculated: number = (totalAvg / (groupArray.length - 1));
-				return calculated;
+				let avg = totalAvg.toNumber() / groupArray.length - 1;
+				return Number(avg.toFixed(2));
 			}
 
 			case "SUM": {
-				let totalSum: number = 0;
+				let totalSum : Decimal = new Decimal(0);
 				for (let i = 1; i < groupArray.length; i++) {
-					totalSum += Number(groupArray[i][parsedField]);
+					let decimal = new Decimal(groupArray[i][parsedField]);
+					totalSum = totalSum.add(decimal);
 				}
-				return totalSum;
+				return Number(totalSum.toFixed(2));
 			}
 			case "MAX" : {
 				let largest: number = Number.MIN_VALUE;

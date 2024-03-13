@@ -16,6 +16,7 @@
     "@types/parse5": "^7.0.0",
     "chai": "4.3.10",
     "chai-as-promised": "^7.1.1",
+    "decimal.js": "^10.4.3",
     "fs-extra": "^11.2.0",
     "jszip": "^3.10.1",
     "mocha": "^10.2.0",
