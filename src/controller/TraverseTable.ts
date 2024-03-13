@@ -25,7 +25,7 @@ export default class TraverseTable {
 	private roomsTableExist: boolean = false;
 	private count = 0;
 	private getLink = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team103/";
-	private buildingLinkedFromIndex: string[] = [];
+	private buildingLinkedFromIndex: BuildingInfo[] = [];
 	private actualCount = 0;
 
 	// ================================================ index.htm ======================================================
@@ -87,9 +87,13 @@ export default class TraverseTable {
 		}
 		for (const tr of node.childNodes) {
 			// let child = node.childNodes[i];
+			let hasAllElement = true;
+			let buildingName: string = "";
+			let buildingCode: string = "";
+			let buildingAddress: string = "";
+			let buildingLink: string = "";
+
 			if (tr.nodeName === tag) {
-				let hasAllElement = true;
-				let currentBuildingLink;
 				// console.log("------------------------" + child.nodeName + "------------------------------")
 				for (const td of tr.childNodes) {
 					// let td = tr.childNodes[j];
@@ -104,9 +108,20 @@ export default class TraverseTable {
 
 						hasAllElement = hasAllElement && true;
 
-						if (td.attrs[0].value === "views-field views-field-nothing") {
+						if (td.attrs[0].value === "views-field views-field-field-building-code") {
+							buildingCode = td.childNodes[0].value.trim();
+							//console.log(buildingCode);
+						} else if (td.attrs[0].value === "views-field views-field-title") {
+							buildingName = td.childNodes[1].childNodes[0].value.trim();
+							//console.log(buildingName)
+						} else if (td.attrs[0].value === "views-field views-field-field-building-address") {
+							buildingAddress = td.childNodes[0].value.trim();
+							//console.log(buildingAddress);
+						} else if (td.attrs[0].value === "views-field views-field-nothing") {
 							// console.log(td.childNodes[1].attrs[0].value.substring(2));
-							this.buildingLinkedFromIndex.push(td.childNodes[1].attrs[0].value.substring(2));
+							//this.buildingLinkedFromIndex.push(td.childNodes[1].attrs[0].value.substring(2));
+							buildingLink = td.childNodes[1].attrs[0].value.substring(2);
+							//console.log(buildingLink);
 						}
 					} else if (td.nodeName === "td" && !this.indexColumnNames.includes(td.attrs[0].value)) {
 						// throw new InsightError("Invalid td in index.htm table");
@@ -114,27 +129,17 @@ export default class TraverseTable {
 						break;
 					}
 				}
-
-				// if (hasAllElement) {
-				// 	var buildingCode;
-				// 	var buildingName;
-				// 	var buildingAddress;
-				// 	var buildingLink;
-				// 	for (let j = 0; j < child.childNodes.length; j++) {
-				// 		let td = child.childNodes[j];
-				// 		if (td.attrs[0].value === "views-field views-field-field-building-code") {
-				// 			td.childNodes
-				// 		} else if (td.attrs[0].value === "views-field views-field-title") {
-				//
-				// 		} else if (td.attrs[0].value === "views-field views-field-field-building-address") {
-				//
-				// 		} else if (td.attrs[0].value === "views-field views-field-nothing") {
-				//
-				// 		}
-				// 	}
-				//
-				// }
 			}
+			if (hasAllElement) {
+				let buildingInfo: BuildingInfo = {
+					buildingName: buildingName,
+					buildingCode: buildingCode,
+					address: buildingAddress,
+					link: buildingLink
+				};
+				this.buildingLinkedFromIndex.push(buildingInfo);
+			}
+
 			this.handleTr(tr, tag);
 		}
 		return;
@@ -143,38 +148,44 @@ export default class TraverseTable {
 
 
 	// ================================================ buildings ======================================================
-	public async handleBuildingFile(document: any, dataset: Dataset) {
+	public async handleBuildingFile(document: any, dataset: Dataset, buildingInfo: BuildingInfo) {
 		// console.log("handle building reached");
 		let table = this.handleBuildingTable(document, "table");
 		if (this.roomsTableExist) {
-			let buildingInfo: BuildingInfo;
-			buildingInfo = this.getBuildingInfo(document, "building-info");
-			let tbody = this.handleBuildingTBody(table, "tbody");
-			await this.handleBuildingTr(tbody, "tr", buildingInfo, dataset);
+			// let buildingInfo: BuildingInfo;
+			// buildingInfo = this.getBuildingInfo(document, "building-info");
+			try {
+				let tbody = this.handleBuildingTBody(table, "tbody");
+				await this.handleBuildingTr(tbody, "tr", buildingInfo, dataset);
+			} catch (error) {
+				console.log(error);
+				// throw new InsightError("error while reading table");
+			}
+
 		}
 		return;
 	}
 
-	private getBuildingInfo(node: any, value: string): any {
-		for (let i = 0; i < node.childNodes?.length; i++) {
-			let child = node.childNodes[i];
-			if (child.nodeName === "div" && child.attrs[0].value === "building-info") {
-				// console.log ("ASLKDJFALSKDFJHALSKJDFHLASJKDFNLAJKSVLAKSJDBVNLASKJDFLASKJDFHLASKJBLVKJSDBNVLAKJNFLKJASDFNLKJ");
-				let fullName = child.childNodes[1].childNodes[0].childNodes[0].value;
-				let address = child.childNodes[3].childNodes[0].childNodes[0].value;
-				// console.log(fullName);		// FULL NAME GOT
-				// console.log(address);		// ADDRESS GOT
-				let buildingInfo: BuildingInfo = {name: fullName, address: address};
-				// might have to create a dictionary to get the short name from the full namem
-				return buildingInfo;
-			}
-			const result = this.getBuildingInfo(node.childNodes[i], value);
-			if (result) {
-				return result;
-			}
-		}
-		return null;
-	}
+	// private getBuildingInfo(node: any, value: string): any {
+	// 	for (let i = 0; i < node.childNodes?.length; i++) {
+	// 		let child = node.childNodes[i];
+	// 		if (child.nodeName === "div" && child.attrs[0].value === "building-info") {
+	// 			// console.log ("ASLKDJFALSKDFJHALSKJDFHLASJKDFNLAJKSVLAKSJDBVNLASKJDFLASKJDFHLASKJBLVKJSDBNVLAKJNFLKJASDFNLKJ");
+	// 			let fullName = child.childNodes[1].childNodes[0].childNodes[0].value;
+	// 			let address = child.childNodes[3].childNodes[0].childNodes[0].value;
+	// 			// console.log(fullName);		// FULL NAME GOT
+	// 			// console.log(address);		// ADDRESS GOT
+	// 			let buildingInfo: BuildingInfo = {name: fullName, address: address};
+	// 			// might have to create a dictionary to get the short name from the full namem
+	// 			return buildingInfo;
+	// 		}
+	// 		const result = this.getBuildingInfo(node.childNodes[i], value);
+	// 		if (result) {
+	// 			return result;
+	// 		}
+	// 	}
+	// 	return null;
+	// }
 
 	private handleBuildingTable (node: any, tag: string): any {
 		for (let i = 0; i < node.childNodes?.length; i++) {
@@ -196,7 +207,9 @@ export default class TraverseTable {
 	}
 
 	private handleBuildingTBody (node: any, tag: string): any {
-		for (let i = 0; i < node.childNodes?.length; i++) {
+		if (!node || !node.childNodes) return null;
+		const len = node.childNodes.length;
+		for (let i = 0; i < len; i++) {
 			let child = node.childNodes[i];
 			// "views-table cols-5 table"
 			if (child.nodeName === tag) {  // error in second case
@@ -204,10 +217,10 @@ export default class TraverseTable {
 				// console.log("------------------------" + child.nodeName + "------------------------------");
 				return child;
 			}
-			const result = this.handleBuildingTBody(node.childNodes[i], tag);
-			if (result) {
-				return result;
-			}
+			// const result = this.handleBuildingTBody(node.childNodes[i], tag);
+			// if (result) {
+			// 	return result;
+			// }
 		}
 		return null;
 	}
@@ -330,15 +343,20 @@ export default class TraverseTable {
 	// 	console.log("valid rooms = " + dataset.getValidRooms().length);
 	// };
 
-	private async handleBuildingTr(node: any,
-		tag: string,
-		buildingInfo: BuildingInfo,
-		dataset: Dataset) {
+	private async handleBuildingTr(node: any, tag: string, buildingInfo: BuildingInfo, dataset: Dataset) {
 
-		const promises: Array<Promise<void>> = [];
+		// const promises: Array<Promise<void>> = [];
 		if (!node || !node.childNodes) {
 			return;
 		}
+
+		let lat: string = "";
+		let lon: string = "";
+
+		let urlEncodedAddress: string = buildingInfo.address.replace(/ /g, "%20");
+		let urlForRoom = this.getLink + urlEncodedAddress;
+
+		this.getLatLon(urlForRoom, lat, lon);
 
 		for (const tr of node.childNodes) {
 			// let tr = node.childNodes[i];
@@ -347,43 +365,71 @@ export default class TraverseTable {
 				hasAllElement = this.validateRoom(tr, hasAllElement);
 				if (hasAllElement) {
 					this.count++;
-					let urlEncodedAddress: string = buildingInfo.address.replace(/ /g, "%20");
-					let urlForRoom = this.getLink + urlEncodedAddress;
+					this.fetchRoomData(buildingInfo, lat, lon, tr, dataset);
 					// console.log(urlForRoom);
 
-					promises.push(new Promise<void>((resolve, reject) => {
-						http.get(urlForRoom, (response) => {
-							let data = "";
-							response.on("data", (chunk) => {
-								data += chunk;
-							});
-							response.on("end", () => {
-								const json = JSON.parse(data);
-								if (!json.error) {
-									// console.log("THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR ")
-									// console.log(json);
-									this.fetchRoomData(buildingInfo, json, tr, dataset);
-
-								} else {
-									console.log("Error response:", json);
-								}
-								resolve();
-							});
-						}).on("error", (error) => {
-							console.error("Error fetching room data:", error);
-							reject(error);
-						});
-					}));
+					//promises.push(new Promise<void>((resolve, reject) => {
+						// http.get(urlForRoom, (response) => {
+						// 	let data = "";
+						// 	response.on("data", (chunk) => {
+						// 		data += chunk;
+						// 	});
+						// 	response.on("end", () => {
+						// 		const json = JSON.parse(data);
+						// 		if (!json.error) {
+						// 			// console.log("THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR ")
+						// 			// console.log(json);
+						// 			this.fetchRoomData(buildingInfo, json, tr, dataset);
+						//
+						// 		} else {
+						// 			console.log("Error response:", json);
+						// 		}
+						// 		resolve();
+						// 	});
+						// }).on("error", (error) => {
+						// 	console.error("Error fetching room data:", error);
+						// 	reject(error);
+						// });
+					//}));
 				}
 			}
 			// await
 			// this.handleBuildingTr(tr, tag, buildingInfo, dataset);
 		}
-		await Promise.all(promises);
+		//await Promise.all(promises);
 
 		// for (const tr of node.childNodes) {
 		// 	await this.handleBuildingTr(tr, tag, buildingInfo, dataset);
 		// }
+	}
+
+	private getLatLon(urlForRoom: string, lat: string, lon: string) {
+		//console.log("get called");
+		return new Promise ((resolve, reject) => {
+			http.get(urlForRoom, (response) => {
+				let data = "";
+				response.on("data", (chunk) => {
+					data += chunk;
+				});
+				response.on("end", () => {
+					const json = JSON.parse(data);
+					if (!json.error) {
+						// console.log("THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR ")
+						// console.log(json);
+						// this.fetchRoomData(buildingInfo, json, tr, dataset);
+						lat = json.lat;
+						lon = json.lon;
+					} else {
+						console.log("Error response:", json);
+					}
+					resolve("worked");
+				});
+			}).on("error", (error) => {
+				console.error("Error fetching room data:", error);
+				reject(error);
+			});
+		});
+
 	}
 
 	private validateRoom(tr: any, hasAllElement: boolean) {
@@ -399,14 +445,14 @@ export default class TraverseTable {
 		return hasAllElement;
 	}
 
-	private fetchRoomData(buildingInfo: BuildingInfo, json: any, tr: any, dataset: Dataset) {
-		let buildingFullName = buildingInfo.name;
-		let buildingShortName;
+	private fetchRoomData(buildingInfo: BuildingInfo, latitude: string, longitude: string, tr: any, dataset: Dataset) {
+		let buildingFullName = buildingInfo.buildingName;
+		let buildingShortName = buildingInfo.buildingCode;
 		let roomNumber;
 		let roomName;
 		let buildingAddress = buildingInfo.address;
-		let lat = json.lat;
-		let lon = json.lon;
+		let lat = latitude;
+		let lon = longitude;
 		let roomCapacity;
 		let roomType;
 		let roomFurniture;
@@ -438,8 +484,8 @@ export default class TraverseTable {
 				td.attrs[0].value === "views-field views-field-nothing") {
 				roomLink = td.childNodes[1].attrs[0].value;
 				// console.log("link = " + roomLink);
-				let buildingRoom = roomLink.split("/").pop();
-				buildingShortName = buildingRoom.split("-")[0];
+				// let buildingRoom = roomLink.split("/").pop();
+				// buildingShortName = buildingRoom.split("-")[0];
 				// console.log("building short name = " + buildingShortName);
 			}
 		}
@@ -494,6 +540,13 @@ export default class TraverseTable {
 }
 
 export interface BuildingInfo {
-	name: string;
+	buildingName: string;
+	buildingCode: string;
 	address: string;
+	link: string;
 }
+
+// export interface BuildingInfo {
+// 	name: string;
+// 	address: string;
+// }
