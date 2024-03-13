@@ -171,8 +171,12 @@ export default class WhereOperator {
 		const object = JSON.parse(data);
 
 		if (object.kind === "sections") {
+			this.queryOperator.mkey =  ["avg", "pass", "fail", "audit"];
+			this.queryOperator.skey = ["dept", "id", "instructor", "title", "uuid"];
 			this.queryOperator.setDataset(JSON.parse(JSON.stringify(object.validSections)));
 		} else {
+			this.queryOperator.mkey =  ["year", "lat", "lon", "seats"];
+			this.queryOperator.skey = ["fullname" , "shortname" , "number" , "name" , "address" , "type" , "furniture" , "href"];
 			this.queryOperator.setDataset(JSON.parse(JSON.stringify(object.validRooms)));
 		}
 		this.queryOperator.setDatasetToQueryId(object.idName);

@@ -13,9 +13,8 @@ export default class QueryOperator {
 	protected idDatasetsAddedSoFar: string[] = [];
 	public applyNames: string[] = [];
 
-	public mkey = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
-	public skey = ["dept", "id", "instructor", "title", "uuid",
-		"fullname" , "shortname" , "number" , "name" , "address" , "type" , "furniture" , "href"];
+	public mkey : string[] = [];
+	public skey: string[] = [];
 
 
 

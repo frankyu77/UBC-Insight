@@ -621,7 +621,7 @@ describe("InsightFacade", function() {
 		// 	} catch (e: unknown) {
 		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
 		// 	}
-		//
+
 		// 	validQueries.forEach(function(test: any) {
 		// 		it(`${test.title}`, async function () {
 		// 			return facade.performQuery(test.input).then((result) => {
@@ -701,6 +701,7 @@ describe("InsightFacade", function() {
 						await result;
 						assert.fail("should have thrown an error");
 					} catch (err: unknown) {
+						console.log(err);
 						expect(err).to.be.an.instanceof(Error);
 					}
 				});

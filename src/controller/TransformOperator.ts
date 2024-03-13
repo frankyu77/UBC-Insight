@@ -17,29 +17,31 @@ export default class TransformOperator {
 
         // Take each group
 		grouped.forEach((groupArray: InsightResult[]) => {
+			const localApplyNames = new Set<string>();
 			applyArray.forEach((value, index, array) =>  {
 				const applyKeyArray: string[] =  Object.keys(value);
 				const applyName = applyKeyArray[0];
 				const applyRuleArray: string[] = Object.values(value);
 				const applyRule: string = applyRuleArray[0];
 
-				// if (this.queryOperator.applyNames.includes(applyName)) {
-				// 	throw new InsightError("Duplicate apply names identified");
-				// }
+				if (localApplyNames.has(applyName)) {
+					throw new InsightError("Duplicate apply names identified");
+				}
 
                 // Calculate apply rule
 				const calculatedApplyRule: number = this.calculateApplyRule(applyRule, groupArray);
 
                 // Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
+				localApplyNames.add(applyName);
 				this.queryOperator.applyNames.push(applyName);
 			});
 		});
 
         // only take the first of each array in every value of the map
 		result = [];
-		grouped.forEach( (value, key, map) => {
-			result.push(value[0]);
+		grouped.forEach( (group, key, map) => {
+			result.push(group[0]);
 		});
 
 		return result;
@@ -96,8 +98,10 @@ export default class TransformOperator {
 				}
 				return occurrences.size; // This is the sum of all occurrences.
 			}
+			default : {
+				throw new InsightError("Invalid apply token.")
+			}
 		}
-		return 0;
 	}
 
 	private handleGroup(query: any, result: InsightResult[]) {
@@ -131,6 +135,10 @@ export default class TransformOperator {
 	}
 
 	private validateTransformationKeys(query: any): void {
-		return;
+		const transformationKeys : string[] = Object.keys(query);
+		if (transformationKeys.length === 2 && transformationKeys.includes("GROUP") && transformationKeys.includes("APPLY")) {
+			return
+		}
+		throw new InsightError("Invalid transformation keys.")
 	}
 }
