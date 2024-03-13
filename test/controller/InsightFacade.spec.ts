@@ -104,20 +104,32 @@ describe("InsightFacade", function() {
 			}
 		});
 
-		//* **************************************************************************************************** SUCCESS
-		// it ("should add valid rooms dataset", async () => {
-		// 	const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
-		// 	expect(asdf).to.deep.equal(["testingRooms"]);
-		//
-		// });
+		it ("should fail with building not referenced in index 2.0", async () => {
+			let test = await getContentFromArchives("invalid_buildingNotReferencedInIndex.zip");
+			try {
+				const asdf = await facade.addDataset("asdf", test, InsightDatasetKind.Rooms);
+				console.log(asdf);
+				assert.fail("should have failed");
+			} catch (error) {
+				console.log(error);
+				expect(error).to.be.an.instanceof(Error);
+			}
+		});
+
+		// * **************************************************************************************************** SUCCESS
+		it ("should add valid rooms dataset", async () => {
+			const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+			expect(asdf).to.deep.equal(["testingRooms"]);
+
+		});
 
 		describe("testing", () => {
-			// for (let i = 0; i < 1; i++) {
-			it ("t" , async () => {
-				const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
-				expect(asdf).to.deep.equal(["testingRooms"]);
-			});
-			// }
+			for (let i = 0; i < 1; i++) {
+				it ("t" , async () => {
+					const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+					expect(asdf).to.deep.equal(["testingRooms"]);
+				});
+			}
 		});
 
 		it ("valid index reference non existent building" , async () => {
@@ -614,12 +626,12 @@ describe("InsightFacade", function() {
 				console.log (error);
 			}
 		});
-	// //
+	//
 	});
 	// //
 	// //
-    // // #####################################################################################################performQuery
-	// //
+    // #####################################################################################################performQuery
+	//
 	describe("performQuery", () => {
 		let sections: string;
 		let rooms: string;

@@ -43,7 +43,11 @@ export default class TraverseTable {
 	}
 
 	private handleTable (node: any, tag: string): any {
-		for (let i = 0; i < node.childNodes?.length; i++) {
+		if (!node || !node.childNodes) {
+			return null;
+		}
+		const len = node.childNodes.length;
+		for (let i = 0; i < len; i++) {
 			let child = node.childNodes[i];
 			// "views-table cols-5 table"
 			if (child.nodeName === tag && child.attrs[0].value ===  "views-table cols-5 table") {
@@ -352,13 +356,14 @@ export default class TraverseTable {
 			return;
 		}
 
-		let lat: string = "";
-		let lon: string = "";
-
-		let urlEncodedAddress: string = buildingInfo.address.replace(/ /g, "%20");
+		// let urlEncodedAddress: string = buildingInfo.address.replace(/ /g, "%20");
+		let urlEncodedAddress = encodeURIComponent(buildingInfo.address);
 		let urlForRoom = this.getLink + urlEncodedAddress;
 
-		await this.getLatLon(urlForRoom, lat, lon);
+		let location: Location = await this.getLatLon(urlForRoom);
+		// console.log("1 location lat = " + location.latitutde);
+		// console.log("1 location lon = " + location.longitude);
+		// console.log("\n");
 
 		for (const tr of node.childNodes) {
 			// let tr = node.childNodes[i];
@@ -367,7 +372,10 @@ export default class TraverseTable {
 				hasAllElement = this.validateRoom(tr, hasAllElement);
 				if (hasAllElement) {
 					this.count++;
-					this.fetchRoomData(buildingInfo, lat, lon, tr, dataset);
+					// console.log("2 location lat = " + location.latitutde);
+					// console.log("2 location lon = " + location.longitude);
+					// console.log("\n");
+					this.fetchRoomData(buildingInfo, location.latitutde, location.longitude, tr, dataset);
 					// console.log(urlForRoom);
 
 					// promises.push(new Promise<void>((resolve, reject) => {
@@ -405,7 +413,7 @@ export default class TraverseTable {
 		// }
 	}
 
-	private getLatLon(urlForRoom: string, lat: string, lon: string) {
+	private getLatLon(urlForRoom: string): Promise<Location> {
 		// console.log("get called");
 		return new Promise ((resolve, reject) => {
 			http.get(urlForRoom, (response) => {
@@ -415,16 +423,26 @@ export default class TraverseTable {
 				});
 				response.on("end", () => {
 					const json = JSON.parse(data);
+					let location: Location;
+					let buildingLat: string;
+					let buildingLon: string;
 					if (!json.error) {
 						// console.log("THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR THERE IS AN ERROR ")
 						// console.log(json);
 						// this.fetchRoomData(buildingInfo, json, tr, dataset);
-						lat = json.lat;
-						lon = json.lon;
+						buildingLat = json.lat;
+						buildingLon = json.lon;
+						// console.log("lat = " + buildingLat);
+						// console.log("lon = " + buildingLon);
+
+						location = {latitutde: buildingLat.toString(), longitude: buildingLon.toString()};
+
+						resolve(location);
 					} else {
 						console.log("Error response:", json);
+						reject(new InsightError("cannot get geolocation"));
 					}
-					resolve("worked");
+
 				});
 			}).on("error", (error) => {
 				console.error("Error fetching room data:", error);
@@ -448,17 +466,23 @@ export default class TraverseTable {
 	}
 
 	private fetchRoomData(buildingInfo: BuildingInfo, latitude: string, longitude: string, tr: any, dataset: Dataset) {
+		// console.log(latitude);
+		// console.log(longitude);
 		let buildingFullName = buildingInfo.buildingName;
 		let buildingShortName = buildingInfo.buildingCode;
 		let roomNumber;
 		let roomName;
 		let buildingAddress = buildingInfo.address;
-		let lat = latitude;
-		let lon = longitude;
+		let roomLat = latitude;
+		let roomLon = longitude;
 		let roomCapacity;
 		let roomType;
 		let roomFurniture;
 		let roomLink;
+
+		// console.log("room lat = " + roomLat);
+		// console.log("room lon = " + roomLon);
+		// console.log("\n");
 
 		for (const td of tr.childNodes) {
 			// let td = tr.childNodes[j];
@@ -500,8 +524,8 @@ export default class TraverseTable {
 			roomNumber,
 			roomName,
 			buildingAddress,
-			lat,
-			lon,
+			roomLat,
+			roomLon,
 			roomCapacity,
 			roomType,
 			roomFurniture,
@@ -546,6 +570,11 @@ export interface BuildingInfo {
 	buildingCode: string;
 	address: string;
 	link: string;
+}
+
+export interface Location {
+	latitutde: string;
+	longitude: string;
 }
 
 // export interface BuildingInfo {
