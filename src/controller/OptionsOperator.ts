@@ -49,8 +49,6 @@ export default class OptionsOperator {
 				const order : string = queryS.ORDER;
 
 				// Handle the case where "ORDER" is a string
-				console.log('Order by:', order);
-
 				const toSortBy: string = this.queryOperator.parseField(order);
 				if (!columns.includes(toSortBy)) {
 					throw new InsightError("Sort key is not present in columns.");

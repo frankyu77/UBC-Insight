@@ -66,7 +66,7 @@ export default class TransformOperator {
 					let decimal = new Decimal(groupArray[i][parsedField]);
 					totalAvg = totalAvg.add(decimal); // Update totalAvg with the new value
 				}
-				let avg = totalAvg.toNumber() / groupArray.length - 1;
+				let avg = totalAvg.toNumber() / (groupArray.length - 1);
 				return Number(avg.toFixed(2));
 			}
 
