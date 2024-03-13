@@ -268,8 +268,8 @@ export default class InsightFacade implements IInsightFacade {
 				result = queryOperator.checkResultLength(result);
 				result = transformOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
 				result = optionsOperator.handleOptions(queryS.OPTIONS, result);
-				console.log(result);
 				result = queryOperator.compatibleFormat(result);
+				console.log(result);
 
 				return resolve(result);
 			}).catch((error) => {
