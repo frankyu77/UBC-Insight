@@ -361,9 +361,9 @@ export default class TraverseTable {
 		let urlForRoom = this.getLink + urlEncodedAddress;
 
 		let location: Location = await this.getLatLon(urlForRoom);
-		console.log("1 location lat = " + location.latitutde);
-		console.log("1 location lon = " + location.longitude);
-		console.log("\n");
+		// console.log("1 location lat = " + location.latitutde);
+		// console.log("1 location lon = " + location.longitude);
+		// console.log("\n");
 
 		for (const tr of node.childNodes) {
 			// let tr = node.childNodes[i];
@@ -372,9 +372,9 @@ export default class TraverseTable {
 				hasAllElement = this.validateRoom(tr, hasAllElement);
 				if (hasAllElement) {
 					this.count++;
-					console.log("2 location lat = " + location.latitutde);
-					console.log("2 location lon = " + location.longitude);
-					console.log("\n");
+					// console.log("2 location lat = " + location.latitutde);
+					// console.log("2 location lon = " + location.longitude);
+					// console.log("\n");
 					this.fetchRoomData(buildingInfo, location.latitutde, location.longitude, tr, dataset);
 					// console.log(urlForRoom);
 
@@ -466,8 +466,8 @@ export default class TraverseTable {
 	}
 
 	private fetchRoomData(buildingInfo: BuildingInfo, latitude: string, longitude: string, tr: any, dataset: Dataset) {
-		console.log(latitude);
-		console.log(longitude);
+		// console.log(latitude);
+		// console.log(longitude);
 		let buildingFullName = buildingInfo.buildingName;
 		let buildingShortName = buildingInfo.buildingCode;
 		let roomNumber;
