@@ -17,6 +17,7 @@ import HandleDataset from "./HandleDataset";
 import WhereOperator from "./WhereOperator";
 import OptionsOperator from "./OptionsOperator";
 import TransformOperator from "./TransformOperator";
+import TraverseTable from "./TraverseTable";
 
 const fsPromises = require("fs").promises;
 
@@ -71,9 +72,11 @@ export default class InsightFacade implements IInsightFacade {
 				currentDataset.setIDName(id);
 				currentDataset.setKind(InsightDatasetKind.Rooms);
 				// currentDataset.setValidity(true);
-
+				console.log("length before = " + currentDataset.getValidRooms().length);
 				// call to helper to handle reading the zip file
 //* **************************************************CHANGE THIS LINE**************************************************
+				this.handleDataset.buildingLinkedFromIndex = [];
+				this.handleDataset.traverseTable = new TraverseTable();
 				await this.handleDataset.handleRoomsZip(zip, reject, currentDataset);
 
 				console.log("length of dataset = " + currentDataset.getValidRooms().length);
@@ -91,6 +94,7 @@ export default class InsightFacade implements IInsightFacade {
 				resolve(this.idDatasetsAddedSoFar);
 			})
 			.catch((error: any) => {
+				console.log(error);
 				reject(new InsightError("Invalid Content"));
 			});
 	}
@@ -130,7 +134,7 @@ export default class InsightFacade implements IInsightFacade {
 				resolve(this.idDatasetsAddedSoFar);
 			})
 			.catch((error: any) => {
-				reject(new InsightError("Invalid Content"));
+				reject(new InsightError(error.message));
 			});
 	}
 
