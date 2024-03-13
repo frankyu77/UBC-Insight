@@ -1,0 +1,45 @@
+{
+	"title": "transform_minSeats",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"EQ": {
+						"rooms_lat": 49.26478
+					}
+				},
+				{
+					"EQ": {
+						"rooms_lon": -123.24673
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"minSeats"
+			],
+			"ORDER": "minSeats"
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname"
+			],
+			"APPLY": [
+				{
+					"minSeats": {
+						"MIN": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "WOOD",
+			"minSeats": 10
+		}
+	]
+}

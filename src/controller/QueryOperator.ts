@@ -11,7 +11,7 @@ export default class QueryOperator {
 	protected _datasetToQueryId: string = "";
 	protected dir = "./data";
 	protected idDatasetsAddedSoFar: string[] = [];
-	public applyNames: string[] = [];
+	public applyNames: Set<string> = new Set<string>();
 
 	public mkey: string[] = [];
 	public skey: string[] = [];
@@ -26,7 +26,7 @@ export default class QueryOperator {
 
 	}
 
-	public getApplyNames(): string[] {
+	public getApplyNames(): Set<string> {
 		return this.applyNames;
 
 	}
@@ -56,7 +56,7 @@ export default class QueryOperator {
 			throw new InsightError("Invalid type in OPTIONS");
 		}
 
-		if (this.applyNames.includes(field)) {
+		if (this.applyNames.has(field)) {
 			return field;
 		}
 
@@ -105,12 +105,12 @@ export default class QueryOperator {
 
 	public compatibleFormat(result: InsightResult[]) {
 		const prefix: string = this.getQueryingDatasetId() + "_";
-		const applyNames: string[] = this.getApplyNames();
+		const applyNames: Set<string> = this.getApplyNames();
 
 		return result.map((obj) => {
 			const newObj: InsightResult = {};
 			Object.entries(obj).forEach(([key, value]) => {
-				if (applyNames.includes(key)) {
+				if (applyNames.has(key)) {
 					newObj[key] = value;
 				} else {
 					newObj[`${prefix}${key}`] = value;
