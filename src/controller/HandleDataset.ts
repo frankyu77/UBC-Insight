@@ -9,7 +9,7 @@ import * as parse5 from "parse5";
 
 
 import * as fs from "fs";
-import TraverseTable from "./TraverseTable";
+import TraverseTable, {BuildingInfo} from "./TraverseTable";
 import Queue from "./Queue";
 
 const fsPromises = require("fs").promises;
@@ -18,6 +18,8 @@ const fsPromises = require("fs").promises;
 export default class HandleDataset {
 	private dir = "./data";
 	private validBuildingLinks: string[] = [];
+	public traverseTable = new TraverseTable();
+	public buildingLinkedFromIndex: BuildingInfo[] = [];
 
 
     // converts dataset object to JSON string then add to disk
@@ -249,11 +251,16 @@ export default class HandleDataset {
 
 			if (relativePath.startsWith("campus/discover/buildings-and-classrooms/") && relativePath.endsWith(".htm")) {
 				// console.log("===============================================================================================BUIDLING");
-				if (this.validBuildingLinks.includes(relativePath)) {
-					this.parseBuildingFile(promises, zipEntry, reject, dataset);
-				} else {
-					console.log("BUILDING NOT LINKED IN INDEX.HTM");
+				for (const buildingInfo of this.buildingLinkedFromIndex) {
+					if (buildingInfo.link === relativePath) {
+						this.parseBuildingFile(promises, zipEntry, reject, dataset, buildingInfo);
+					}
 				}
+				// if (this.buildingLinkedFromIndex.includes(relativePath)) {
+				// 	this.parseBuildingFile(promises, zipEntry, reject, dataset);
+				// } else {
+				// 	console.log("BUILDING NOT LINKED IN INDEX.HTM");
+				// }
 			}
 
 		});
@@ -272,10 +279,11 @@ export default class HandleDataset {
 			zipEntry.async("string").then(async (contentInFile) => {
 				// parses the file into a list of JSON objects
 				try {
-					let traverseTable = new TraverseTable();
+					// let traverseTable = new TraverseTable();
 					const document = parse(contentInFile, {treeAdapter: defaultTreeAdapter});
 					// this.validBuildingLinks = traverseTable.handleIndexHTML(document, this.buildingDictionary);
-					this.validBuildingLinks = traverseTable.handleIndexHTML(document);
+					// this.validBuildingLinks =
+					this.buildingLinkedFromIndex = this.traverseTable.handleIndexHTML(document);
 				} catch (error) {
 					console.log(error);
 					reject(new InsightError("Error while parsing index.htm file"));
@@ -289,30 +297,25 @@ export default class HandleDataset {
 	private parseBuildingFile(promises: unknown[],
 		zipEntry: JSZip.JSZipObject,
 		reject: (reason?: any) => void,
-		dataset: Dataset) {
+		dataset: Dataset,
+		buildingInfo: BuildingInfo) {
 
 		promises.push(
 			zipEntry.async("string").then(async (contentInFile) => {
 				// console.log(relativePath);
 				// parses the file into a list of JSON objects
 				try {
-					let traverseTableBuildings = new TraverseTable();
+					// let traverseTableBuildings = new TraverseTable();
 					const document = parse(contentInFile, {treeAdapter: defaultTreeAdapter});
-					await traverseTableBuildings.handleBuildingFile(document, dataset);
+					await this.traverseTable.handleBuildingFile(document, dataset, buildingInfo);
 					// console.log(this.count);
 				} catch (error) {
 					console.log(error);
 					reject(new InsightError("Error while parsing building file"));
 				}
 			}).catch((error) => {
-				reject(new InsightError("Error while adding dataset"));
+				reject(new InsightError("Error while adding dataset f"));
 			})
 		);
 	}
-}
-
-export interface BuildingInfo {
-	name: string;
-	address: string;
-	link: string;
 }
