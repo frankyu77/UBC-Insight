@@ -258,9 +258,10 @@ export default class InsightFacade implements IInsightFacade {
 			let optionsOperator: OptionsOperator = new OptionsOperator(queryOperator);
 			let transformOperator: TransformOperator = new TransformOperator(queryOperator);
 			let queryS: any = query;
+			let transformPresent: boolean;
 			try {
 				queryOperator.checkIfValidJson(queryS);
-				queryOperator.checkBaseEbnf(queryS);
+				transformPresent = queryOperator.checkBaseEbnf(queryS);
 			} catch (error) {
 				return reject(error);
 			}
@@ -270,13 +271,15 @@ export default class InsightFacade implements IInsightFacade {
 			whereOperator.handleWhere(queryS.WHERE).then( (resultWhere) => {
 				result = queryOperator.convertBoolean(resultWhere);
 				result = queryOperator.checkResultLength(result);
-				result = transformOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
+				if (transformPresent) {
+					result = transformOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
+				}
 				result = optionsOperator.handleOptions(queryS.OPTIONS, result);
 				result = queryOperator.compatibleFormat(result);
 
 				return resolve(result);
 			}).catch((error) => {
-				return reject(error);// new InsightError(error.message));
+				return reject(error);
 			});
 
 		});

@@ -636,10 +636,10 @@ describe("InsightFacade", function() {
 			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		});
 
-		describe("valid queries", function() {
+		describe("valid sections queries", function() {
 			let validQueries: ITestQuery[];
 			try {
-				validQueries = readFileQueries("holding");
+				validQueries = readFileQueries("sections_valid");
 			} catch (e: unknown) {
 				expect.fail(`Failed to read one or more test queries. ${e}`);
 			}
@@ -676,6 +676,7 @@ describe("InsightFacade", function() {
 						await result;
 						assert.fail("should have thrown an error");
 					} catch (err: unknown) {
+						console.log(err);
 						expect(err).to.be.an.instanceof(Error);
 					}
 				});
@@ -722,6 +723,7 @@ describe("InsightFacade", function() {
 						await result;
 						assert.fail("should have thrown an error");
 					} catch (err: unknown) {
+						console.log(err);
 						expect(err).to.be.an.instanceof(Error);
 					}
 				});

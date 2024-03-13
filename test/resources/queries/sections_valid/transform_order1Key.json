@@ -1,0 +1,83 @@
+{
+	"title": "transform_order1Key",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 98
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"overallAvg",
+				"sumYear"
+			],
+			"ORDER": "sections_title"
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "sections_avg"
+					}
+				},
+				{
+					"sumYear": {
+						"SUM": "sections_year"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_title": "algb topology i",
+			"overallAvg": 99.78,
+			"sumYear": 3909
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"overallAvg": 98.38,
+			"sumYear": 5918
+		},
+		{
+			"sections_title": "career planning",
+			"overallAvg": 99.19,
+			"sumYear": 2012
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"overallAvg": 98.46,
+			"sumYear": 7826
+		},
+		{
+			"sections_title": "dev el sk df&hrd",
+			"overallAvg": 98.45,
+			"sumYear": 3911
+		},
+		{
+			"sections_title": "educ stds autism",
+			"overallAvg": 98.7,
+			"sumYear": 9838
+		},
+		{
+			"sections_title": "fam nrs pract",
+			"overallAvg": 98.54,
+			"sumYear": 7823
+		},
+		{
+			"sections_title": "multimedia sys",
+			"overallAvg": 98.75,
+			"sumYear": 3909
+		},
+		{
+			"sections_title": "work int health",
+			"overallAvg": 98.98,
+			"sumYear": 3915
+		}
+	]
+}

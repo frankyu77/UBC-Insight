@@ -2,6 +2,8 @@ import {InsightError, InsightResult} from "./IInsightFacade";
 import QueryOperator from "./QueryOperator";
 export default class OptionsOperator {
 	private queryOperator: QueryOperator;
+	private optionsKey = ["COLUMNS", "ORDER"];
+
 	constructor(queryOperator: QueryOperator) {
 		this.queryOperator = queryOperator;
 	}
@@ -13,7 +15,7 @@ export default class OptionsOperator {
 
 
         // Check if there is a key that does not match the valid options keys
-		const invalidKey = keys.some((key) => !this.queryOperator.optionsKey.includes(key));
+		const invalidKey = keys.some((key) => !this.optionsKey.includes(key));
 		if (invalidKey) {
 			throw new InsightError("Invalid key in OPTIONS");
 		}
@@ -30,34 +32,84 @@ export default class OptionsOperator {
 		}
 
         // Filters for the needed columns
-		const updatedArray: InsightResult[] = filtered.map((insight) => {
+		let updatedArray: InsightResult[] = filtered.map((insight) => {
 			let newInsight: InsightResult = {};
 			columns.forEach((field) => {
-                // Object.prototype.hasOwnProperty.call(insight, field
-				if(Object.prototype.hasOwnProperty.call(insight, field)) {
+				if (Object.prototype.hasOwnProperty.call(insight, field)) {
 					newInsight[field] = insight[field];
+				} else {
+					throw new InsightError("Keys in COLUMNS must be in GROUP or APPLY");
 				}
 			});
 			return newInsight;
 		});
 
 		if (keys.includes("ORDER")) {
-			const toSortBy: string = this.queryOperator.parseField(queryS.ORDER);
-			if (!columns.includes(toSortBy)) {
-				throw new InsightError("Sort key is not present in columns.");
+			if (typeof queryS.ORDER === "string") {
+				const order: string = queryS.ORDER;
+
+				// Handle the case where "ORDER" is a string
+				const toSortBy: string = this.queryOperator.parseField(order);
+				if (!columns.includes(toSortBy)) {
+					throw new InsightError("Sort key is not present in columns.");
+				}
+
+				this.staticSort(updatedArray, toSortBy);
+
+			} else if (typeof queryS.ORDER === "object" && queryS.ORDER !== null) {
+				const orderObjectKeys: string[] = Object.keys(queryS.ORDER);
+				const orderObjectVals  = Object.values(queryS.ORDER);
+				const orderDir: string = queryS.ORDER.dir;
+				const orderKeyList: string[] = queryS.ORDER.keys;
+				// Check if order object has correct keys
+
+				this.dynamicSort(updatedArray, orderKeyList, orderDir);
+
+			} else {
+				throw new InsightError("Invalid Order Config");
 			}
-			updatedArray.sort((a, b) => {
-				if (a[toSortBy] < b[toSortBy]) {
-					return -1;
-				}
-				if (a[toSortBy] > b[toSortBy]) {
-					return 1;
-				}
-				return 0;
-			});
+
 		}
 
 		return updatedArray;
+	}
+
+	private staticSort(array: InsightResult[], key: string): InsightResult[] {
+		return array.sort((a, b) => {
+			if (a[key] < b[key]) {
+				return -1;
+			}
+			if (a[key] > b[key]) {
+				return 1;
+			}
+			return 0;
+		});
+	}
+
+	private dynamicSort(array: InsightResult[], keys: string[], direction: string): InsightResult[] {
+		return array.sort((a, b) => {
+			let sort: number;
+			for (let key of keys) {
+				if (a[key] !== b[key]) {
+					// Assuming we are sorting strings or numbers only
+					if (a[key] < b[key]) {
+						sort = -1;
+					}
+					if (a[key] > b[key]) {
+						sort = 1;
+					}
+				}
+			}
+			sort = 0; // if all keys are equal
+
+			if (direction === "UP") {
+				return sort;
+			} else if (direction === "DOWN") {
+				return sort * -1;
+			} else {
+				throw new InsightError("Invalid direction in sort");
+			}
+		});
 	}
 
 	private parseColumns(columns: string[]) {

@@ -13,11 +13,8 @@ export default class QueryOperator {
 	protected idDatasetsAddedSoFar: string[] = [];
 	public applyNames: string[] = [];
 
-	public mkey = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
-	public skey = ["dept", "id", "instructor", "title", "uuid",
-		"fullname" , "shortname" , "number" , "name" , "address" , "type" , "furniture" , "href"];
-
-	public optionsKey = ["COLUMNS", "ORDER"];
+	public mkey: string[] = [];
+	public skey: string[] = [];
 
 
 	constructor(idDatasets: string[]) {
@@ -88,10 +85,10 @@ export default class QueryOperator {
 	public  checkBaseEbnf(queryS: any) {
 		const keysArray = Object.keys(queryS);
 		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
-			return;
+			return false;
 		} else if (keysArray.length === 3 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS") &&
 			keysArray.includes("TRANSFORMATIONS")) {
-			return;
+			return true;
 		}
 		throw new InsightError("Invalid query! (No OPTIONS or WHERE)");
 	}
