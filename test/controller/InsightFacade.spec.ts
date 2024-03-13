@@ -605,19 +605,66 @@ describe("InsightFacade", function() {
 
 		before(async function() {
 			sections = await getContentFromArchives("pair.zip");
-			// rooms = await getContentFromArchives("campus.zip");
+			rooms = await getContentFromArchives("campus.zip");
 			facade = new InsightFacade();
 
 			chai.use(chaiAsPromised);
 			await clearDisk();
 			await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
-			// await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 		});
 
-		describe("valid sections queries", function() {
+		// describe("valid sections queries", function() {
+		// 	let validQueries: ITestQuery[];
+		// 	try {
+		// 		validQueries = readFileQueries("sections_valid");
+		// 	} catch (e: unknown) {
+		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
+		// 	}
+		//
+		// 	validQueries.forEach(function(test: any) {
+		// 		it(`${test.title}`, async function () {
+		// 			return facade.performQuery(test.input).then((result) => {
+		// 				if (!test.errorExpected) {
+		// 					expect(result).to.have.deep.members(test.expected);
+		//
+		// 				} else {
+		// 					throw new Error("error expected");
+		// 				}
+		//
+		// 			}).catch((err: string) => {
+		// 				assert.fail(`performQuery threw unexpected error: ${err}`);
+		// 			});
+		// 		});
+		// 	});
+		// });
+		//
+		// describe("invalid sections queries", () => {
+		// 	let invalidQueries: ITestQuery[];
+		// 	try {
+		// 		invalidQueries = readFileQueries("sections_invalid");
+		// 	} catch (e: unknown) {
+		// 		expect.fail(`Failed to read one or more test queries. ${e}`);
+		// 	}
+		//
+		// 	invalidQueries.forEach(function(test: any) {
+		// 		it(`${test.title}`, async function () {
+		// 			try {
+		// 				const result = facade.performQuery(test.input);
+		// 				await result;
+		// 				assert.fail("should have thrown an error");
+		// 			} catch (err: unknown) {
+		// 				console.log(err);
+		// 				expect(err).to.be.an.instanceof(Error);
+		// 			}
+		// 		});
+		// 	});
+		// });
+
+		describe("valid rooms queries", function() {
 			let validQueries: ITestQuery[];
 			try {
-				validQueries = readFileQueries("sections_valid");
+				validQueries = readFileQueries("rooms_valid");
 			} catch (e: unknown) {
 				expect.fail(`Failed to read one or more test queries. ${e}`);
 			}
@@ -639,10 +686,10 @@ describe("InsightFacade", function() {
 			});
 		});
 
-		describe("invalid sections queries", () => {
+		describe("invalid rooms queries", () => {
 			let invalidQueries: ITestQuery[];
 			try {
-				invalidQueries = readFileQueries("sections_invalid");
+				invalidQueries = readFileQueries("rooms_invalid");
 			} catch (e: unknown) {
 				expect.fail(`Failed to read one or more test queries. ${e}`);
 			}
@@ -654,59 +701,12 @@ describe("InsightFacade", function() {
 						await result;
 						assert.fail("should have thrown an error");
 					} catch (err: unknown) {
-						console.log(err);
 						expect(err).to.be.an.instanceof(Error);
 					}
 				});
 			});
 		});
 
-	// 	describe("valid rooms queries", function() {
-	// 		let validQueries: ITestQuery[];
-	// 		try {
-	// 			validQueries = readFileQueries("rooms_valid");
-	// 		} catch (e: unknown) {
-	// 			expect.fail(`Failed to read one or more test queries. ${e}`);
-	// 		}
-	//
-	// 		validQueries.forEach(function(test: any) {
-	// 			it(`${test.title}`, async function () {
-	// 				return facade.performQuery(test.input).then((result) => {
-	// 					if (!test.errorExpected) {
-	// 						expect(result).to.have.deep.members(test.expected);
-	//
-	// 					} else {
-	// 						throw new Error("error expected");
-	// 					}
-	//
-	// 				}).catch((err: string) => {
-	// 					assert.fail(`performQuery threw unexpected error: ${err}`);
-	// 				});
-	// 			});
-	// 		});
-	// 	});
-	//
-	// 	describe("invalid rooms queries", () => {
-	// 		let invalidQueries: ITestQuery[];
-	// 		try {
-	// 			invalidQueries = readFileQueries("rooms_invalid");
-	// 		} catch (e: unknown) {
-	// 			expect.fail(`Failed to read one or more test queries. ${e}`);
-	// 		}
-	//
-	// 		invalidQueries.forEach(function(test: any) {
-	// 			it(`${test.title}`, async function () {
-	// 				try {
-	// 					const result = facade.performQuery(test.input);
-	// 					await result;
-	// 					assert.fail("should have thrown an error");
-	// 				} catch (err: unknown) {
-	// 					expect(err).to.be.an.instanceof(Error);
-	// 				}
-	// 			});
-	// 		});
-	// 	});
-	//
 	});
 
 });
