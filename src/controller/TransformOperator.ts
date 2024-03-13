@@ -14,7 +14,6 @@ export default class TransformOperator {
 
 		let applyArray: string[] = query.APPLY;
 
-
         // Take each group
 		grouped.forEach((groupArray: InsightResult[]) => {
 			const localApplyNames = new Set<string>();
@@ -34,8 +33,8 @@ export default class TransformOperator {
                 // Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
 				localApplyNames.add(applyName);
-				this.queryOperator.applyNames.push(applyName);
 			});
+			this.queryOperator.applyNames = localApplyNames;
 		});
 
         // only take the first of each array in every value of the map
@@ -48,7 +47,6 @@ export default class TransformOperator {
 	}
 
 	private calculateApplyRule(applyRuleObject: string, groupArray: InsightResult[]): number {
-
 		const applyKeyArray: string[] =  Object.keys(applyRuleObject);
 		const applyValueArray: string[] = Object.values(applyRuleObject);
 		const parsedField: string = this.queryOperator.parseField(applyValueArray[0]);
@@ -121,7 +119,6 @@ export default class TransformOperator {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
-
         // Iterate sections in result
 		result.forEach((section, index) => {
 
