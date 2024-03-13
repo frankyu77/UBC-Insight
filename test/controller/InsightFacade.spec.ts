@@ -113,10 +113,10 @@ describe("InsightFacade", function() {
 
 		describe("testing", () => {
 			// for (let i = 0; i < 1; i++) {
-				it ("t" , async () => {
-					const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
-					expect(asdf).to.deep.equal(["testingRooms"]);
-				});
+			it ("t" , async () => {
+				const asdf = await facade.addDataset("testingRooms", rooms, InsightDatasetKind.Rooms);
+				expect(asdf).to.deep.equal(["testingRooms"]);
+			});
 			// }
 		});
 
@@ -610,8 +610,7 @@ describe("InsightFacade", function() {
 					kind: InsightDatasetKind.Rooms,
 					numRows: 364
 				}]);
-			}
-			catch (error) {
+			} catch (error) {
 				console.log (error);
 			}
 		});

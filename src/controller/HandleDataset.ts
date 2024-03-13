@@ -9,7 +9,7 @@ import * as parse5 from "parse5";
 
 
 import * as fs from "fs";
-import TraverseTable, { BuildingInfo } from "./TraverseTable";
+import TraverseTable, {BuildingInfo} from "./TraverseTable";
 import Queue from "./Queue";
 
 const fsPromises = require("fs").promises;

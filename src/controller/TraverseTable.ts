@@ -110,18 +110,18 @@ export default class TraverseTable {
 
 						if (td.attrs[0].value === "views-field views-field-field-building-code") {
 							buildingCode = td.childNodes[0].value.trim();
-							//console.log(buildingCode);
+							// console.log(buildingCode);
 						} else if (td.attrs[0].value === "views-field views-field-title") {
 							buildingName = td.childNodes[1].childNodes[0].value.trim();
-							//console.log(buildingName)
+							// console.log(buildingName)
 						} else if (td.attrs[0].value === "views-field views-field-field-building-address") {
 							buildingAddress = td.childNodes[0].value.trim();
-							//console.log(buildingAddress);
+							// console.log(buildingAddress);
 						} else if (td.attrs[0].value === "views-field views-field-nothing") {
 							// console.log(td.childNodes[1].attrs[0].value.substring(2));
-							//this.buildingLinkedFromIndex.push(td.childNodes[1].attrs[0].value.substring(2));
+							// this.buildingLinkedFromIndex.push(td.childNodes[1].attrs[0].value.substring(2));
 							buildingLink = td.childNodes[1].attrs[0].value.substring(2);
-							//console.log(buildingLink);
+							// console.log(buildingLink);
 						}
 					} else if (td.nodeName === "td" && !this.indexColumnNames.includes(td.attrs[0].value)) {
 						// throw new InsightError("Invalid td in index.htm table");
@@ -207,7 +207,9 @@ export default class TraverseTable {
 	}
 
 	private handleBuildingTBody (node: any, tag: string): any {
-		if (!node || !node.childNodes) return null;
+		if (!node || !node.childNodes) {
+			return null;
+		}
 		const len = node.childNodes.length;
 		for (let i = 0; i < len; i++) {
 			let child = node.childNodes[i];
@@ -356,7 +358,7 @@ export default class TraverseTable {
 		let urlEncodedAddress: string = buildingInfo.address.replace(/ /g, "%20");
 		let urlForRoom = this.getLink + urlEncodedAddress;
 
-		this.getLatLon(urlForRoom, lat, lon);
+		await this.getLatLon(urlForRoom, lat, lon);
 
 		for (const tr of node.childNodes) {
 			// let tr = node.childNodes[i];
@@ -368,7 +370,7 @@ export default class TraverseTable {
 					this.fetchRoomData(buildingInfo, lat, lon, tr, dataset);
 					// console.log(urlForRoom);
 
-					//promises.push(new Promise<void>((resolve, reject) => {
+					// promises.push(new Promise<void>((resolve, reject) => {
 						// http.get(urlForRoom, (response) => {
 						// 	let data = "";
 						// 	response.on("data", (chunk) => {
@@ -390,13 +392,13 @@ export default class TraverseTable {
 						// 	console.error("Error fetching room data:", error);
 						// 	reject(error);
 						// });
-					//}));
+					// }));
 				}
 			}
 			// await
 			// this.handleBuildingTr(tr, tag, buildingInfo, dataset);
 		}
-		//await Promise.all(promises);
+		// await Promise.all(promises);
 
 		// for (const tr of node.childNodes) {
 		// 	await this.handleBuildingTr(tr, tag, buildingInfo, dataset);
@@ -404,7 +406,7 @@ export default class TraverseTable {
 	}
 
 	private getLatLon(urlForRoom: string, lat: string, lon: string) {
-		//console.log("get called");
+		// console.log("get called");
 		return new Promise ((resolve, reject) => {
 			http.get(urlForRoom, (response) => {
 				let data = "";
