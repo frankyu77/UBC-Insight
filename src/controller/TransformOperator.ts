@@ -7,18 +7,19 @@ export default class TransformOperator {
 		this.queryOperator = queryOperator;
 	}
 
-	public handleTransformations(query: any, result: InsightResult[]): InsightResult[] {
-        // Check keys length and its names
+	public async handleTransformations(query: any, result: InsightResult[]): Promise<InsightResult[]> {
+		// Check keys length and its names
 		this.validateTransformationKeys(query);
-		let grouped: Map<string, InsightResult[]>  = this.handleGroup(query, result);
+		let grouped: Map<string, InsightResult[]> = await
+		this.handleGroup(query, result, this.queryOperator.emptyWhere);
 
 		let applyArray: string[] = query.APPLY;
 
-        // Take each group
+		// Take each group
 		grouped.forEach((groupArray: InsightResult[]) => {
 			const localApplyNames = new Set<string>();
-			applyArray.forEach((value, index, array) =>  {
-				const applyKeyArray: string[] =  Object.keys(value);
+			applyArray.forEach((value, index, array) => {
+				const applyKeyArray: string[] = Object.keys(value);
 				const applyName = applyKeyArray[0];
 				const applyRuleArray: string[] = Object.values(value);
 				const applyRule: string = applyRuleArray[0];
@@ -27,19 +28,19 @@ export default class TransformOperator {
 					throw new InsightError("Duplicate apply names identified");
 				}
 
-                // Calculate apply rule
+				// Calculate apply rule
 				const calculatedApplyRule: number = this.calculateApplyRule(applyRule, groupArray);
 
-                // Add to the current groupArray with the right applyName
+				// Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
 				localApplyNames.add(applyName);
 			});
 			this.queryOperator.applyNames = localApplyNames;
 		});
 
-        // only take the first of each array in every value of the map
+		// only take the first of each array in every value of the map
 		result = [];
-		grouped.forEach( (group, key, map) => {
+		grouped.forEach((group, key, map) => {
 			result.push(group[0]);
 		});
 
@@ -115,14 +116,23 @@ export default class TransformOperator {
 		return totalSum;
 	}
 
-	private handleGroup(query: any, result: InsightResult[]) {
+
+	private async handleGroup(query: any, result: InsightResult[], emptyWhere: boolean) {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
-        // Iterate sections in result
+		// Get the fucking dataset
+		if (emptyWhere) {
+			const datasetName: string = this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]);
+			await this.queryOperator.validateAndSetDataset(datasetName);
+			result = this.queryOperator.getDataset();
+		}
+
+
+		// Iterate sections in result
 		result.forEach((section, index) => {
 
-            // Create a groupKey for the section to match in maps.
+			// Create a groupKey for the section to match in maps.
 			let groupKey: string = "";
 
 			groupsArray.forEach((mOrSkey) => {

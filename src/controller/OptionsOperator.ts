@@ -13,7 +13,6 @@ export default class OptionsOperator {
         // If columns not present throw error
 		let keys = Object.keys(queryS);
 
-
         // Check if there is a key that does not match the valid options keys
 		const invalidKey = keys.some((key) => !this.optionsKey.includes(key));
 		if (invalidKey) {

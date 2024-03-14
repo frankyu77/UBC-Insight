@@ -1,7 +1,6 @@
 import {InsightError, InsightResult} from "./IInsightFacade";
 import QueryOperator from "./QueryOperator";
 
-const fsPromises = require("fs").promises;
 
 export default class WhereOperator {
 
@@ -16,6 +15,11 @@ export default class WhereOperator {
 
 		if (keys.length > 1) {
 			throw new InsightError("More than one key in WHERE");
+		}
+		if (keys.length === 0) {
+			// Return the dataset
+			this.queryOperator.emptyWhere = true;
+			return [];
 		}
 
         // Terminating calls are IS, EQ, GT, LT
@@ -157,31 +161,6 @@ export default class WhereOperator {
 		}
 	}
 
-    // Checks if the given idString is a valid dataset name
-    // If it is, it returns an entire dataset in InsightResult form
-	private async validateAndSetDataset(idString: string): Promise<void> {
-
-		if (!this.queryOperator.getDatasetIds().includes(idString)) {
-			throw new InsightError("Dataset not found");
-		}
-		const data = await fsPromises.readFile(this.queryOperator.getDatasetDirPath(idString)).catch(() => {
-			throw new InsightError("Error file read.");
-		} );
-
-		const object = JSON.parse(data);
-
-		if (object.kind === "sections") {
-			this.queryOperator.mkey =  ["avg", "pass", "fail", "audit", "year"];
-			this.queryOperator.skey = ["dept", "id", "instructor", "title", "uuid"];
-			this.queryOperator.setDataset(JSON.parse(JSON.stringify(object.validSections)));
-		} else {
-			this.queryOperator.mkey =  ["lat", "lon", "seats"];
-			this.queryOperator.skey = ["fullname" , "shortname" , "number" , "name" ,
-				"address" , "type" , "furniture" , "href"];
-			this.queryOperator.setDataset(JSON.parse(JSON.stringify(object.validRooms)));
-		}
-		this.queryOperator.setDatasetToQueryId(object.idName);
-	}
 
     // Takes a query key and returns a valid dataset id to search for and valid mfield and sfield.
     // Throws Insight Error if not a valid query string.
@@ -205,7 +184,7 @@ export default class WhereOperator {
 		const value: string | number = parsedArray[2];
 
 		if (this.queryOperator.getQueryingDatasetId()  === "") {
-			await this.validateAndSetDataset(datasetToQueryId);
+			await this.queryOperator.validateAndSetDataset(datasetToQueryId);
 		} else if (this.queryOperator.getQueryingDatasetId() !== datasetToQueryId) {
 			throw new InsightError("Querying 2 Datasets.");
 		}

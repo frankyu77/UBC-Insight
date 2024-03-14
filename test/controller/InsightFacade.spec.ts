@@ -723,7 +723,7 @@ describe("InsightFacade", function() {
 		describe("invalid rooms queries", () => {
 			let invalidQueries: ITestQuery[];
 			try {
-				invalidQueries = readFileQueries("sections_valid");
+				invalidQueries = readFileQueries("rooms_invalid");
 			} catch (e: unknown) {
 				expect.fail(`Failed to read one or more test queries. ${e}`);
 			}
