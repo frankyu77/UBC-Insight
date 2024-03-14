@@ -13,7 +13,7 @@ export default class QueryOperator {
 	protected dir = "./data";
 	protected idDatasetsAddedSoFar: string[] = [];
 	public applyNames: Set<string> = new Set<string>();
-	public emptyWhere : boolean = false;
+	public emptyWhere: boolean = false;
 
 	public mkey: string[] = [];
 	public skey: string[] = [];
@@ -84,7 +84,7 @@ export default class QueryOperator {
 		}
 	}
 
-	public grabDatasetNameFromQueryKey(queryKey : string) : string {
+	public grabDatasetNameFromQueryKey(queryKey: string): string {
 		const parts = queryKey.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
 		return parts[0];
@@ -103,7 +103,7 @@ export default class QueryOperator {
 
 	public convertBoolean(boolArr: boolean[]): InsightResult[] {
 		const converted: InsightResult[] = this.getDataset().filter((value, index) => {
-				return boolArr[index];
+			return boolArr[index];
 		});
 		// Yes
 		return converted;

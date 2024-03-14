@@ -10,7 +10,8 @@ export default class TransformOperator {
 	public async handleTransformations(query: any, result: InsightResult[]): Promise<InsightResult[]> {
 		// Check keys length and its names
 		this.validateTransformationKeys(query);
-		let grouped: Map<string, InsightResult[]> = await this.handleGroup(query, result, this.queryOperator.emptyWhere);
+		let grouped: Map<string, InsightResult[]> = await
+		this.handleGroup(query, result, this.queryOperator.emptyWhere);
 
 		let applyArray: string[] = query.APPLY;
 
@@ -124,7 +125,8 @@ export default class TransformOperator {
 		let newResult = result;
 		// Get the fucking dataset
 		if (emptyWhere) {
-			await this.queryOperator.validateAndSetDataset(this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]));
+			const datasetName: string = this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]);
+			await this.queryOperator.validateAndSetDataset(datasetName);
 			result = this.queryOperator.getDataset();
 		}
 
