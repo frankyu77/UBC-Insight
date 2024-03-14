@@ -121,8 +121,6 @@ export default class TransformOperator {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
-
-		let newResult = result;
 		// Get the fucking dataset
 		if (emptyWhere) {
 			const datasetName: string = this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]);
