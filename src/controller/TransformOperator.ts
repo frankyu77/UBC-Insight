@@ -10,7 +10,7 @@ export default class TransformOperator {
 	public handleTransformations(query: any, result: InsightResult[]): InsightResult[] {
         // Check keys length and its names
 		this.validateTransformationKeys(query);
-		let grouped: Map<string, InsightResult[]>  = this.handleGroup(query, result);
+		let grouped: Map<string, InsightResult[]>  = this.handleGroup(query, result, this.queryOperator.emptyWhere);
 
 		let applyArray: string[] = query.APPLY;
 
@@ -115,12 +115,23 @@ export default class TransformOperator {
 		return totalSum;
 	}
 
-	private handleGroup(query: any, result: InsightResult[]) {
+
+	private handleGroup(query: any, result: InsightResult[], emptyWhere : boolean) {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
-        // Iterate sections in result
-		result.forEach((section, index) => {
+
+		let newResult = result;
+		// Get the fucking dataset
+		if (emptyWhere) {
+			this.queryOperator.validateAndSetDataset(this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]));
+			newResult = this.queryOperator.getDataset();
+			console.log(this.queryOperator.getDataset())
+		}
+
+
+		// Iterate sections in result
+		newResult.forEach((section, index) => {
 
             // Create a groupKey for the section to match in maps.
 			let groupKey: string = "";
@@ -141,6 +152,7 @@ export default class TransformOperator {
 			tempResult = {};
 
 		});
+		console.log(map);
 		return map;
 	}
 

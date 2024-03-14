@@ -269,17 +269,25 @@ export default class InsightFacade implements IInsightFacade {
 			let result: InsightResult[];
 			whereOperator.handleWhere(queryS.WHERE).then( (resultWhere) => {
 				result = queryOperator.convertBoolean(resultWhere);
-				if (result.length === 0) {
-					return resolve(result);
-				}
-				result = queryOperator.checkResultLength(result);
+				// if (result.length === 0) {
+				// 	return resolve(result); // HANDLE 0 FROM WHERE CASE BUT TRANSFORM
+				// }
 				if (transformPresent) {
 					result = transformOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
 				}
 				result = optionsOperator.handleOptions(queryS.OPTIONS, result);
 				result = queryOperator.compatibleFormat(result);
+				result = queryOperator.checkResultLength(result);
 				return resolve(result);
 			}).catch((error) => {
+				// if (error.message == "Empty where" && transformPresent) {
+				// 	result = transformOperator.handleTransformations(queryS.TRANSFORMATIONS, [], true);
+				// 	console.log(result);
+				// 	result = optionsOperator.handleOptions(queryS.OPTIONS, result);
+				// 	result = queryOperator.compatibleFormat(result);
+				// 	result = queryOperator.checkResultLength(result);
+				// 	return resolve(result);
+				// }
 				return reject(error);
 			});
 
