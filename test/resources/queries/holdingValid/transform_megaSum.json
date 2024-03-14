@@ -1,0 +1,132 @@
+{
+	"title": "transform_megaSum",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"sumAvg",
+				"sumAudit"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title"
+			],
+			"APPLY": [
+				{
+					"sumAvg": {
+						"SUM": "sections_avg"
+					}
+				},
+				{
+					"sumAudit": {
+						"SUM": "sections_audit"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_title": "career planning",
+			"sumAvg": 294.13,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "thesis",
+			"sumAvg": 196,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"sumAvg": 97.5,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "multimedia sys",
+			"sumAvg": 197.5,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"sumAvg": 489.72,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"sumAvg": 590.89,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "dev el sk df&hrd",
+			"sumAvg": 196.9,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"sumAvg": 195.19,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "sem in autism",
+			"sumAvg": 97.69,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "cor des ed res",
+			"sumAvg": 194.18,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "coll&uni teachng",
+			"sumAvg": 97.67,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "diff geometry i",
+			"sumAvg": 194.5,
+			"sumAudit": 2
+		},
+		{
+			"sections_title": "algb topology i",
+			"sumAvg": 199.56,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "algb geometry i",
+			"sumAvg": 194.96,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "harmonic anal i",
+			"sumAvg": 194.18,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"sumAvg": 393.84,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "fam nrs pract",
+			"sumAvg": 589.22,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "eth&profl issues",
+			"sumAvg": 194.66,
+			"sumAudit": 0
+		},
+		{
+			"sections_title": "work int health",
+			"sumAvg": 197.96,
+			"sumAudit": 0
+		}
+	]
+}
