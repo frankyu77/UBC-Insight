@@ -140,7 +140,6 @@ export default class QueryOperator {
 	// If it is, it returns an entire dataset in InsightResult form
 	public async validateAndSetDataset(idString: string): Promise<void> {
 		if (!this.getDatasetIds().includes(idString)) {
-			console.log(idString);
 			throw new InsightError("Dataset not found");
 		}
 		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {
