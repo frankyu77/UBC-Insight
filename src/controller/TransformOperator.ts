@@ -10,8 +10,7 @@ export default class TransformOperator {
 	public async handleTransformations(query: any, result: InsightResult[]): Promise<InsightResult[]> {
 		// Check keys length and its names
 		this.validateTransformationKeys(query);
-		let grouped: Map<string, InsightResult[]> = await
-		this.handleGroup(query, result, this.queryOperator.emptyWhere);
+		let grouped: Map<string, InsightResult[]> = await this.handleGroup(query, result);
 
 		let applyArray: string[] = query.APPLY;
 
@@ -115,11 +114,11 @@ export default class TransformOperator {
 		return totalSum;
 	}
 
-	private async handleGroup(query: any, result: InsightResult[], wh: boolean): Promise<Map<string, InsightResult[]>> {
+	private async handleGroup(query: any, result: InsightResult[]): Promise<Map<string, InsightResult[]>> {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
-		if (wh) {
+		if (this.queryOperator.emptyWhere) {
 			const datasetName: string = this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]);
 			await this.queryOperator.validateAndSetDataset(datasetName);
 			result = this.queryOperator.getDataset();

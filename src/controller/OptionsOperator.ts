@@ -66,8 +66,6 @@ export default class OptionsOperator {
 				this.staticSort(updatedArray, toSortBy);
 
 			} else if (typeof queryS.ORDER === "object" && queryS.ORDER !== null) {
-				const orderObjectKeys: string[] = Object.keys(queryS.ORDER);
-				const orderObjectVals = Object.values(queryS.ORDER);
 				const orderDir: string = queryS.ORDER.dir;
 				const orderKeyList: string[] = queryS.ORDER.keys;
 				// Check if order object has correct keys
