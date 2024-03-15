@@ -15,10 +15,10 @@ export default class TransformOperator {
 
 		let applyArray: string[] = query.APPLY;
 
-		// Take each group
-		grouped.forEach((groupArray: InsightResult[]) => {
+		for (let groupArray of grouped.values()) {
 			const localApplyNames = new Set<string>();
-			applyArray.forEach((value, index, array) => {
+
+			for (let value of applyArray) {
 				const applyKeyArray: string[] = Object.keys(value);
 				const applyName = applyKeyArray[0];
 				const applyRuleArray: string[] = Object.values(value);
@@ -34,21 +34,20 @@ export default class TransformOperator {
 				// Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
 				localApplyNames.add(applyName);
-			});
+			}
 			this.queryOperator.applyNames = localApplyNames;
-		});
+		}
 
 		// only take the first of each array in every value of the map
 		result = [];
-		grouped.forEach((group, key, map) => {
+		grouped.forEach((group) => {
 			result.push(group[0]);
 		});
-
 		return result;
 	}
 
-	private calculateApplyRule(applyRuleObject: string, groupArray: InsightResult[]): number {
-		const applyKeyArray: string[] =  Object.keys(applyRuleObject);
+	private  calculateApplyRule(applyRuleObject: string, groupArray: InsightResult[]): number {
+		const applyKeyArray: string[] = Object.keys(applyRuleObject);
 		const applyValueArray: string[] = Object.values(applyRuleObject);
 		const parsedField: string = this.queryOperator.parseField(applyValueArray[0]);
 		switch (applyKeyArray[0]) {
@@ -116,30 +115,25 @@ export default class TransformOperator {
 		return totalSum;
 	}
 
-
-	private async handleGroup(query: any, result: InsightResult[], emptyWhere: boolean) {
+	private async handleGroup(query: any, result: InsightResult[], emptyWhere: boolean)
+		: Promise<Map<string, InsightResult[]>> {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
-		// Get the fucking dataset
 		if (emptyWhere) {
 			const datasetName: string = this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]);
 			await this.queryOperator.validateAndSetDataset(datasetName);
 			result = this.queryOperator.getDataset();
 		}
 
-
-		// Iterate sections in result
-		result.forEach((section, index) => {
-
-			// Create a groupKey for the section to match in maps.
+		for (let section of result) {
 			let groupKey: string = "";
 
-			groupsArray.forEach((mOrSkey) => {
+			for (let mOrSkey of groupsArray) {
 				const parsedField: string = this.queryOperator.parseField(mOrSkey);
 				groupKey += section[parsedField] + " |";
 				tempResult[parsedField] = section[parsedField];
-			});
+			}
 
 			groupKey += " group";
 
@@ -149,8 +143,8 @@ export default class TransformOperator {
 
 			map.get(groupKey)?.push(section);
 			tempResult = {};
+		}
 
-		});
 		return map;
 	}
 

@@ -1,0 +1,19 @@
+{
+	"title": "0 Result",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"rooms_shortname": "d"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"rooms_seats"
+			],
+			"ORDER": "rooms_seats"
+		}
+	},
+	"errorExpected": false,
+	"expected": []
+}

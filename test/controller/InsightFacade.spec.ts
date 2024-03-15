@@ -631,7 +631,7 @@ describe("InsightFacade", function() {
 	// //
 	// //
     // #####################################################################################################performQuery
-	//
+
 	describe("performQuery", () => {
 		let sections: string;
 		let rooms: string;

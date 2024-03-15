@@ -8,12 +8,13 @@ export default class OptionsOperator {
 		this.queryOperator = queryOperator;
 	}
 
-	public handleOptions(queryS: any, filtered:  InsightResult[]): InsightResult[] {
+	public async handleOptions(queryS: any, filtered: InsightResult[], transformPresent: boolean)
+		: Promise<InsightResult[]> {
 
-        // If columns not present throw error
+		// If columns not present throw error
 		let keys = Object.keys(queryS);
 
-        // Check if there is a key that does not match the valid options keys
+		// Check if there is a key that does not match the valid options keys
 		const invalidKey = keys.some((key) => !this.optionsKey.includes(key));
 		if (invalidKey) {
 			throw new InsightError("Invalid key in OPTIONS");
@@ -23,14 +24,23 @@ export default class OptionsOperator {
 			throw new InsightError("No columns");
 		}
 
-        // Columns to keep
-		const columns: string[] = this.parseColumns(queryS.COLUMNS);
+
+		if (this.queryOperator.emptyWhere && !transformPresent) {
+			let columns: string[] = queryS.COLUMNS;
+			const datasetHandle: string = this.queryOperator.grabDatasetNameFromQueryKey(columns[0]);
+			await this.queryOperator.validateAndSetDataset(datasetHandle);
+			filtered = this.queryOperator.getDataset();
+		}
+
+
+		let columns: string[] = this.parseColumns(queryS.COLUMNS);
 
 		if (columns.length < 1) {
 			throw new InsightError("Columns is empty");
 		}
 
-        // Filters for the needed columns
+
+		// Filters for the needed columns
 		let updatedArray: InsightResult[] = filtered.map((insight) => {
 			let newInsight: InsightResult = {};
 			columns.forEach((field) => {
@@ -48,7 +58,7 @@ export default class OptionsOperator {
 				const order: string = queryS.ORDER;
 
 				// Handle the case where "ORDER" is a string
-				const toSortBy: string = this.queryOperator.parseField(order);
+				const toSortBy: string =  this.queryOperator.parseField(order);
 				if (!columns.includes(toSortBy)) {
 					throw new InsightError("Sort key is not present in columns.");
 				}
@@ -57,7 +67,7 @@ export default class OptionsOperator {
 
 			} else if (typeof queryS.ORDER === "object" && queryS.ORDER !== null) {
 				const orderObjectKeys: string[] = Object.keys(queryS.ORDER);
-				const orderObjectVals  = Object.values(queryS.ORDER);
+				const orderObjectVals = Object.values(queryS.ORDER);
 				const orderDir: string = queryS.ORDER.dir;
 				const orderKeyList: string[] = queryS.ORDER.keys;
 				// Check if order object has correct keys
@@ -72,6 +82,7 @@ export default class OptionsOperator {
 
 		return updatedArray;
 	}
+
 
 	private staticSort(array: InsightResult[], key: string): InsightResult[] {
 		return array.sort((a, b) => {
@@ -111,10 +122,9 @@ export default class OptionsOperator {
 		});
 	}
 
-	private parseColumns(columns: string[]) {
-		let parsedColumns: string[] = columns.map((item) => {
-			return this.queryOperator.parseField(item);
-		});
-		return parsedColumns;
+	private parseColumns(columns: string[]): string[] {
+		const parsedColumnsPromises = columns.map((item) => this.queryOperator.parseField(item));
+		return  (parsedColumnsPromises);
 	}
+
 }
