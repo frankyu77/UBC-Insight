@@ -23,20 +23,21 @@ export default class OptionsOperator {
 			throw new InsightError("No columns");
 		}
 
+		let columns: string[] = queryS.COLUMNS;
+
+
+		if (columns.length < 1) {
+			throw new InsightError("Columns is empty");
+		}
 
 		if (this.queryOperator.emptyWhere && !transform) {
-			let columns: string[] = queryS.COLUMNS;
 			const datasetHandle: string = this.queryOperator.grabDatasetNameFromQueryKey(columns[0]);
 			await this.queryOperator.validateAndSetDataset(datasetHandle);
 			filtered = this.queryOperator.getDataset();
 		}
 
 
-		let columns: string[] = this.parseColumns(queryS.COLUMNS);
-
-		if (columns.length < 1) {
-			throw new InsightError("Columns is empty");
-		}
+		columns = this.parseColumns(queryS.COLUMNS);
 
 
 		// Filters for the needed columns

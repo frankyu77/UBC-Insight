@@ -213,20 +213,19 @@ export default class InsightFacade implements IInsightFacade {
 			}
 
 			let result: InsightResult[];
-			whereOperator.handleWhere(queryS.WHERE).then( async (resultWhere) => {
+			whereOperator.initialHandle(queryS.WHERE).then( async (resultWhere) => {
 				result = queryOperator.convertBoolean(resultWhere);
 				if (result.length === 0 && !queryOperator.emptyWhere) {
 					return resolve(result); // HANDLE 0 FROM WHERE CASE BUT TRANSFORM
 				}
-
 				if (transformPresent) {
 					result = await transformOperator.handleTransformations(queryS.TRANSFORMATIONS, result);
 				}
+				// and where.
 				result = await optionsOperator.handleOptions(queryS.OPTIONS, result, transformPresent); // Must now handle the  case of
 				// empty where but below 5000 results
-				result = queryOperator.compatibleFormat(result);
 				result = queryOperator.checkResultLength(result); // Only 2 places result length changes is transform
-				// and where.
+				result = queryOperator.compatibleFormat(result);
 				return resolve(result);
 			}).catch((error) => {
 				return reject(error);

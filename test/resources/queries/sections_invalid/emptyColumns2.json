@@ -1,11 +1,7 @@
- {
-	"title": "columnsEmptyArray",
+{
+	"title": "emptyColumns2",
 	"input": {
-		"WHERE": {
-			"IS": {
-				"sect_dept": "cpsc"
-			}
-		},
+		"WHERE": {},
 		"OPTIONS": {
 			"COLUMNS": [],
 			"ORDER": "sections_avg"
