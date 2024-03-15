@@ -8,8 +8,7 @@ export default class OptionsOperator {
 		this.queryOperator = queryOperator;
 	}
 
-	public async handleOptions(queryS: any, filtered: InsightResult[], transformPresent: boolean)
-		: Promise<InsightResult[]> {
+	public async handleOptions(queryS: any, filtered: InsightResult[], transform: boolean): Promise<InsightResult[]> {
 
 		// If columns not present throw error
 		let keys = Object.keys(queryS);
@@ -25,7 +24,7 @@ export default class OptionsOperator {
 		}
 
 
-		if (this.queryOperator.emptyWhere && !transformPresent) {
+		if (this.queryOperator.emptyWhere && !transform) {
 			let columns: string[] = queryS.COLUMNS;
 			const datasetHandle: string = this.queryOperator.grabDatasetNameFromQueryKey(columns[0]);
 			await this.queryOperator.validateAndSetDataset(datasetHandle);

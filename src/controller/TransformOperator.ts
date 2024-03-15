@@ -115,12 +115,11 @@ export default class TransformOperator {
 		return totalSum;
 	}
 
-	private async handleGroup(query: any, result: InsightResult[], emptyWhere: boolean)
-		: Promise<Map<string, InsightResult[]>> {
+	private async handleGroup(query: any, result: InsightResult[], wh: boolean): Promise<Map<string, InsightResult[]>> {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
-		if (emptyWhere) {
+		if (wh) {
 			const datasetName: string = this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]);
 			await this.queryOperator.validateAndSetDataset(datasetName);
 			result = this.queryOperator.getDataset();
