@@ -62,6 +62,10 @@ export default class OptionsOperator {
 				this.staticSort(updatedArray, toSortBy);
 
 			} else if (typeof queryS.ORDER === "object" && queryS.ORDER !== null) {
+				if (typeof queryS.ORDER.dir !== "string" || !Array.isArray(queryS.ORDER.keys)
+					|| !queryS.ORDER.keys.every((key: any) => typeof key === "string")) {
+					throw new InsightError("Directional order configuration is invalid.");
+				}
 				const orderDir: string = queryS.ORDER.dir;
 				const toSortBy: string[] = this.parseColumns(queryS.ORDER.keys);
 
