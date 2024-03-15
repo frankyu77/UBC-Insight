@@ -30,11 +30,7 @@ export default class OptionsOperator {
 			throw new InsightError("Columns is empty");
 		}
 
-		if (this.queryOperator.emptyWhere && !transform) {
-			const datasetHandle: string = this.queryOperator.grabDatasetNameFromQueryKey(columns[0]);
-			await this.queryOperator.validateAndSetDataset(datasetHandle);
-			filtered = this.queryOperator.getDataset();
-		}
+		filtered = await this.grabFilteredIfNeeded(transform, columns, filtered);
 
 
 		columns = this.parseColumns(queryS.COLUMNS);
@@ -67,20 +63,30 @@ export default class OptionsOperator {
 
 			} else if (typeof queryS.ORDER === "object" && queryS.ORDER !== null) {
 				const orderDir: string = queryS.ORDER.dir;
-				const orderKeyList: string[] = queryS.ORDER.keys;
-				// Check if order object has correct keys
+				const toSortBy: string[] = this.parseColumns(queryS.ORDER.keys);
 
-				this.dynamicSort(updatedArray, orderKeyList, orderDir);
+				if (!toSortBy.every((key) => columns.includes(key))) {
+					throw new InsightError("One or more sort keys are not present in columns.");
+				}
 
+				this.dynamicSort(updatedArray, toSortBy, orderDir);
 			} else {
 				throw new InsightError("Invalid Order Config");
 			}
-
 		}
 
 		return updatedArray;
 	}
 
+
+	private async grabFilteredIfNeeded(transform: boolean, columns: string[], filtered: InsightResult[]) {
+		if (this.queryOperator.emptyWhere && !transform) {
+			const datasetHandle: string = this.queryOperator.grabDatasetNameFromQueryKey(columns[0]);
+			await this.queryOperator.validateAndSetDataset(datasetHandle);
+			filtered = this.queryOperator.getDataset();
+		}
+		return filtered;
+	}
 
 	private staticSort(array: InsightResult[], key: string): InsightResult[] {
 		return array.sort((a, b) => {
@@ -98,6 +104,7 @@ export default class OptionsOperator {
 		return array.sort((a, b) => {
 			let sort: number;
 			for (let key of keys) {
+
 				if (a[key] !== b[key]) {
 					// Assuming we are sorting strings or numbers only
 					if (a[key] < b[key]) {
