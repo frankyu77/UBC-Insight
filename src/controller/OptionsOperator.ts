@@ -53,23 +53,18 @@ export default class OptionsOperator {
 			if (typeof queryS.ORDER === "string") {
 				const order: string = queryS.ORDER;
 
-				// Handle the case where "ORDER" is a string
 				const toSortBy: string =  this.queryOperator.parseField(order);
-				if (!columns.includes(toSortBy)) {
-					throw new InsightError("Sort key is not present in columns.");
-				}
+				this.checkOneWaySortBy(columns, toSortBy);
 
-				this.staticSort(updatedArray, toSortBy);
+				this.oneWaySort(updatedArray, toSortBy);
 
 			} else if (typeof queryS.ORDER === "object" && queryS.ORDER !== null) {
+				this.checkDirectionalOrderKeys(queryS);
 				const orderDir: string = queryS.ORDER.dir;
 				const toSortBy: string[] = this.parseColumns(queryS.ORDER.keys);
+				this.checkDirectionalSortBy(toSortBy, columns);
 
-				if (!toSortBy.every((key) => columns.includes(key))) {
-					throw new InsightError("One or more sort keys are not present in columns.");
-				}
-
-				this.dynamicSort(updatedArray, toSortBy, orderDir);
+				this.directionalSort(updatedArray, toSortBy, orderDir);
 			} else {
 				throw new InsightError("Invalid Order Config");
 			}
@@ -78,6 +73,25 @@ export default class OptionsOperator {
 		return updatedArray;
 	}
 
+
+	private checkOneWaySortBy(columns: string[], toSortBy: string) {
+		if (!columns.includes(toSortBy)) {
+			throw new InsightError("Sort key is not present in columns.");
+		}
+	}
+
+	private checkDirectionalSortBy(toSortBy: string[], columns: string[]) {
+		if (!toSortBy.every((key) => columns.includes(key))) {
+			throw new InsightError("One or more sort keys are not present in columns.");
+		}
+	}
+
+	private checkDirectionalOrderKeys(queryS: any) {
+		if (typeof queryS.ORDER.dir !== "string" || !Array.isArray(queryS.ORDER.keys)
+			|| !queryS.ORDER.keys.every((key: any) => typeof key === "string")) {
+			throw new InsightError("Directional order configuration is invalid.");
+		}
+	}
 
 	private async grabFilteredIfNeeded(transform: boolean, columns: string[], filtered: InsightResult[]) {
 		if (this.queryOperator.emptyWhere && !transform) {
@@ -88,7 +102,7 @@ export default class OptionsOperator {
 		return filtered;
 	}
 
-	private staticSort(array: InsightResult[], key: string): InsightResult[] {
+	private oneWaySort(array: InsightResult[], key: string): InsightResult[] {
 		return array.sort((a, b) => {
 			if (a[key] < b[key]) {
 				return -1;
@@ -100,7 +114,7 @@ export default class OptionsOperator {
 		});
 	}
 
-	private dynamicSort(array: InsightResult[], keys: string[], direction: string): InsightResult[] {
+	private directionalSort(array: InsightResult[], keys: string[], direction: string): InsightResult[] {
 		return array.sort((a, b) => {
 			let sort: number;
 			for (let key of keys) {
