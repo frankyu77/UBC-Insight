@@ -8,7 +8,8 @@ export default class OptionsOperator {
 		this.queryOperator = queryOperator;
 	}
 
-	public async handleOptions(queryS: any, filtered: InsightResult[], transformPresent: boolean): Promise<InsightResult[]> {
+	public async handleOptions(queryS: any, filtered: InsightResult[], transformPresent: boolean)
+		: Promise<InsightResult[]> {
 
 		// If columns not present throw error
 		let keys = Object.keys(queryS);
@@ -23,15 +24,41 @@ export default class OptionsOperator {
 			throw new InsightError("No columns");
 		}
 
-		let columns: string[] = await this.parseColumns(queryS.COLUMNS);
-		let updatedArray = this.handleColumns(columns, transformPresent, filtered);
+
+		if (this.queryOperator.emptyWhere && !transformPresent) {
+			let columns: string[] = queryS.COLUMNS;
+			const datasetHandle: string = this.queryOperator.grabDatasetNameFromQueryKey(columns[0]);
+			await this.queryOperator.validateAndSetDataset(datasetHandle);
+			filtered = this.queryOperator.getDataset();
+		}
+
+
+		let columns: string[] = this.parseColumns(queryS.COLUMNS);
+
+		if (columns.length < 1) {
+			throw new InsightError("Columns is empty");
+		}
+
+
+		// Filters for the needed columns
+		let updatedArray: InsightResult[] = filtered.map((insight) => {
+			let newInsight: InsightResult = {};
+			columns.forEach((field) => {
+				if (Object.prototype.hasOwnProperty.call(insight, field)) {
+					newInsight[field] = insight[field];
+				} else {
+					throw new InsightError("Keys in COLUMNS must be in GROUP or APPLY");
+				}
+			});
+			return newInsight;
+		});
 
 		if (keys.includes("ORDER")) {
 			if (typeof queryS.ORDER === "string") {
 				const order: string = queryS.ORDER;
 
 				// Handle the case where "ORDER" is a string
-				const toSortBy: string = await this.queryOperator.parseField(order);
+				const toSortBy: string =  this.queryOperator.parseField(order);
 				if (!columns.includes(toSortBy)) {
 					throw new InsightError("Sort key is not present in columns.");
 				}
@@ -56,29 +83,6 @@ export default class OptionsOperator {
 		return updatedArray;
 	}
 
-	private handleColumns(columns: string[], transformPresent: boolean, filtered: InsightResult[]) {
-		if (columns.length < 1) {
-			throw new InsightError("Columns is empty");
-		}
-
-		if (this.queryOperator.emptyWhere && !transformPresent) {
-			filtered = this.queryOperator.getDataset();
-		}
-
-		// Filters for the needed columns
-		let updatedArray: InsightResult[] = filtered.map((insight) => {
-			let newInsight: InsightResult = {};
-			columns.forEach((field) => {
-				if (Object.prototype.hasOwnProperty.call(insight, field)) {
-					newInsight[field] = insight[field];
-				} else {
-					throw new InsightError("Keys in COLUMNS must be in GROUP or APPLY");
-				}
-			});
-			return newInsight;
-		});
-		return updatedArray;
-	}
 
 	private staticSort(array: InsightResult[], key: string): InsightResult[] {
 		return array.sort((a, b) => {
@@ -118,9 +122,9 @@ export default class OptionsOperator {
 		});
 	}
 
-	private async parseColumns(columns: string[]): Promise<string[]> {
+	private parseColumns(columns: string[]): string[] {
 		const parsedColumnsPromises = columns.map((item) => this.queryOperator.parseField(item));
-		return await Promise.all(parsedColumnsPromises);
+		return  (parsedColumnsPromises);
 	}
 
 }

@@ -29,7 +29,7 @@ export default class TransformOperator {
 				}
 
 				// Calculate apply rule
-				const calculatedApplyRule: number = await this.calculateApplyRule(applyRule, groupArray);
+				const calculatedApplyRule: number = this.calculateApplyRule(applyRule, groupArray);
 
 				// Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
@@ -40,16 +40,16 @@ export default class TransformOperator {
 
 		// only take the first of each array in every value of the map
 		result = [];
-		grouped.forEach((group, key, map) => {
+		grouped.forEach((group) => {
 			result.push(group[0]);
 		});
 		return result;
 	}
 
-	private async calculateApplyRule(applyRuleObject: string, groupArray: InsightResult[]): Promise<number> {
+	private  calculateApplyRule(applyRuleObject: string, groupArray: InsightResult[]): number {
 		const applyKeyArray: string[] = Object.keys(applyRuleObject);
 		const applyValueArray: string[] = Object.values(applyRuleObject);
-		const parsedField: string = await this.queryOperator.parseField(applyValueArray[0]);
+		const parsedField: string = this.queryOperator.parseField(applyValueArray[0]);
 		switch (applyKeyArray[0]) {
 			case "MIN" : {
 				return this.min(groupArray, parsedField);
@@ -115,7 +115,8 @@ export default class TransformOperator {
 		return totalSum;
 	}
 
-	private async handleGroup(query: any, result: InsightResult[], emptyWhere: boolean): Promise<Map<string, InsightResult[]>> {
+	private async handleGroup(query: any, result: InsightResult[], emptyWhere: boolean)
+		: Promise<Map<string, InsightResult[]>> {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
@@ -129,7 +130,7 @@ export default class TransformOperator {
 			let groupKey: string = "";
 
 			for (let mOrSkey of groupsArray) {
-				const parsedField: string = await this.queryOperator.parseField(mOrSkey);
+				const parsedField: string = this.queryOperator.parseField(mOrSkey);
 				groupKey += section[parsedField] + " |";
 				tempResult[parsedField] = section[parsedField];
 			}

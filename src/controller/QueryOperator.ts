@@ -53,7 +53,7 @@ export default class QueryOperator {
 		return path.join(this.dir, `${id}`);
 	}
 
-	public async parseField(field: string) {
+	public  parseField(field: string) {
 		if (typeof field !== "string") {
 			throw new InsightError("Invalid type in OPTIONS");
 		}
@@ -68,9 +68,7 @@ export default class QueryOperator {
 		const datasetToQueryId: string = parts[0];
 		const mOrSKey: string = parts[1];
 
-		if (this.getQueryingDatasetId() === "") {
-			await this.validateAndSetDataset(datasetToQueryId);
-		} else if (this.getQueryingDatasetId() !== datasetToQueryId) {
+		if (this.getQueryingDatasetId() !== datasetToQueryId) {
 			throw new InsightError("Querying 2 Datasets.");
 		}
 
@@ -142,6 +140,7 @@ export default class QueryOperator {
 	// If it is, it returns an entire dataset in InsightResult form
 	public async validateAndSetDataset(idString: string): Promise<void> {
 		if (!this.getDatasetIds().includes(idString)) {
+			console.log(idString);
 			throw new InsightError("Dataset not found");
 		}
 		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {
