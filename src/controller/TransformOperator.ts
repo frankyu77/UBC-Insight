@@ -144,7 +144,6 @@ export default class TransformOperator {
 			map.get(groupKey)?.push(section);
 			tempResult = {};
 		}
-
 		return map;
 	}
 
