@@ -53,7 +53,7 @@ export default class QueryOperator {
 		return path.join(this.dir, `${id}`);
 	}
 
-	public parseField(field: string) {
+	public async parseField(field: string) {
 		if (typeof field !== "string") {
 			throw new InsightError("Invalid type in OPTIONS");
 		}
@@ -65,11 +65,16 @@ export default class QueryOperator {
 		const parts = field.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
 
-		if (this.getQueryingDatasetId() !== String(parts[0])) {
+		const datasetToQueryId: string = parts[0];
+		const mOrSKey: string = parts[1];
+
+		if (this.getQueryingDatasetId() === "") {
+			await this.validateAndSetDataset(datasetToQueryId);
+		} else if (this.getQueryingDatasetId() !== datasetToQueryId) {
 			throw new InsightError("Querying 2 Datasets.");
 		}
 
-		if (!(this.mkey.includes(parts[1]) || this.skey.includes(parts[1]))) {
+		if (!(this.mkey.includes(mOrSKey) || this.skey.includes(mOrSKey))) {
 			throw new InsightError("Invalid mkey or skey in columns.");
 		}
 
