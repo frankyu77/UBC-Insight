@@ -2,7 +2,8 @@ import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
 import InsightFacade from "../controller/InsightFacade";
-import { InsightResult } from "../controller/IInsightFacade";
+import {InsightDatasetKind, InsightResult } from "../controller/IInsightFacade";
+import { clearDisk, getContentFromArchives } from "../../test/resources/archives/TestUtil";
 
 export default class Server {
 	private readonly port: number;
@@ -20,11 +21,11 @@ export default class Server {
 		// NOTE: you can serve static frontend files in from your express server
 		// by uncommenting the line below. This makes files in ./frontend/public
 		// accessible at http://localhost:<port>/
-		this.express.use(express.static("./frontend/public"))
+		this.express.use(express.static("./frontend/public"));
 		this.facade = new InsightFacade();
 	}
-
-	/**
+	
+ 	/**
 	 * Starts the server. Returns a promise that resolves if success. Promises are used
 	 * here because starting the server takes some time and we want to know when it
 	 * is done (and if it worked).
