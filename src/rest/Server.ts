@@ -1,12 +1,15 @@
 import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
+import InsightFacade from "../controller/InsightFacade";
+import {InsightDatasetKind, InsightResult } from "../controller/IInsightFacade";
+import { clearDisk, getContentFromArchives } from "../../test/resources/archives/TestUtil";
 
 export default class Server {
 	private readonly port: number;
 	private express: Application;
 	private server: http.Server | undefined;
-
+	private facade: InsightFacade;
 	constructor(port: number) {
 		console.info(`Server::<init>( ${port} )`);
 		this.port = port;
@@ -18,10 +21,11 @@ export default class Server {
 		// NOTE: you can serve static frontend files in from your express server
 		// by uncommenting the line below. This makes files in ./frontend/public
 		// accessible at http://localhost:<port>/
-		// this.express.use(express.static("./frontend/public"))
+		this.express.use(express.static("./frontend/public"));
+		this.facade = new InsightFacade();
 	}
-
-	/**
+	
+ 	/**
 	 * Starts the server. Returns a promise that resolves if success. Promises are used
 	 * here because starting the server takes some time and we want to know when it
 	 * is done (and if it worked).
@@ -85,10 +89,21 @@ export default class Server {
 		this.express.get("/echo/:msg", Server.echo);
 
 		// TODO: your other endpoints should go here
-
+		this.registerPost();
 	}
 
-	// The next two methods handle the echo service.
+	private registerPost() {
+		this.express.post("/query", async (req, res) => {
+			try {
+				const queryResult: InsightResult[] = await this.facade.performQuery(req);
+				res.status(200).json({result: queryResult});
+			} catch (error) {
+				res.status(400).json({message: "Error"}) // Pass in related error to query. !!!!!
+			}
+		});
+	}
+
+// The next two methods handle the echo service.
 	// These are almost certainly not the best place to put these, but are here for your reference.
 	// By updating the Server.echo function pointer above, these methods can be easily moved.
 	private static echo(req: Request, res: Response) {
