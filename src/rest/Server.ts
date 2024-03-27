@@ -2,8 +2,14 @@ import express, {Application, Request, Response} from "express";
 import * as http from "http";
 import cors from "cors";
 import InsightFacade from "../controller/InsightFacade";
-import {InsightDatasetKind, InsightResult } from "../controller/IInsightFacade";
-import { clearDisk, getContentFromArchives } from "../../test/resources/archives/TestUtil";
+import {
+	InsightDataset,
+	InsightDatasetKind,
+	InsightError,
+	InsightResult,
+	NotFoundError
+} from "../controller/IInsightFacade";
+import {clearDisk, getContentFromArchives} from "../../test/resources/archives/TestUtil";
 
 export default class Server {
 	private readonly port: number;
@@ -24,8 +30,8 @@ export default class Server {
 		this.express.use(express.static("./frontend/public"));
 		this.facade = new InsightFacade();
 	}
-	
- 	/**
+
+	/**
 	 * Starts the server. Returns a promise that resolves if success. Promises are used
 	 * here because starting the server takes some time and we want to know when it
 	 * is done (and if it worked).
@@ -88,22 +94,69 @@ export default class Server {
 		// http://localhost:4321/echo/hello
 		this.express.get("/echo/:msg", Server.echo);
 
+
 		// TODO: your other endpoints should go here
-		this.registerPost();
+		// this.express.get("/dataset/:id/:kind", this.registerPut);
+		// this.express.get("/dataset/:id", this.registerDelete);
+		// this.express.get("/query", this.registerPost);
+		// this.express.get("/datasets", this.registerGet);
+		this.express.get("/dataset/:id/:kind", (req, res) => this.registerPut(req, res));
+		this.express.get("/dataset/:id", (req, res) => this.registerDelete(req, res));
+		this.express.get("/query", (req, res) => this.registerPost(req, res));
+		this.express.get("/datasets", (req, res) => this.registerGet(req, res));
 	}
 
-	private registerPost() {
-		this.express.post("/query", async (req, res) => {
-			try {
-				const queryResult: InsightResult[] = await this.facade.performQuery(req);
-				res.status(200).json({result: queryResult});
-			} catch (error) {
-				res.status(400).json({message: "Error"}) // Pass in related error to query. !!!!!
+	private async registerPut(req: Request, res: Response) {
+		try {
+			const zipFileBuffer: Buffer = req.body;
+			const zipFileBase64: string = zipFileBuffer.toString("base64");
+
+			let kind = InsightDatasetKind.Sections;
+			if (req.params.kind === "rooms") {
+				kind = InsightDatasetKind.Rooms;
 			}
-		});
+
+			const datasetAdded: string[] = await this.facade.addDataset(req.params.id, zipFileBase64, kind);
+			res.status(200).json({result: datasetAdded});
+		} catch (err) {
+			res.status(400).json({error: "InsightError" + err});
+		}
 	}
 
-// The next two methods handle the echo service.
+	private async registerDelete(req: Request, res: Response) {
+		try {
+			const deletedResult: string = await this.facade.removeDataset(req.params.id);
+			res.status(200).json({result: deletedResult});
+		} catch (err) {
+			if (err instanceof InsightError) {
+				res.status(400).json({error: "InsightError" + err});
+			} else if (err instanceof NotFoundError) {
+				res.status(404).json({error: "NotFoundError" + err});
+			} else {
+				res.status(400).json({error: "RandomError" + err});
+			}
+		}
+	}
+
+	private async registerPost(req: Request, res: Response) {
+		try {
+			const queryResult: InsightResult[] = await this.facade.performQuery(req);
+			res.status(200).json({result: queryResult});
+		} catch (error) {
+			res.status(400).json({error: "Error"}); // Pass in related error to query. !!!!!
+		}
+	}
+
+	private async registerGet(req: Request, res: Response ) {
+		try {
+			const listDataSetResult: InsightDataset[] = await this.facade.listDatasets();
+			res.status(200).json({result: listDataSetResult});
+		} catch (err) {
+			res.status(400).json({error: "Random error thrown" + err});
+		}
+	}
+
+	// The next two methods handle the echo service.
 	// These are almost certainly not the best place to put these, but are here for your reference.
 	// By updating the Server.echo function pointer above, these methods can be easily moved.
 	private static echo(req: Request, res: Response) {
