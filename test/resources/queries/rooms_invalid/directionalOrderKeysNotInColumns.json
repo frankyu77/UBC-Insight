@@ -1,0 +1,20 @@
+{
+	"title": "directionalOrderKeysNotInColumns",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"rooms_seats"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"rooms_lat"
+				]
+			}
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

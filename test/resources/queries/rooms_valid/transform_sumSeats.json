@@ -1,0 +1,59 @@
+{
+	"title": "transform_sumSeats",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"rooms_seats": 1
+					}
+				},
+				{
+					"IS": {
+						"rooms_shortname": "B*"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"sumSeats"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"sumSeats",
+					"rooms_shortname"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname"
+			],
+			"APPLY": [
+				{
+					"sumSeats": {
+						"SUM": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "BRKX",
+			"sumSeats": 94
+		},
+		{
+			"rooms_shortname": "BIOL",
+			"sumSeats": 336
+		},
+		{
+			"rooms_shortname": "BUCH",
+			"sumSeats": 3190
+		}
+	]
+}

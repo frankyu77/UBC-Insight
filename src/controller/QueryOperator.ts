@@ -4,6 +4,7 @@ import {
 	ResultTooLargeError,
 } from "./IInsightFacade";
 import path from "node:path";
+const fsPromises = require("fs").promises;
 
 export default class QueryOperator {
 
@@ -11,13 +12,11 @@ export default class QueryOperator {
 	protected _datasetToQueryId: string = "";
 	protected dir = "./data";
 	protected idDatasetsAddedSoFar: string[] = [];
-	public applyNames: string[] = [];
+	public applyNames: Set<string> = new Set<string>();
+	public emptyWhere: boolean = false;
 
-	public mkey = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
-	public skey = ["dept", "id", "instructor", "title", "uuid",
-		"fullname" , "shortname" , "number" , "name" , "address" , "type" , "furniture" , "href"];
-
-	public optionsKey = ["COLUMNS", "ORDER"];
+	public mkey: string[] = [];
+	public skey: string[] = [];
 
 
 	constructor(idDatasets: string[]) {
@@ -29,7 +28,7 @@ export default class QueryOperator {
 
 	}
 
-	public getApplyNames(): string[] {
+	public getApplyNames(): Set<string> {
 		return this.applyNames;
 
 	}
@@ -54,23 +53,26 @@ export default class QueryOperator {
 		return path.join(this.dir, `${id}`);
 	}
 
-	public parseField(field: string) {
+	public  parseField(field: string) {
 		if (typeof field !== "string") {
 			throw new InsightError("Invalid type in OPTIONS");
 		}
 
-		if (this.applyNames.includes(field)) {
+		if (this.applyNames.has(field)) {
 			return field;
 		}
 
 		const parts = field.split("_");
 		// Check if there is a second part; if not, return an empty string or the original item
 
-		if (this.getQueryingDatasetId() !== String(parts[0])) {
+		const datasetToQueryId: string = parts[0];
+		const mOrSKey: string = parts[1];
+
+		if (this.getQueryingDatasetId() !== datasetToQueryId) {
 			throw new InsightError("Querying 2 Datasets.");
 		}
 
-		if (!(this.mkey.includes(parts[1]) || this.skey.includes(parts[1]))) {
+		if (!(this.mkey.includes(mOrSKey) || this.skey.includes(mOrSKey))) {
 			throw new InsightError("Invalid mkey or skey in columns.");
 		}
 
@@ -85,34 +87,39 @@ export default class QueryOperator {
 		}
 	}
 
+	public grabDatasetNameFromQueryKey(queryKey: string): string {
+		const parts = queryKey.split("_");
+		// Check if there is a second part; if not, return an empty string or the original item
+		return parts[0];
+	}
+
 	public  checkBaseEbnf(queryS: any) {
 		const keysArray = Object.keys(queryS);
 		if (keysArray.length === 2 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS")) {
-			return;
+			return false;
 		} else if (keysArray.length === 3 && keysArray.includes("WHERE") && keysArray.includes("OPTIONS") &&
 			keysArray.includes("TRANSFORMATIONS")) {
-			return;
+			return true;
 		}
 		throw new InsightError("Invalid query! (No OPTIONS or WHERE)");
 	}
 
 	public convertBoolean(boolArr: boolean[]): InsightResult[] {
 		const converted: InsightResult[] = this.getDataset().filter((value, index) => {
-			if (boolArr[index]) {
-				return true;
-			}
+			return boolArr[index];
 		});
+		// Yes
 		return converted;
 	}
 
 	public compatibleFormat(result: InsightResult[]) {
 		const prefix: string = this.getQueryingDatasetId() + "_";
-		const applyNames: string[] = this.getApplyNames();
+		const applyNames: Set<string> = this.getApplyNames();
 
 		return result.map((obj) => {
 			const newObj: InsightResult = {};
 			Object.entries(obj).forEach(([key, value]) => {
-				if (applyNames.includes(key)) {
+				if (applyNames.has(key)) {
 					newObj[key] = value;
 				} else {
 					newObj[`${prefix}${key}`] = value;
@@ -128,6 +135,31 @@ export default class QueryOperator {
 		}
 		return result;
 	}
+
+	// Checks if the given idString is a valid dataset name
+	// If it is, it returns an entire dataset in InsightResult form
+	public async validateAndSetDataset(idString: string): Promise<void> {
+		if (!this.getDatasetIds().includes(idString)) {
+			throw new InsightError("Dataset not found");
+		}
+		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {
+			throw new InsightError("Error file read.");
+		} );
+
+		const object = JSON.parse(data);
+		if (object.kind === "sections") {
+			this.mkey =  ["avg", "pass", "fail", "audit", "year"];
+			this.skey = ["dept", "id", "instructor", "title", "uuid"];
+			this.setDataset(JSON.parse(JSON.stringify(object.validSections)));
+		} else {
+			this.mkey =  ["lat", "lon", "seats"];
+			this.skey = ["fullname" , "shortname" , "number" , "name" ,
+				"address" , "type" , "furniture" , "href"];
+			this.setDataset(JSON.parse(JSON.stringify(object.validRooms)));
+		}
+		this.setDatasetToQueryId(object.idName);
+	}
+
 
 }
 

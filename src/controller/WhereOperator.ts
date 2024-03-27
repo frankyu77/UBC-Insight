@@ -1,13 +1,28 @@
 import {InsightError, InsightResult} from "./IInsightFacade";
 import QueryOperator from "./QueryOperator";
 
-const fsPromises = require("fs").promises;
 
 export default class WhereOperator {
 
 	private queryOperator: QueryOperator;
 	constructor(queryOperator: QueryOperator) {
 		this.queryOperator = queryOperator;
+	}
+
+	public async initialHandle(queryS: any): Promise<boolean[]> {
+		if (typeof queryS === "object" && Array.isArray(queryS)) {
+			throw new InsightError("Array given in Where");
+		}
+
+		const keys = Object.keys(queryS);
+
+		if (keys.length === 0) {
+			// Return the dataset
+			this.queryOperator.emptyWhere = true;
+			return [];
+		}
+
+		return await this.handleWhere(queryS);
 	}
 
 	public async handleWhere(queryS: any): Promise<boolean[]> {
@@ -17,6 +32,7 @@ export default class WhereOperator {
 		if (keys.length > 1) {
 			throw new InsightError("More than one key in WHERE");
 		}
+
 
         // Terminating calls are IS, EQ, GT, LT
         // AND, OR, NOT have to be recursive
@@ -82,16 +98,22 @@ export default class WhereOperator {
 		return resultArray;
 	}
 
+
     // Takes two insight result arrays and only joins the same sections together
 	private async handleAnd(queryS: any): Promise<boolean[]> {
 		const filters = Object.keys(queryS);
 
 		if (filters.length === 0) {
-			throw new InsightError("No keys found in OR");
+			throw new InsightError("No keys found in AND");
 		}
 
         // Map each filter to a promise returned by handleWhere
-		const promises =  filters.map(async (filter) => await this.handleWhere(queryS[filter]));
+		const promises =  filters.map(async (filter): Promise<boolean[]> => {
+			// if (filter === "0") {
+			// 	throw new InsightError("HOUSTON MASSIVE ERRROR");
+			// }
+			return await this.handleWhere(queryS[filter]);
+		});
 
         // Use Promise.all to wait for all promises to resolve
 		const results = await Promise.all(promises);
@@ -157,26 +179,6 @@ export default class WhereOperator {
 		}
 	}
 
-    // Checks if the given idString is a valid dataset name
-    // If it is, it returns an entire dataset in InsightResult form
-	private async validateAndSetDataset(idString: string): Promise<void> {
-
-		if (!this.queryOperator.getDatasetIds().includes(idString)) {
-			throw new InsightError("Dataset not found");
-		}
-		const data = await fsPromises.readFile(this.queryOperator.getDatasetDirPath(idString)).catch(() => {
-			throw new InsightError("Error file read.");
-		} );
-
-		const object = JSON.parse(data);
-
-		if (object.kind === "sections") {
-			this.queryOperator.setDataset(JSON.parse(JSON.stringify(object.validSections)));
-		} else {
-			this.queryOperator.setDataset(JSON.parse(JSON.stringify(object.validRooms)));
-		}
-		this.queryOperator.setDatasetToQueryId(object.idName);
-	}
 
     // Takes a query key and returns a valid dataset id to search for and valid mfield and sfield.
     // Throws Insight Error if not a valid query string.
@@ -200,7 +202,7 @@ export default class WhereOperator {
 		const value: string | number = parsedArray[2];
 
 		if (this.queryOperator.getQueryingDatasetId()  === "") {
-			await this.validateAndSetDataset(datasetToQueryId);
+			await this.queryOperator.validateAndSetDataset(datasetToQueryId);
 		} else if (this.queryOperator.getQueryingDatasetId() !== datasetToQueryId) {
 			throw new InsightError("Querying 2 Datasets.");
 		}

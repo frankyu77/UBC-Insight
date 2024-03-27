@@ -1,0 +1,93 @@
+{
+	"title": "geolactionEasy",
+	"input": {
+		"WHERE": {
+			"OR": [
+				{
+					"EQ": {
+						"rooms_lat": 49.26478
+					}
+				},
+				{
+					"EQ": {
+						"rooms_lon": -123.24673
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"rooms_seats"
+			],
+			"ORDER": "rooms_seats"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 10
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 10
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 10
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 12
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 12
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 14
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 16
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 21
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 30
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 30
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 88
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 120
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 120
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 120
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 181
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_seats": 503
+		}
+	]
+}

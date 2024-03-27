@@ -1,3 +1,4 @@
+import Decimal from "decimal.js";
 import {InsightError, InsightResult} from "./IInsightFacade";
 import QueryOperator from "./QueryOperator";
 export default class TransformOperator {
@@ -6,110 +7,131 @@ export default class TransformOperator {
 		this.queryOperator = queryOperator;
 	}
 
-	public handleTransformations(query: any, result: InsightResult[]): InsightResult[] {
-        // Check keys length and its names
+	public async handleTransformations(query: any, result: InsightResult[]): Promise<InsightResult[]> {
+		// Check keys length and its names
 		this.validateTransformationKeys(query);
-		let grouped: Map<string, InsightResult[]>  = this.handleGroup(query, result);
+		let grouped: Map<string, InsightResult[]> = await this.handleGroup(query, result);
 
 		let applyArray: string[] = query.APPLY;
 
+		for (let groupArray of grouped.values()) {
+			const localApplyNames = new Set<string>();
 
-        // Take each group
-		grouped.forEach((groupArray: InsightResult[]) => {
-			applyArray.forEach((value, index, array) =>  {
-				const applyKeyArray: string[] =  Object.keys(value);
+			for (let value of applyArray) {
+				const applyKeyArray: string[] = Object.keys(value);
 				const applyName = applyKeyArray[0];
 				const applyRuleArray: string[] = Object.values(value);
 				const applyRule: string = applyRuleArray[0];
 
+				if (localApplyNames.has(applyName)) {
+					throw new InsightError("Duplicate apply names identified");
+				}
 
-                // Calculate apply rule
+				// Calculate apply rule
 				const calculatedApplyRule: number = this.calculateApplyRule(applyRule, groupArray);
 
-                // Add to the current groupArray with the right applyName
+				// Add to the current groupArray with the right applyName
 				groupArray[0][applyName] = calculatedApplyRule;
-				this.queryOperator.applyNames.push(applyName);
-			});
-		});
+				localApplyNames.add(applyName);
+			}
+			this.queryOperator.applyNames = localApplyNames;
+		}
 
-        // only take the first of each array in every value of the map
+		// only take the first of each array in every value of the map
 		result = [];
-		grouped.forEach( (value, key, map) => {
-			result.push(value[0]);
+		grouped.forEach((group) => {
+			result.push(group[0]);
 		});
-
 		return result;
 	}
 
-	private calculateApplyRule(applyRuleObject: string, groupArray: InsightResult[]): number {
-
-		const applyKeyArray: string[] =  Object.keys(applyRuleObject);
+	private  calculateApplyRule(applyRuleObject: string, groupArray: InsightResult[]): number {
+		const applyKeyArray: string[] = Object.keys(applyRuleObject);
 		const applyValueArray: string[] = Object.values(applyRuleObject);
 		const parsedField: string = this.queryOperator.parseField(applyValueArray[0]);
 		switch (applyKeyArray[0]) {
 			case "MIN" : {
-				let smallest: number = Number.MAX_VALUE;
-				for (let i = 1; i < groupArray.length; i++) {
-					if (Number(groupArray[i][parsedField]) < smallest) {
-						smallest = Number(groupArray[i][parsedField]);
-					}
-				}
-				return smallest;
+				return this.min(groupArray, parsedField);
 			}
 			case "AVG" : {
-				let totalAvg: number = 0;
-				for (let i = 1; i < groupArray.length; i++) {
-					totalAvg += Number(groupArray[i][parsedField]);
-				}
-				const calculated: number = (totalAvg / (groupArray.length - 1));
-				return calculated;
+				let avg = this.sum(groupArray, parsedField).toNumber() / (groupArray.length - 1);
+				return Number(avg.toFixed(2));
 			}
 
 			case "SUM": {
-				let totalSum: number = 0;
-				for (let i = 1; i < groupArray.length; i++) {
-					totalSum += Number(groupArray[i][parsedField]);
-				}
-				return totalSum;
+				let totalSum = this.sum(groupArray, parsedField);
+				return Number(totalSum.toFixed(2));
 			}
 			case "MAX" : {
-				let largest: number = Number.MIN_VALUE;
-				for (let i = 1; i < groupArray.length; i++) {
-					if (Number(groupArray[i][parsedField]) > largest) {
-						largest = Number(groupArray[i][parsedField]);
-					}
-				}
-				return largest;
+				return this.max(groupArray, parsedField);
 			}
 			case "COUNT" : {
-				const occurrences = new Map<number | string, number>();
-
-				for (let i = 1; i < groupArray.length; i++) {
-					const currentCount = occurrences.get(groupArray[i][parsedField]) || 0;
-					occurrences.set(groupArray[i][parsedField], currentCount + 1);
-				}
-				return occurrences.size; // This is the sum of all occurrences.
+				const occurrences = this.getOccurences(groupArray, parsedField);
+				return occurrences.size;
+			}
+			default : {
+				throw new InsightError("Invalid apply token.");
 			}
 		}
-		return 0;
 	}
 
-	private handleGroup(query: any, result: InsightResult[]) {
+
+	private getOccurences(groupArray: InsightResult[], parsedField: string) {
+		const occurrences = new Map<number | string, number>();
+		for (let i = 1; i < groupArray.length; i++) {
+			const currentCount = occurrences.get(groupArray[i][parsedField]) || 0;
+			occurrences.set(groupArray[i][parsedField], currentCount + 1);
+		}
+		return occurrences;
+	}
+
+	private max(groupArray: InsightResult[], parsedField: string) {
+		let largest: number = Number.MIN_VALUE;
+		for (let i = 1; i < groupArray.length; i++) {
+			if (Number(groupArray[i][parsedField]) > largest) {
+				largest = Number(groupArray[i][parsedField]);
+			}
+		}
+		return largest;
+	}
+
+	private min(groupArray: InsightResult[], parsedField: string) {
+		let smallest: number = Number.MAX_VALUE;
+		for (let i = 1; i < groupArray.length; i++) {
+			if (Number(groupArray[i][parsedField]) < smallest) {
+				smallest = Number(groupArray[i][parsedField]);
+			}
+		}
+		return smallest;
+	}
+
+	private sum(groupArray: InsightResult[], parsedField: string) {
+		let totalSum: Decimal = new Decimal(0);
+		for (let i = 1; i < groupArray.length; i++) {
+			let decimal = new Decimal(groupArray[i][parsedField]);
+			totalSum = totalSum.add(decimal);
+		}
+		return totalSum;
+	}
+
+	private async handleGroup(query: any, result: InsightResult[]): Promise<Map<string, InsightResult[]>> {
 		let groupsArray: string[] = query.GROUP;
 		let map: Map<string, InsightResult[]> = new Map<string, InsightResult[]>();
 		let tempResult: InsightResult = {};
+		if (this.queryOperator.emptyWhere) {
+			const datasetName: string = this.queryOperator.grabDatasetNameFromQueryKey(groupsArray[0]);
+			await this.queryOperator.validateAndSetDataset(datasetName);
+			result = this.queryOperator.getDataset();
+		}
 
-        // Iterate sections in result
-		result.forEach((section, index) => {
-
-            // Create a groupKey for the section to match in maps.
+		for (let section of result) {
 			let groupKey: string = "";
 
-			groupsArray.forEach((mOrSkey) => {
+			for (let mOrSkey of groupsArray) {
 				const parsedField: string = this.queryOperator.parseField(mOrSkey);
 				groupKey += section[parsedField] + " |";
 				tempResult[parsedField] = section[parsedField];
-			});
+			}
 
 			groupKey += " group";
 
@@ -119,12 +141,16 @@ export default class TransformOperator {
 
 			map.get(groupKey)?.push(section);
 			tempResult = {};
-
-		});
+		}
 		return map;
 	}
 
 	private validateTransformationKeys(query: any): void {
-		return;
+		const transformationKeys: string[] = Object.keys(query);
+		if (transformationKeys.length === 2 && transformationKeys.includes("GROUP") &&
+			transformationKeys.includes("APPLY")) {
+			return;
+		}
+		throw new InsightError("Invalid transformation keys.");
 	}
 }
