@@ -114,6 +114,8 @@ export default class Server {
 			let kind = InsightDatasetKind.Sections;
 			if (req.params.kind === "rooms") {
 				kind = InsightDatasetKind.Rooms;
+			} else {
+				throw Error("Not a valid kind listed");
 			}
 
 			const datasetAdded: string[] = await this.facade.addDataset(req.params.id, zipFileBase64, kind);
