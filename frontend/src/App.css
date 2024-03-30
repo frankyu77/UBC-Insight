@@ -23,6 +23,26 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+ .my-form {
+   max-width: 600px; /* Adjust based on your preference */
+   margin: 0 auto; /* Center the form */
+   padding: 0 20px; /* Padding on either side */
+ }
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px; /* Space between form elements */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
 
 .App-link {
   color: #61dafb;
