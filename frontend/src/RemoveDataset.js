@@ -1,47 +1,73 @@
 import './App.css'
-import React, { useState } from 'react';
+import React, {useEffect, useState} from "react";
 
 function RemoveDataset() {
+    const [insertResultMsg, setInsertResultMsg] = useState("");
+    const [isError, setIsError] = useState(false);
 
-    // State to hold the input value
-    const [inputValue, setInputValue] = useState('');
-    // Set the document title using useEffect
+    async function handleRemove(event) {
+        event.preventDefault();
 
-    // Function to update state based on input changes
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-    };
+        const removeID = document.getElementById("datasetIDToRemove").value;
 
-    // Function to handle form submission
-    const handleSubmit = (event) => {
-        event.preventDefault(); // Prevents the default form submit action
-        console.log(inputValue); // Do something with the input value
-        // For example, send it to a server or display it somewhere
-    };
+        try {
+            const response = await fetch(`http://localhost:4321/dataset/${removeID}`, {
+                method: 'DELETE'
+            });
+
+            const messageElement = document.getElementById("insertRemoveDatasetMsg");
+            if (response.ok) {
+                const responseData = await response.json();
+
+                messageElement.textContent = "Data removed successfully!";
+                setInsertResultMsg("You SUCCESSFULLY REMOVED: " + responseData.result);
+
+                document.getElementById("datasetIDToRemove").value = "";
+            } else {
+                const errorMessage = await response.json();
+                console.error(errorMessage);
+
+                messageElement.textContent = "Error removing data!";
+                setIsError(true);
+                setInsertResultMsg("Error removing data!");
+
+            }
+        } catch (err) {
+            console.log("ERRORRRRRRRR");
+            console.log(err);
+            setIsError(true);
+            setInsertResultMsg("Error removing data!");
+        }
+
+    }
 
 
+    useEffect(() => {
+        document.getElementById("removeForm").addEventListener("submit", handleRemove);
+        return () => {
+            document.getElementById("removeForm").removeEventListener("submit", handleRemove);
+        };
+    }, []);
 
     return (
-        <>
-            <div style={{marginBottom: '50px'}}>
-                <form className={"my-form"}
-                      onSubmit={handleSubmit}>
-                    <h1>Remove Dataset</h1>
-                    <label htmlFor="datasetId">Dataset ID:</label><br/>
-                    <input
-                        className={"form-control"}
-                        type="text"
-                        value={inputValue}
-                        onChange={handleInputChange}
-                    /><br/>
-                    <input
-                        className={"form-control"}
-                        type="submit"
-                        value="Remove"
-                    />
-                </form>
-            </div>
-        </>
+        <div style={{marginBottom: '50px'}}>
+            <form className={"my-form"}
+                  id="removeForm">
+                <h1>Remove Dataset</h1>
+                <label htmlFor="datasetId">Dataset ID:</label><br/>
+                <input
+                    type="text"
+                    id="datasetIDToRemove"
+                    placeholder="Enter dataset ID to remove"
+                /><br/>
+                <button className={"form-control"} type="submit">
+                    Remove
+                </button>
+                <div id="insertRemoveDatasetMsg" className={isError ? "error" : "noError"}>{insertResultMsg}</div>
+            </form>
+
+
+        </div>
 
     );
 }

@@ -14,14 +14,7 @@ function AddDataset() {
         const datasetId = document.getElementById("datasetId").value;
         const datasetKind = document.getElementById("datasetKind").value;
         const datasetFileInput = document.getElementById("datasetFile");
-
-
         const datasetContent = datasetFileInput.files[0];
-        console.log(datasetContent);
-
-        console.log(datasetId);
-        console.log(datasetKind);
-        console.log(datasetContent.name);
 
          try {
              const fileBlob = new Blob([datasetContent]);
@@ -33,16 +26,16 @@ function AddDataset() {
                  body: fileBlob,
              };
              const response = await fetch(`http://localhost:4321/dataset/${datasetId}/${datasetKind}`, requestOptions);
-
-             console.log("after fetch");
-
+             
              const messageElement = document.getElementById("insertAddDatasetMsg");
              if (response.ok) {
                  const responseData = await response.json();
-                 console.log(responseData);
 
                  messageElement.textContent = "Data inserted successfully!";
                  setInsertResultMsg("SUCCESS \n You Entered: " + datasetId);
+
+                 document.getElementById("datasetId").value = "";
+                 document.getElementById("datasetKind").value = "";
              } else {
                  const errorMessage = await response.json();
                  console.error(errorMessage);
@@ -80,6 +73,7 @@ function AddDataset() {
                     // className={"form-control"}
                     type="text"
                     id="datasetId"
+                    placeholder="Enter dataset ID"
                 /><br/>
 
                 <label htmlFor="datasetKind">Dataset Kind:</label><br/>
@@ -87,6 +81,7 @@ function AddDataset() {
                     // className={"form-control"}
                     type="text"
                     id="datasetKind"
+                    placeholder="Enter 'sections' or 'rooms'"
                 /><br/>
 
                 <input
@@ -99,9 +94,10 @@ function AddDataset() {
                 <button className={"form-control"} type="submit">
                     Add
                 </button>
+
+                <div id="insertAddDatasetMsg" className={isError ? "error" : "noError"}>{insertResultMsg}</div>
             </form>
 
-            <div id="insertAddDatasetMsg" className={isError ? "error" : "noError"}>{insertResultMsg}</div>
 
         </div>
     );

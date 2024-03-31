@@ -102,8 +102,8 @@ export default class Server {
 
 
 		this.express.put("/dataset/:id/:kind", (req, res) => this.registerPut(req, res));
-		this.express.get("/dataset/:id", (req, res) => this.registerDelete(req, res));
-		this.express.get("/query", (req, res) => this.registerPost(req, res));
+		this.express.delete("/dataset/:id", (req, res) => this.registerDelete(req, res));
+		this.express.post("/query", (req, res) => this.registerPost(req, res));
 		this.express.get("/datasets", (req, res) => this.registerGet(req, res));
 	}
 
@@ -142,7 +142,10 @@ export default class Server {
 
 	private async registerDelete(req: Request, res: Response) {
 		try {
+			console.log("removed: " + req.params.id);
+
 			const deletedResult: string = await this.facade.removeDataset(req.params.id);
+
 			res.status(200).json({result: deletedResult});
 		} catch (err) {
 			if (err instanceof InsightError) {
@@ -157,9 +160,17 @@ export default class Server {
 
 	private async registerPost(req: Request, res: Response) {
 		try {
-			const queryResult: InsightResult[] = await this.facade.performQuery(req);
+			const queryObject = JSON.parse(req.body.query);
+			console.log(queryObject);
+			console.log(typeof queryObject);
+
+			const keysArray = Object.keys(queryObject);
+			console.log(keysArray);
+
+			const queryResult: InsightResult[] = await this.facade.performQuery(queryObject);
 			res.status(200).json({result: queryResult});
 		} catch (error) {
+			console.log(error);
 			res.status(400).json({error: "Error"}); // Pass in related error to query. !!!!!
 		}
 	}

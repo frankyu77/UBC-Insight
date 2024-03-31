@@ -4,6 +4,7 @@ import './index.css';
 import AddDataset from './AddDataset';
 import RemoveDataset from './RemoveDataset'
 import ViewDataset from './ViewDataset'
+import QueryDataset from './QueryDataset'
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -12,6 +13,7 @@ root.render(
       <AddDataset />
       <RemoveDataset />
       <ViewDataset />
+      <QueryDataset />
   </React.StrictMode>
 );
 

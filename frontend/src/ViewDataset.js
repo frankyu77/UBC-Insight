@@ -1,38 +1,49 @@
 import './App.css'
-import React, { useState } from 'react';
+import React, {useState} from "react";
 
 function ViewDataset() {
+    const [insertResultMsg, setInsertResultMsg] = useState("");
+    const [isError, setIsError] = useState(false);
 
-    // State to hold the input value
-    const [inputValue, setInputValue] = useState('');
-    // Set the document title using useEffect
+    async function handleView(event) {
+        event.preventDefault();
 
-    // Function to update state based on input changes
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
-    };
+        try {
+            const response = await fetch(`http://localhost:4321/datasets`, {
+                method: 'GET'
+            });
 
-    // Function to handle form submission
-    const handleSubmit = (event) => {
-        event.preventDefault(); // Prevents the default form submit action
-        console.log(inputValue); // Do something with the input value
-        // For example, send it to a server or display it somewhere
-    };
+            const messageElement = document.getElementById("insertViewDataset");
+            if (response.ok) {
+                const responseData = await response.json();
 
+                messageElement.textContent = "Data listed successfully!";
+                setInsertResultMsg(JSON.stringify(responseData.result));
+            } else {
+                const errorMessage = await response.json();
+                console.error(errorMessage);
 
+                messageElement.textContent = "Error removing data!";
+                setIsError(true);
+                setInsertResultMsg("Error removing data!");
+
+            }
+        } catch (err) {
+            console.log("ERRORRRRRRRR");
+            console.log(err);
+            setIsError(true);
+            setInsertResultMsg("Error removing data!");
+        }
+    }
 
     return (
-        <>
-            <div
-                className={"my-form"}>
-                <h1>View Datasets</h1>
-                <input
-                    className={"form-control"}
-                    type="submit"
-                    value="View"
-                />
-            </div>
-        </>
+        <div className={"my-form"} id="viewDiv">
+            <h1>View Datasets</h1>
+            <button className={"form-control"} type="submit" onClick={handleView}>
+                View
+            </button>
+            <div id="insertViewDataset" className={isError ? "error" : "noError"}>{insertResultMsg}</div>
+        </div>
 
     );
 }
