@@ -9,7 +9,7 @@ import {
 	InsightResult,
 	NotFoundError
 } from "../controller/IInsightFacade";
-import {clearDisk, getContentFromArchives} from "../../test/resources/archives/TestUtil";
+
 
 export default class Server {
 	private readonly port: number;
@@ -99,25 +99,41 @@ export default class Server {
 		// this.express.get("/dataset/:id", this.registerDelete);
 		// this.express.get("/query", this.registerPost);
 		// this.express.get("/datasets", this.registerGet);
-		this.express.get("/dataset/:id/:kind", (req, res) => this.registerPut(req, res));
-		this.express.get("/dataset/:id", (req, res) => this.registerDelete(req, res));
-		this.express.get("/query", (req, res) => this.registerPost(req, res));
+
+
+		this.express.put("/dataset/:id/:kind", (req, res) => this.registerPut(req, res));
+		this.express.delete("/dataset/:id", (req, res) => this.registerDelete(req, res));
+		this.express.post("/query", (req, res) => this.registerPost(req, res));
 		this.express.get("/datasets", (req, res) => this.registerGet(req, res));
 	}
 
 	private async registerPut(req: Request, res: Response) {
-		try {
-			const zipFileBuffer: Buffer = req.body;
-			const zipFileBase64: string = zipFileBuffer.toString("base64");
+		const {id, kind} = req.params;
+		const {body} = req;
 
-			let kind = InsightDatasetKind.Sections;
-			if (req.params.kind === "rooms") {
-				kind = InsightDatasetKind.Rooms;
+		if (!body) {
+			res.status(400).json({error: "No file uploaded"});
+			return;
+		}
+
+		console.log(id);
+		console.log(body);
+		console.log(kind);
+		try {
+			const zipFileBase64: string = body.toString("base64");
+
+
+			let datasetKind = InsightDatasetKind.Sections;
+			if (kind === "rooms") {
+				datasetKind = InsightDatasetKind.Rooms;
+			} else if (kind === "sections") {
+				datasetKind = InsightDatasetKind.Sections;
 			} else {
 				throw Error("Not a valid kind listed");
 			}
+			console.log(datasetKind);
 
-			const datasetAdded: string[] = await this.facade.addDataset(req.params.id, zipFileBase64, kind);
+			const datasetAdded: string[] = await this.facade.addDataset(req.params.id, zipFileBase64, datasetKind);
 			res.status(200).json({result: datasetAdded});
 		} catch (err) {
 			res.status(400).json({error: "InsightError" + err});
@@ -126,7 +142,10 @@ export default class Server {
 
 	private async registerDelete(req: Request, res: Response) {
 		try {
+			console.log("removed: " + req.params.id);
+
 			const deletedResult: string = await this.facade.removeDataset(req.params.id);
+
 			res.status(200).json({result: deletedResult});
 		} catch (err) {
 			if (err instanceof InsightError) {
@@ -141,9 +160,17 @@ export default class Server {
 
 	private async registerPost(req: Request, res: Response) {
 		try {
-			const queryResult: InsightResult[] = await this.facade.performQuery(req);
+			const queryObject = JSON.parse(req.body.query);
+			console.log(queryObject);
+			console.log(typeof queryObject);
+
+			const keysArray = Object.keys(queryObject);
+			console.log(keysArray);
+
+			const queryResult: InsightResult[] = await this.facade.performQuery(queryObject);
 			res.status(200).json({result: queryResult});
 		} catch (error) {
+			console.log(error);
 			res.status(400).json({error: "Error"}); // Pass in related error to query. !!!!!
 		}
 	}

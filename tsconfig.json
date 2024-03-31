@@ -3,7 +3,8 @@
   "compilerOptions": {
     "preserveConstEnums": true,
     "noImplicitAny": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "types": ["node", "express", "multer"]
   },
   "include": [
     "src/**/*",

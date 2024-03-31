@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import AddDataset from './AddDataset';
+import RemoveDataset from './RemoveDataset'
+import ViewDataset from './ViewDataset'
+import QueryDataset from './QueryDataset'
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+      <AddDataset />
+      <RemoveDataset />
+      <ViewDataset />
+      <QueryDataset />
   </React.StrictMode>
 );
 

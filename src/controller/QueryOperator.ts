@@ -1,3 +1,4 @@
+import HandleDataset from "./HandleDataset";
 import {
 	InsightError,
 	InsightResult,
@@ -17,6 +18,8 @@ export default class QueryOperator {
 
 	public mkey: string[] = [];
 	public skey: string[] = [];
+
+	private handleDataset = new HandleDataset();
 
 
 	constructor(idDatasets: string[]) {
@@ -139,7 +142,10 @@ export default class QueryOperator {
 	// Checks if the given idString is a valid dataset name
 	// If it is, it returns an entire dataset in InsightResult form
 	public async validateAndSetDataset(idString: string): Promise<void> {
-		if (!this.getDatasetIds().includes(idString)) {
+		// asdfasdfasdf
+		// if (!this.getDatasetIds().includes(idString)) {
+		let dataExists = await this.handleDataset.isThereDatasetDir(idString);
+		if (!dataExists) {
 			throw new InsightError("Dataset not found");
 		}
 		const data = await fsPromises.readFile(this.getDatasetDirPath(idString)).catch(() => {
