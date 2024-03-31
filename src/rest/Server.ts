@@ -9,8 +9,6 @@ import {
 	InsightResult,
 	NotFoundError
 } from "../controller/IInsightFacade";
-import {clearDisk, getContentFromArchives} from "../../test/resources/archives/TestUtil";
-import multer from "multer";
 
 
 export default class Server {
@@ -102,11 +100,8 @@ export default class Server {
 		// this.express.get("/query", this.registerPost);
 		// this.express.get("/datasets", this.registerGet);
 
-		const storage = multer.memoryStorage();
-		const upload = multer({storage: storage});
 
-
-		this.express.put("/dataset/:id/:kind", upload.single("file"), (req, res) => this.registerPut(req, res));
+		this.express.put("/dataset/:id/:kind", (req, res) => this.registerPut(req, res));
 		this.express.get("/dataset/:id", (req, res) => this.registerDelete(req, res));
 		this.express.get("/query", (req, res) => this.registerPost(req, res));
 		this.express.get("/datasets", (req, res) => this.registerGet(req, res));
@@ -114,20 +109,21 @@ export default class Server {
 
 	private async registerPut(req: Request, res: Response) {
 		const {id, kind} = req.params;
-		if (!req.file) {
-			throw new Error("No file uploaded");
-		}
-		const {buffer} = req.file;
-		if (!buffer) {
-			throw new Error("File buffer is empty");
+		const { body } = req;
+
+		if (!body) {
+			res.status(400).json({ error: "No file uploaded" });
+			return;
 		}
 
 		console.log(id);
-		console.log(buffer);
+		console.log(body);
 		console.log(kind);
 		try {
-			const zipFileBuffer: Buffer = buffer;
-			const zipFileBase64: string = zipFileBuffer.toString("base64");
+			// const zipFileBuffer: Buffer = body;
+			// const zipFileBase64: string = zipFileBuffer.toString("base64");
+			const zipFileBase64: string = body.toString("base64");
+
 
 			let datasetKind = InsightDatasetKind.Sections;
 			if (kind === "rooms") {

@@ -20,19 +20,35 @@ function AddDataset() {
          // Access the selected file from the input element
 
         const datasetContent = datasetFileInput.files[0];
+        console.log(datasetContent);
 
         console.log(datasetId);
         console.log(datasetKind);
         console.log(datasetContent.name);
 
          try {
-             const formData = new FormData();
-             formData.append('file', datasetContent);
+             // const formData = new FormData();
+             // // formData.append('file', datasetContent);
+             // formData.append('file', datasetContent);
+             // formData.append('id', datasetId); // Append other form fields if required
+             // formData.append('kind', datasetKind);
+             // console.log(formData);
 
-             const response = await fetch(`http://localhost:4321/dataset/${datasetId}/${datasetKind}`, {
+             const fileBlob = new Blob([datasetContent]);
+             const requestOptions = {
                  method: 'PUT',
-                 body: formData
-             })
+                 headers: {
+                     'Content-Type': 'application/octet-stream', // Set the content type as binary
+                 },
+                 body: fileBlob,
+             };
+             const response = await fetch(`http://localhost:4321/dataset/${datasetId}/${datasetKind}`, requestOptions);
+
+
+             // const response = await fetch(`http://localhost:4321/dataset/${datasetId}/${datasetKind}`, {
+             //     method: 'PUT',
+             //     body: formData
+             // })
              console.log("after fetch");
 
              // const responseData = await response.json();
