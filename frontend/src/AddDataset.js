@@ -1,66 +1,61 @@
-    import './App.css'
-    import React, { useState } from 'react';
-
-    function AddDataset() {
-
-        const [datasetId, setDatasetId] = useState('');
-        const [datasetType, setDatasetType] = useState('');
-
-        // Function to update state based on input changes
-        const handleDatasetIdChange = (event) => {
-            setDatasetId(event.target.value);
-        };
-
-        const handleDatasetTypeChange = (event) => {
-            setDatasetType(event.target.value);
-        };
-
-        // Function to handle form submission
-        const handleSubmit = (event) => {
-            event.preventDefault(); // Prevents the default form submit action
-            console.log(datasetId);
-            console.log(datasetType);
-        };
+import './App.css'
+import React, { useEffect, useState } from 'react';
 
 
+function AddDataset() {
 
-        return (
-            <>
-            <div style={{ marginBottom: '50px' }}>
-                <form className={"my-form"}
-                      onSubmit={handleSubmit}>
-                    <h1>Add Dataset</h1>
-                    <label htmlFor="datasetId">Dataset ID:</label><br/>
-                    <input
-                        className={"form-control"}
-                        type="text"
-                        value={datasetId}
-                        onChange={handleDatasetIdChange}
-                    /><br/>
-                    <label htmlFor="datasetKind">Dataset Kind:</label><br/>
-                    <input
-                        className={"form-control"}
-                        type="text"
-                        value={datasetType}
-                        onChange={handleDatasetTypeChange}
-                    /><br/>
-                    <input
-                        className={"form-control"}
-                        type="file"
-                        id="myFile"
-                        name="filename"
-                    /><br/>
-                    <input
-                        className={"form-control"}
-                        type="submit"
-                        value="Add"
-                    />
-                </form>
-            </div>
-            </>
+    // Function to handle form submission
+     function handleSubmit(event) {
+        event.preventDefault(); // Prevents the default form submit action
 
-        );
-    }
+        const datasetId = document.getElementById("datasetID").value;
+        const datasetKind = document.getElementById("datasetKind").value;
+
+        console.log(datasetId);
+        console.log(datasetKind);
+    };
+
+    useEffect(() => {
+        document.getElementById("addForm").addEventListener("submit", handleSubmit);
+    }, []);
+
+    return (
+        <>
+        <div style={{ marginBottom: '50px' }}>
+            <form className={"my-form"}
+                  onSubmit={handleSubmit}
+                  id = "addForm"
+            >
+                <h1>Add Dataset</h1>
+                <label htmlFor="datasetId">Dataset ID:</label><br/>
+                <input
+                    className={"form-control"}
+                    type="text"
+                    id = "datasetId"
+                /><br/>
+                <label htmlFor="datasetKind">Dataset Kind:</label><br/>
+                <input
+                    className={"form-control"}
+                    type="text"
+                    id = "datasetKind"
+                /><br/>
+                <input
+                    className={"form-control"}
+                    type="file"
+                    id="myFile"
+                    name="filename"
+                /><br/>
+                <button
+                    className={"form-control"}
+                    type="submit">
+                    Add
+                </button>
+            </form>
+        </div>
+        </>
+
+    );
+}
 
 
-    export default AddDataset;
+export default AddDataset;
