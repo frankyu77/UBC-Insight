@@ -103,10 +103,10 @@ export default class Server {
 		// this.express.get("/datasets", this.registerGet);
 
 		const storage = multer.memoryStorage();
-		const upload = multer({ storage: storage });
+		const upload = multer({storage: storage});
 
 
-		this.express.put("/dataset/:id/:kind", upload.single('file'), (req, res) => this.registerPut(req, res));
+		this.express.put("/dataset/:id/:kind", upload.single("file"), (req, res) => this.registerPut(req, res));
 		this.express.get("/dataset/:id", (req, res) => this.registerDelete(req, res));
 		this.express.get("/query", (req, res) => this.registerPost(req, res));
 		this.express.get("/datasets", (req, res) => this.registerGet(req, res));
@@ -117,7 +117,7 @@ export default class Server {
 		if (!req.file) {
 			throw new Error("No file uploaded");
 		}
-		const { buffer } = req.file;
+		const {buffer} = req.file;
 		if (!buffer) {
 			throw new Error("File buffer is empty");
 		}
