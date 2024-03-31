@@ -109,10 +109,10 @@ export default class Server {
 
 	private async registerPut(req: Request, res: Response) {
 		const {id, kind} = req.params;
-		const { body } = req;
+		const {body} = req;
 
 		if (!body) {
-			res.status(400).json({ error: "No file uploaded" });
+			res.status(400).json({error: "No file uploaded"});
 			return;
 		}
 
