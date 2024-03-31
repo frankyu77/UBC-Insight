@@ -120,8 +120,6 @@ export default class Server {
 		console.log(body);
 		console.log(kind);
 		try {
-			// const zipFileBuffer: Buffer = body;
-			// const zipFileBase64: string = zipFileBuffer.toString("base64");
 			const zipFileBase64: string = body.toString("base64");
 
 

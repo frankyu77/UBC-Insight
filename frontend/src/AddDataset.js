@@ -3,21 +3,18 @@ import React, { useEffect, useState } from 'react';
 
 
 function AddDataset() {
-    // Function to handle form submission
+    // for testing purposes to see that data was added successfully
     const [insertResultMsg, setInsertResultMsg] = useState("");
     const [isError, setIsError] = useState(false);
 
 
      async function handleSubmit(event) {
-        event.preventDefault(); // Prevents the default form submit action
+        event.preventDefault();
 
         const datasetId = document.getElementById("datasetId").value;
         const datasetKind = document.getElementById("datasetKind").value;
-        // const datasetContent = document.getElementById("datasetFile").value;
-
         const datasetFileInput = document.getElementById("datasetFile");
 
-         // Access the selected file from the input element
 
         const datasetContent = datasetFileInput.files[0];
         console.log(datasetContent);
@@ -27,13 +24,6 @@ function AddDataset() {
         console.log(datasetContent.name);
 
          try {
-             // const formData = new FormData();
-             // // formData.append('file', datasetContent);
-             // formData.append('file', datasetContent);
-             // formData.append('id', datasetId); // Append other form fields if required
-             // formData.append('kind', datasetKind);
-             // console.log(formData);
-
              const fileBlob = new Blob([datasetContent]);
              const requestOptions = {
                  method: 'PUT',
@@ -44,15 +34,7 @@ function AddDataset() {
              };
              const response = await fetch(`http://localhost:4321/dataset/${datasetId}/${datasetKind}`, requestOptions);
 
-
-             // const response = await fetch(`http://localhost:4321/dataset/${datasetId}/${datasetKind}`, {
-             //     method: 'PUT',
-             //     body: formData
-             // })
              console.log("after fetch");
-
-             // const responseData = await response.json();
-             // console.log(responseData);
 
              const messageElement = document.getElementById("insertAddDatasetMsg");
              if (response.ok) {
