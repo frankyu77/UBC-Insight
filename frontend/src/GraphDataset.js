@@ -70,11 +70,11 @@ function GraphDataset() {
                         Click to see number of fails for departments over the years!
                     </button>
                 </div>
-
+                <button className={"clearButton"} onClick={clearGraphData}>
+                    Clear Graph
+                </button>
             </form>
-            <button className={"clearButton"} onClick={clearGraphData}>
-                Clear Graph
-            </button>
+
             <div>
                 {graphData.length > 0 && <HorizontalGraph alphabet={graphData}/>}
             </div>

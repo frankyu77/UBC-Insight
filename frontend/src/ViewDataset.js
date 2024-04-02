@@ -36,11 +36,18 @@ function ViewDataset() {
         }
     }
 
+    const clearGraphData = () => {
+        setInsertResultMsg("");
+    };
+
     return (
         <div className={"my-form"} id="viewDiv">
             <h1>View Datasets</h1>
             <button className={"form-control"} type="submit" onClick={handleView}>
                 View
+            </button>
+            <button className={"clearButton"} onClick={clearGraphData}>
+                Clear Graph
             </button>
             <div id="insertViewDataset" className={isError ? "error" : "noError"}>{insertResultMsg}</div>
         </div>
