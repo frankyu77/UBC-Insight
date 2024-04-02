@@ -7,6 +7,8 @@ import ViewDataset from './ViewDataset'
 import QueryDataset from './QueryDataset'
 import reportWebVitals from './reportWebVitals';
 
+import GraphDataset from './GraphDataset';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -14,6 +16,8 @@ root.render(
       <RemoveDataset />
       <ViewDataset />
       <QueryDataset />
+
+      <GraphDataset />
   </React.StrictMode>
 );
 
