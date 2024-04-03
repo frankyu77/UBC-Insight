@@ -50,6 +50,7 @@
 		"build": "tsc && yarn lint",
 		"test": "mocha --require ts-node/register --timeout 10000 --extension .spec.ts --recursive test",
 		"test-server": "mocha --require ts-node/register test/rest/Server.spec.ts --recursive test --async-hooks",
+		"test-backend": "mocha --require ts-node/register --timeout 10000 test/controller/InsightFacade.spec.ts --recursive test --async-hooks",
 		"pretty": "prettier --config ./.prettierrc.json --write \"./**/*.ts\"",
 		"lint": "eslint src test --ext .ts",
 		"fix": "yarn lint --fix",
