@@ -1,0 +1,172 @@
+{
+	"title": "testing",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"NOT": {
+						"EQ": {
+							"sections_year": 1900
+						}
+					}
+				},
+				{
+					"GT": {
+						"sections_fail": 50
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_year",
+				"sumFail"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"sections_dept",
+					"sections_year",
+					"sumFail"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_dept",
+				"sections_year"
+			],
+			"APPLY": [
+				{
+					"sumFail": {
+						"SUM": "sections_fail"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_dept": "biol",
+			"sections_year": 2007,
+			"sumFail": 250
+		},
+		{
+			"sections_dept": "biol",
+			"sections_year": 2008,
+			"sumFail": 187
+		},
+		{
+			"sections_dept": "biol",
+			"sections_year": 2009,
+			"sumFail": 106
+		},
+		{
+			"sections_dept": "biol",
+			"sections_year": 2011,
+			"sumFail": 66
+		},
+		{
+			"sections_dept": "biol",
+			"sections_year": 2012,
+			"sumFail": 122
+		},
+		{
+			"sections_dept": "biol",
+			"sections_year": 2013,
+			"sumFail": 74
+		},
+		{
+			"sections_dept": "biol",
+			"sections_year": 2014,
+			"sumFail": 72
+		},
+		{
+			"sections_dept": "biol",
+			"sections_year": 2015,
+			"sumFail": 95
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2008,
+			"sumFail": 75
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2009,
+			"sumFail": 148
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2010,
+			"sumFail": 189
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2011,
+			"sumFail": 57
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2012,
+			"sumFail": 179
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2013,
+			"sumFail": 51
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2014,
+			"sumFail": 216
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2015,
+			"sumFail": 175
+		},
+		{
+			"sections_dept": "chem",
+			"sections_year": 2016,
+			"sumFail": 58
+		},
+		{
+			"sections_dept": "cpsc",
+			"sections_year": 2013,
+			"sumFail": 59
+		},
+		{
+			"sections_dept": "econ",
+			"sections_year": 2007,
+			"sumFail": 61
+		},
+		{
+			"sections_dept": "econ",
+			"sections_year": 2008,
+			"sumFail": 61
+		},
+		{
+			"sections_dept": "econ",
+			"sections_year": 2009,
+			"sumFail": 60
+		},
+		{
+			"sections_dept": "math",
+			"sections_year": 2011,
+			"sumFail": 51
+		},
+		{
+			"sections_dept": "math",
+			"sections_year": 2013,
+			"sumFail": 53
+		},
+		{
+			"sections_dept": "math",
+			"sections_year": 2015,
+			"sumFail": 64
+		}
+	]
+}
