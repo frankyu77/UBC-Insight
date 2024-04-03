@@ -15,6 +15,7 @@ function AddDataset() {
         const datasetKind = document.getElementById("datasetKind").value;
         const datasetFileInput = document.getElementById("datasetFile");
         const datasetContent = datasetFileInput.files[0];
+        console.log(datasetContent);
 
          try {
              const fileBlob = new Blob([datasetContent]);
@@ -26,10 +27,10 @@ function AddDataset() {
                  body: fileBlob,
              };
              const response = await fetch(`http://localhost:4321/dataset/${datasetId}/${datasetKind}`, requestOptions);
-             
+
              const messageElement = document.getElementById("insertAddDatasetMsg");
              if (response.ok) {
-                 const responseData = await response.json();
+                 await response.json();
 
                  messageElement.textContent = "Data inserted successfully!";
                  setInsertResultMsg("SUCCESS \n You Entered: " + datasetId);

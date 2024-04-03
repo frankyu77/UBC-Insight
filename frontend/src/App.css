@@ -42,6 +42,22 @@ input[type=text] {
   margin-bottom: 10px; /* Space between form elements */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
+.graph-form {
+  max-width: 1000px; /* Adjust based on your preference */
+  margin: 0 auto; /* Center the form */
+  padding: 0 20px; /* Padding on either side */
+}
+.button-container {
+  display: flex;
+  gap: 10px; /* Adjust the gap between buttons as needed */
+}
+.clearButton {
+  display: block;
+  width: 6rem;
+  padding: 5px;
+  margin: 0 auto; /* Add this line to center the button horizontally */
+  box-sizing: border-box;
+}
 
 
 .App-link {
