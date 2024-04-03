@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import HorizontalGraph from "./graphs/horizontalGraph";
 import LineGraph from "./graphs/lineGraph";
+import PieChart from "./graphs/PieChart"
 
 function GraphDataset() {
     const [horizontalGraphData, setHorizontalGraphData] = useState([]);
     const [lineGraphData, setLineGraphData] = useState([]);
+    const [pieChartData, setPieChartData] = useState([]);
 
 
     const handleAvgs = async (event) => {
@@ -63,6 +65,32 @@ function GraphDataset() {
         }
     }
 
+    const handleCourses = async (event) => {
+        event.preventDefault();
+
+        const query = "{ \"WHERE\": {}, \"OPTIONS\": { \"COLUMNS\": [ \"sections_dept\", \"count\" ], \"ORDER\": { \"dir\": \"UP\", \"keys\": [ \"count\", \"sections_dept\" ] } }, \"TRANSFORMATIONS\": { \"GROUP\": [ \"sections_dept\" ], \"APPLY\": [ { \"count\": { \"COUNT\": \"sections_uuid\" } } ] } }";
+
+        try {
+            const response = await fetch(`http://localhost:4321/query`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query })
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                setPieChartData(responseData.result);
+            } else {
+                console.error(await response.json());
+                setPieChartData([]);
+            }
+        } catch (err) {
+            console.error(err);
+            setPieChartData([]);
+        }
+    }
 
     // useEffect(() => {
     //     document.getElementById("graphForm").addEventListener("submit", handleAvgs);
@@ -80,6 +108,7 @@ function GraphDataset() {
 
     const clearGraphData = () => {
         setHorizontalGraphData([]);
+        setPieChartData([]);
         setLineGraphData([]);
     };
 
@@ -94,7 +123,7 @@ function GraphDataset() {
                         Click to see all departments and their averages!
                     </button>
 
-                    <button id={"coursesButton"} className={"form-control"} type="button">
+                    <button id={"coursesButton"} className={"form-control"} type="button"onClick={handleCourses}>
                         Click to see number of courses offered by each dept!
                     </button>
 
@@ -109,6 +138,9 @@ function GraphDataset() {
             </button>
             <div>
                 {horizontalGraphData.length > 0 && <HorizontalGraph alphabet={horizontalGraphData}/>}
+            </div>
+            <div>
+                {pieChartData.length > 0 && <PieChart data={pieChartData}/>}
             </div>
             <div>
                 {lineGraphData.length > 0 && <LineGraph data={lineGraphData}/>}
