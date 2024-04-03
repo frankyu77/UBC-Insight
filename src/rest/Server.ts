@@ -148,11 +148,15 @@ export default class Server {
 
 			res.status(200).json({result: deletedResult});
 		} catch (err) {
+			console.log(err);
 			if (err instanceof InsightError) {
+				console.log("insight errir caught");
 				res.status(400).json({error: "InsightError" + err});
 			} else if (err instanceof NotFoundError) {
+				console.log("not found error caught");
 				res.status(404).json({error: "NotFoundError" + err});
 			} else {
+				console.log("random error");
 				res.status(400).json({error: "RandomError" + err});
 			}
 		}
@@ -168,6 +172,7 @@ export default class Server {
 			console.log(keysArray);
 
 			const queryResult: InsightResult[] = await this.facade.performQuery(queryObject);
+			console.log(queryResult);
 			res.status(200).json({result: queryResult});
 		} catch (error) {
 			console.log(error);

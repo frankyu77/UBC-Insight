@@ -15,6 +15,7 @@ function AddDataset() {
         const datasetKind = document.getElementById("datasetKind").value;
         const datasetFileInput = document.getElementById("datasetFile");
         const datasetContent = datasetFileInput.files[0];
+        console.log(datasetContent);
 
          try {
              const fileBlob = new Blob([datasetContent]);

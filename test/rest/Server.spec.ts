@@ -3,14 +3,16 @@ import InsightFacade from "../../src/controller/InsightFacade";
 
 import {expect} from "chai";
 import request, {Response} from "supertest";
+import { getContentFromArchives, getBuffer } from "../resources/archives/TestUtil";
 
 describe("Facade D3", function () {
-
+	let sections: Buffer;
 	let facade: InsightFacade;
 	let server: Server;
 	const SERVER_URL = "http://localhost:4321";
 
 	before(async function () {
+		sections = await getBuffer("shorterCourses.zip");
 		facade = new InsightFacade();
 		server = new Server(4321);
 		// TODO: start server here once and handle errors properly
@@ -57,22 +59,45 @@ describe("Facade D3", function () {
 			// and some more logging here!
 		}
 	}); */
-	it("PUT test for courses dataset", async function () {
+	it("PUT test for sections dataset one valid", async function () {
 		try {
 			return request(SERVER_URL)
-				.put("/dataset/courses/courses")
-				.send("test/resources/archives/campus.zip")
-				.attach("body", "Content-Type", "application/x-zip-compressed")
+				.put("/dataset/sections/sections")
+				.attach("body", sections, "shorterCourses.zip")
 				.then(function (res: Response) {
 					// some logging here please!
 					expect(res.status).to.be.equal(200);
 				})
 				.catch(function (err) {
-					// some logging here please!
+					console.log(err);
 					expect.fail();
 				});
 		} catch (err) {
 			// and some more logging here!
+			console.log(err);
+			expect.fail();
+		}
+	});
+
+	it("PUT test for sections dataset pair.zip", async function () {
+		try {
+			const pair = await getBuffer("pair.zip");
+			return request(SERVER_URL)
+				.put("/dataset/sections/sections")
+				// .attach("body", "test/resources/archives/pair.zip")
+				.attach("body", pair, "pair.zip")
+				.then(function (res: Response) {
+					// some logging here please!
+					expect(res.status).to.be.equal(200);
+				})
+				.catch(function (err) {
+					console.log(err);
+					expect.fail();
+				});
+		} catch (err) {
+			// and some more logging here!
+			console.log(err);
+			expect.fail();
 		}
 	});
 

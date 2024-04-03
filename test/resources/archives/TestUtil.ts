@@ -28,6 +28,10 @@ async function getContentFromArchives (name: string): Promise<string> {
 	return buffer.toString("base64");
 }
 
+async function getBuffer (name: string): Promise<Buffer> {
+	return await fs.readFile("test/resources/archives/" + name);
+}
+
 
 /**
  * Removes all files within the persistDir.
@@ -59,4 +63,4 @@ function readFileQueries(path: string): ITestQuery[] {
 }
 
 
-export {getContentFromArchives, clearDisk, readFileQueries};
+export {getContentFromArchives, clearDisk, readFileQueries, getBuffer};
