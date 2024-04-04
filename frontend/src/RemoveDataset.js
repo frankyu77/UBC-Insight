@@ -16,27 +16,32 @@ function RemoveDataset() {
             });
 
             const messageElement = document.getElementById("insertRemoveDatasetMsg");
-            if (response.ok) {
+            if (response.status === 200) {
                 const responseData = await response.json();
 
                 messageElement.textContent = "Data removed successfully!";
                 setInsertResultMsg("You SUCCESSFULLY REMOVED: " + responseData.result);
 
                 document.getElementById("datasetIDToRemove").value = "";
-            } else {
+            } else if (response.status === 400){
                 const errorMessage = await response.json();
                 console.error(errorMessage);
 
                 messageElement.textContent = "Error removing data!";
                 setIsError(true);
-                setInsertResultMsg("Error removing data!");
+                setInsertResultMsg("InsightError");
+            } else if (response.status === 404) {
+                const errorMessage = await response.json();
+                console.error(errorMessage);
 
+                messageElement.textContent = "Error removing data!";
+                setIsError(true);
+                setInsertResultMsg("NotFoundError");
             }
         } catch (err) {
-            console.log("ERRORRRRRRRR");
             console.log(err);
             setIsError(true);
-            setInsertResultMsg("Error removing data!");
+            setInsertResultMsg("Fetch failed");
         }
 
     }
