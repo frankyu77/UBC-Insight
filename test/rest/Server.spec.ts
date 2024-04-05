@@ -3,7 +3,7 @@ import InsightFacade from "../../src/controller/InsightFacade";
 
 import {expect} from "chai";
 import request, {Response} from "supertest";
-import { getContentFromArchives, getBuffer } from "../resources/archives/TestUtil";
+import {getContentFromArchives, getBuffer} from "../resources/archives/TestUtil";
 
 describe("Facade D3", function () {
 	let sections: Buffer;
