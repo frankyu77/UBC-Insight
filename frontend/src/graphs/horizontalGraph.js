@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const HorizontalGraph = ({ alphabet: dataset }) => {
+const HorizontalGraph = ({ alphabet: dataset, datasetID }) => {
     const svgRef = useRef();
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const HorizontalGraph = ({ alphabet: dataset }) => {
             .range([marginLeft, width - marginRight]);
 
         const y = d3.scaleBand()
-            .domain(d3.sort(dataset, d => -d.overallAvg).map(d => d.sections_dept))
+            .domain(d3.sort(dataset, d => -d.overallAvg).map(d => d[`${datasetID}_dept`]))
             .rangeRound([marginTop, height - marginBottom])
             .padding(0.1);
 
@@ -38,7 +38,7 @@ const HorizontalGraph = ({ alphabet: dataset }) => {
             .data(dataset)
             .join("rect")
             .attr("x", x(0))
-            .attr("y", (d) => y(d.sections_dept))
+            .attr("y", (d) => y(d[`${datasetID}_dept`]))
             .attr("width", (d) => x(d.overallAvg / 100) - x(0))
             .attr("height", y.bandwidth());
 
@@ -49,7 +49,7 @@ const HorizontalGraph = ({ alphabet: dataset }) => {
             .data(dataset)
             .join("text")
             .attr("x", (d) => x(d.overallAvg / 100))
-            .attr("y", (d) => y(d.sections_dept) + y.bandwidth() / 2)
+            .attr("y", (d) => y(d[`${datasetID}_dept`] + y.bandwidth() / 2))
             .attr("dy", "0.35em")
             .attr("dx", -4)
             .text((d) => formatPercent(d.overallAvg / 100))

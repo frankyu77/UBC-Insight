@@ -17,7 +17,7 @@ class LineGraph extends Component {
     }
 
     createChart() {
-        const { data } = this.props; // Extract data from props
+        const { data, datasetID } = this.props;
         const width = 928;
         const height = 600;
         const marginTop = 20;
@@ -25,13 +25,17 @@ class LineGraph extends Component {
         const marginBottom = 30;
         const marginLeft = 30;
 
+        const dataByDept = d3.group(data, d => d[`${datasetID}_dept`]);
+
         const x = d3.scaleLinear()
-            .domain(d3.extent(data, d => d.sections_year))
+            .domain(d3.extent(data, d => d[`${datasetID}_year`]))
             .range([marginLeft, width - marginRight]);
 
         const y = d3.scaleLinear()
             .domain([0, d3.max(data, d => d.sumFail)]).nice()
             .range([height - marginBottom, marginTop]);
+
+        const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
         const svg = d3.select(this.chartRef.current)
             .attr("width", width)
@@ -42,7 +46,7 @@ class LineGraph extends Component {
         const xAxis = d3.axisBottom(x)
             .ticks(width / 80)
             .tickSizeOuter(0)
-            .tickFormat(d3.format("d")); // Format ticks as integers
+            .tickFormat(d3.format("d"));
 
         svg.append("g")
             .attr("transform", `translate(0,${height - marginBottom})`)
@@ -63,18 +67,26 @@ class LineGraph extends Component {
                 .text("↑ Number of Fails"));
 
         const line = d3.line()
-            .x(d => x(d.sections_year))
+            .x(d => x(d[`${datasetID}_year`]))
             .y(d => y(d.sumFail));
 
-        svg.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 1.5)
-            .attr("d", line);
+        dataByDept.forEach((deptData, datasetID_dept) => {
+            if (datasetID_dept) {
+                const deptId = datasetID_dept.replace(/\s+/g, '-').toLowerCase();
+                svg.append("path")
+                    .datum(deptData)
+                    .attr("fill", "none")
+                    .attr("stroke", colorScale(datasetID_dept))
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line)
+                    .attr("class", "line")
+                    .attr("id", `line-${deptId}`);
+            }
+        });
 
         this.svg = svg;
     }
+
 
     render() {
         return <svg ref={this.chartRef}></svg>;

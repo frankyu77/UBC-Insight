@@ -19,10 +19,10 @@ class PieChart extends Component {
     }
 
     createPieChart() {
-        const { data } = this.props; // Assuming data is an object like {a: 9, b: 20, c:30, d:8, e:12}
+        const { data, datasetID } = this.props;
 
-        const resultMap = data.reduce((acc, { sections_dept, count }) => {
-            acc[sections_dept] = count;
+        const resultMap = data.reduce((acc, item) => {
+            acc[item[`${datasetID}_dept`]] = item.count;
             return acc;
         }, {});
 

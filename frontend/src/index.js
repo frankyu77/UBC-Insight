@@ -15,7 +15,7 @@ root.render(
       <AddDataset />
       <RemoveDataset />
       <ViewDataset />
-      <QueryDataset />
+      {/*<QueryDataset />*/}
 
       <GraphDataset />
   </React.StrictMode>
