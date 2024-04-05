@@ -17,7 +17,7 @@ class LineGraph extends Component {
     }
 
     createChart() {
-        const { data } = this.props;
+        const { data, datasetID } = this.props;
         const width = 928;
         const height = 600;
         const marginTop = 20;
@@ -25,10 +25,10 @@ class LineGraph extends Component {
         const marginBottom = 30;
         const marginLeft = 30;
 
-        const dataByDept = d3.group(data, d => d.sections_dept);
+        const dataByDept = d3.group(data, d => d[`${datasetID}_dept`]);
 
         const x = d3.scaleLinear()
-            .domain(d3.extent(data, d => d.sections_year))
+            .domain(d3.extent(data, d => d[`${datasetID}_year`]))
             .range([marginLeft, width - marginRight]);
 
         const y = d3.scaleLinear()
@@ -67,19 +67,21 @@ class LineGraph extends Component {
                 .text("↑ Number of Fails"));
 
         const line = d3.line()
-            .x(d => x(d.sections_year))
+            .x(d => x(d[`${datasetID}_year`]))
             .y(d => y(d.sumFail));
 
-        // Draw lines for each sections_dept
-        dataByDept.forEach((deptData, dept) => {
-            svg.append("path")
-                .datum(deptData)
-                .attr("fill", "none")
-                .attr("stroke", colorScale(dept))
-                .attr("stroke-width", 1.5)
-                .attr("d", line)
-                .attr("class", "line")
-                .attr("id", `line-${dept.replace(/\s+/g, '-').toLowerCase()}`); // Create unique ID for each line
+        dataByDept.forEach((deptData, datasetID_dept) => {
+            if (datasetID_dept) {
+                const deptId = datasetID_dept.replace(/\s+/g, '-').toLowerCase();
+                svg.append("path")
+                    .datum(deptData)
+                    .attr("fill", "none")
+                    .attr("stroke", colorScale(datasetID_dept))
+                    .attr("stroke-width", 1.5)
+                    .attr("d", line)
+                    .attr("class", "line")
+                    .attr("id", `line-${deptId}`);
+            }
         });
 
         this.svg = svg;
